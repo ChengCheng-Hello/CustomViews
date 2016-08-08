@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="StepView">
+        <attr name="circleRadius" format="dimension" />
+        <attr name="circleColorDone" format="color" />
+        <attr name="circleColorDefault" format="color" />
+        <attr name="lineHeight" format="dimension" />
+        <attr name="lineColorDone" format="color" />
+        <attr name="lineColorDefault" format="color" />
+        <attr name="statusTextColorDone" format="color" />
+        <attr name="statusTextColorDefault" format="color" />
+        <attr name="textDateColor" format="color" />
+        <attr name="statusTextSize" format="dimension" />
+        <attr name="dateTextSize" format="dimension" />
+        <attr name="textSpace" format="dimension" />
+        <attr name="stepCount" format="integer" />
+    </declare-styleable>
+</resources>

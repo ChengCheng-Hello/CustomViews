@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.cc.stepview.MainActivity">
+
+    <com.cc.stepview.stepview.StepView
+        android:id="@+id/stepView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:circleRadius="4dp"
+        app:dateTextSize="10sp"
+        app:lineHeight="2dp"
+        app:statusTextSize="12sp"
+        app:textSpace="8dp" />
+
+    <!--<com.cc.stepview.stepview.StepView2-->
+    <!--android:id="@+id/stepView2"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="100dp"-->
+    <!--app:circleRadius="4dp"-->
+    <!--app:dateTextSize="10sp"-->
+    <!--app:lineHeight="2dp"-->
+    <!--app:statusTextSize="12sp"-->
+    <!--app:textSpace="8dp" />-->
+
+    <com.cc.stepview.chart.LineChartView2
+        android:id="@+id/lineChart"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:text="load data" />
+
+    <Button
+        android:id="@+id/button_clear"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:text="data clear" />
+
+    <Button
+        android:id="@+id/button_scroll"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:text="button_scroll"
+        android:visibility="gone" />
+
+</LinearLayout>
