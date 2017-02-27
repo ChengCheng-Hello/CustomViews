@@ -1,4 +1,4 @@
-package com.cc.stepview;
+package com.cc.custom;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

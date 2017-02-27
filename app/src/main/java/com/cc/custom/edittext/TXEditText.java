@@ -1,4 +1,4 @@
-package com.cc.stepview.edittext;
+package com.cc.custom.edittext;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.cc.stepview.R;
+import com.cc.custom.R;
 
 /**
  * 实现输入长度限制，达到最大长度会toast提示

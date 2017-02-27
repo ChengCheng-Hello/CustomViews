@@ -1,26 +1,25 @@
-package com.cc.stepview.stepview;
+package com.cc.custom.stepview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 
-import com.cc.stepview.R;
+import com.cc.custom.R;
 
 import java.util.List;
 
 /**
  * Created by Cheng on 16/7/4.
  */
-public class StepView2 extends View {
+public class StepView extends View {
 
     private static final String TAG = "StepView";
 
@@ -55,46 +54,24 @@ public class StepView2 extends View {
     private int mStepCount;
     private int mDoneStep;
 
-    private List<String> mStatusData;
-    private List<String> mDateData;
+    private List<StepItem> mStepData;
     private int mMaxTextWidth;
 
     private int mWidth;
 
-    private float mDistanceX;
-    private GestureDetector mGestureDestector;
-    private GestureDetector.SimpleOnGestureListener mGestureDetectorListener = new GestureDetector.SimpleOnGestureListener() {
+    private int mTouchSlop;
+    private boolean mIsBeingDragged;
+    private int mLastMotionX;
 
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            return true;
-        }
-
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            System.out.println("@@@ onSrcoll  distanceX " + distanceX + " distanceY " + distanceY);
-
-            mDistanceX = distanceX;
-            ViewCompat.postInvalidateOnAnimation(StepView2.this);
-            return true;
-        }
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return true;
-        }
-    };
-    private float mCurrentX;
-
-    public StepView2(Context context) {
+    public StepView(Context context) {
         this(context, null, 0);
     }
 
-    public StepView2(Context context, AttributeSet attrs) {
+    public StepView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public StepView2(Context context, AttributeSet attrs, int defStyleAttr) {
+    public StepView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.StepView);
         if (typedArray != null) {
@@ -115,7 +92,8 @@ public class StepView2 extends View {
         }
 
         initPaints();
-        mGestureDestector = new GestureDetector(context, mGestureDetectorListener);
+        ViewConfiguration configuration = ViewConfiguration.get(context);
+        mTouchSlop = configuration.getScaledTouchSlop();
     }
 
     private void initPaints() {
@@ -202,17 +180,13 @@ public class StepView2 extends View {
     private int getMaxTextWidth() {
         float maxWidth = 100;
 
-        if (mStatusData != null) {
-            for (String text : mStatusData) {
-                float width = mPaintTextDone.measureText(text);
-                maxWidth = Math.max(maxWidth, width);
-            }
-        }
+        if (mStepData != null) {
+            for (StepItem item : mStepData) {
+                float tipWidth = mPaintTextDone.measureText(item.tip);
+                maxWidth = Math.max(maxWidth, tipWidth);
+                float dateWidth = mPaintTextDate.measureText(item.date);
+                maxWidth = Math.max(maxWidth, dateWidth);
 
-        if (mDateData != null) {
-            for (String text : mDateData) {
-                float width = mPaintTextDate.measureText(text);
-                maxWidth = Math.max(maxWidth, width);
             }
         }
 
@@ -224,25 +198,28 @@ public class StepView2 extends View {
 //        Log.d(TAG, "onDraw");
         super.onDraw(canvas);
 
-        mCurrentX -= mDistanceX;
-
-        if (mStatusData == null || mDateData == null) {
+        if (mStepData == null) {
+            String loading = "Loading...";
+            float loadingWidth = mPaintTextDate.measureText(loading);
+            canvas.drawText(loading, (getWidth() - loadingWidth) / 2, getHeight() / 2, mPaintTextDate);
             return;
         }
 
         int startCircleX;
         if (mMaxTextWidth > mCircleRadius) {
-            startCircleX = (int) (getPaddingLeft() + mMaxTextWidth / 2 + mCurrentX);
+            startCircleX = getPaddingLeft() + mMaxTextWidth / 2;
         } else {
-            startCircleX = (int) (mCircleRadius + getPaddingLeft() + mCurrentX);
+            startCircleX = mCircleRadius + getPaddingLeft();
         }
 
         int startLineX = startCircleX + mCircleRadius;
         int startY = mCircleRadius + getPaddingTop();
 
         for (int i = 0; i < mStepCount; i++) {
-            float statusTextX = startCircleX - mPaintTextDone.measureText(mStatusData.get(i)) / 2;
-            float dateTextX = startCircleX - mPaintTextDate.measureText(mDateData.get(i)) / 2;
+            StepItem stepItem = mStepData.get(i);
+
+            float statusTextX = startCircleX - mPaintTextDone.measureText(stepItem.tip) / 2;
+            float dateTextX = startCircleX - mPaintTextDate.measureText(stepItem.date) / 2;
 
             float statusTextY = startY + mCircleRadius + mTextSpace + mStatusTextSize;
             float dateTextY = startY + mCircleRadius + mTextSpace * 2 + mStatusTextSize + mDateTextSize;
@@ -253,16 +230,16 @@ public class StepView2 extends View {
                 if (i < mStepCount - 1) {
                     canvas.drawLine(startLineX, startY, startLineX + mLineWidth, startY, mPaintLineDone);
                 }
-                canvas.drawText(mStatusData.get(i), statusTextX, statusTextY, mPaintTextDone);
-                canvas.drawText(mDateData.get(i), dateTextX, dateTextY, mPaintTextDate);
+                canvas.drawText(stepItem.tip, statusTextX, statusTextY, mPaintTextDone);
+                canvas.drawText(stepItem.date, dateTextX, dateTextY, mPaintTextDate);
             } else {
                 // 没完成
                 canvas.drawCircle(startCircleX, startY, mCircleRadius, mPaintCircleDefault);
                 if (i < mStepCount - 1) {
                     canvas.drawLine(startLineX, startY, startLineX + mLineWidth, startY, mPaintLineDefault);
                 }
-                canvas.drawText(mStatusData.get(i), statusTextX, statusTextY, mPaintTextDefault);
-                canvas.drawText(mDateData.get(i), dateTextX, dateTextY, mPaintTextDate);
+                canvas.drawText(stepItem.tip, statusTextX, statusTextY, mPaintTextDefault);
+                canvas.drawText(stepItem.date, dateTextX, dateTextY, mPaintTextDate);
             }
 
             startCircleX += mLineWidth + mCircleRadius * 2;
@@ -272,18 +249,58 @@ public class StepView2 extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        return mGestureDestector.onTouchEvent(ev);
+        final int action = ev.getAction();
+
+        switch (action & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN: {
+                mLastMotionX = (int) ev.getX();
+                break;
+            }
+            case MotionEvent.ACTION_MOVE:
+                final int x = (int) ev.getX();
+                int deltaX = mLastMotionX - x;
+                if (!mIsBeingDragged && Math.abs(deltaX) > mTouchSlop) {
+                    mIsBeingDragged = true;
+                    if (deltaX > 0) {
+                        deltaX -= mTouchSlop;
+                    } else {
+                        deltaX += mTouchSlop;
+                    }
+                }
+                if (mIsBeingDragged) {
+                    // Scroll to follow the motion event
+                    mLastMotionX = x;
+
+                    final int range = getScrollRange();
+
+                    // Calling overScrollBy will call onOverScrolled, which
+                    // calls onScrollChanged if applicable.
+                    overScrollBy(deltaX, 0, getScrollX(), 0, range, 0, 0, 0, true);
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                mIsBeingDragged = false;
+                break;
+        }
+        return true;
     }
+
+    @Override
+    protected void onOverScrolled(int scrollX, int scrollY,
+                                  boolean clampedX, boolean clampedY) {
+        super.scrollTo(scrollX, scrollY);
+    }
+
 
     private int getScrollRange() {
         return mWidth - getWidth();
     }
 
-    public void initData(int stepCount, int doneCount, List<String> statusData, List<String> dateData) {
+    public void initData(int stepCount, int doneCount, List<StepItem> stepData) {
         mStepCount = stepCount;
         mDoneStep = doneCount;
-        mStatusData = statusData;
-        mDateData = dateData;
+        mStepData = stepData;
         requestLayout();
     }
 }

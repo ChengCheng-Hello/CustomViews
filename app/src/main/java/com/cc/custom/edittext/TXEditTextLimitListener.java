@@ -1,4 +1,4 @@
-package com.cc.stepview.edittext;
+package com.cc.custom.edittext;
 
 /**
  * EditText输入长度监听

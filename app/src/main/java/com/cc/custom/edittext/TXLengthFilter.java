@@ -1,4 +1,4 @@
-package com.cc.stepview.edittext;
+package com.cc.custom.edittext;
 
 import android.text.InputFilter;
 import android.text.Spanned;

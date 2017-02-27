@@ -1,13 +1,13 @@
-package com.cc.stepview;
+package com.cc.custom;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.cc.stepview.chart.ChartItem;
-import com.cc.stepview.chart.LineChartView2;
-import com.cc.stepview.stepview.StepItem;
-import com.cc.stepview.stepview.StepView;
+import com.cc.custom.chart.ChartItem;
+import com.cc.custom.chart.LineChartView2;
+import com.cc.custom.stepview.StepItem;
+import com.cc.custom.stepview.StepView;
 
 import java.util.ArrayList;
 import java.util.List;

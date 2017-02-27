@@ -1,4 +1,4 @@
-package com.cc.stepview.stepview;
+package com.cc.custom.stepview;
 
 /**
  * Created by Cheng on 16/7/18.

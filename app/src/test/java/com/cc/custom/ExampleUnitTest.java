@@ -1,4 +1,4 @@
-package com.cc.stepview;
+package com.cc.custom;
 
 import org.junit.Test;
 

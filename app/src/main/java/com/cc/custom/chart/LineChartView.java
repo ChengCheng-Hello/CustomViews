@@ -1,4 +1,4 @@
-package com.cc.stepview.chart;
+package com.cc.custom.chart;
 
 import android.content.Context;
 import android.graphics.Canvas;
