@@ -15,4 +15,9 @@
         <attr name="textSpace" format="dimension" />
         <attr name="stepCount" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="TXEditText">
+        <attr name="limitLength" format="integer" />
+        <attr name="limitText" format="string" />
+    </declare-styleable>
 </resources>

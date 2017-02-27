@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">App</string>
+    <string name="limit_default_text">最多输入%1$d个字</string>
 </resources>

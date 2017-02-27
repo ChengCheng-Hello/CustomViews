@@ -9,6 +9,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.cc.stepview.MainActivity">
 
+    <com.cc.stepview.edittext.TXEditText
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:limitLength="3" />
+
     <com.cc.stepview.stepview.StepView
         android:id="@+id/stepView"
         android:layout_width="wrap_content"
