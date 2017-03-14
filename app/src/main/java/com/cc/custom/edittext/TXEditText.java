@@ -2,10 +2,10 @@ package com.cc.custom.edittext;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cc.custom.R;
@@ -18,8 +18,7 @@ import com.cc.custom.R;
  * <p>
  * Created by Cheng on 17/2/27.
  */
-
-public class TXEditText extends EditText implements TXEditTextLimitListener {
+public class TXEditText extends AppCompatEditText implements TXEditTextLimitListener {
 
     private static final String TAG = "TXEditText";
 
