@@ -21,6 +21,9 @@ public class TXLengthFilter implements InputFilter {
         mLengthListener = listener;
     }
 
+    /**
+     * 参考LengthFilter，只是添加了TXEditTextLimitListener回调
+     */
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest,
                                int dstart, int dend) {
         int keep = mMax - (dest.length() - (dend - dstart));
