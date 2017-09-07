@@ -61,4 +61,13 @@
         android:text="button_scroll"
         android:visibility="gone" />
 
+    <com.cc.custom.rating.TXRatingView
+        app:ratingSize="32dp"
+        app:itemSpace="4dp"
+        app:maxRating="5"
+        app:rating="3"
+        app:enabled="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

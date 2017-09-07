@@ -20,4 +20,14 @@
         <attr name="limitLength" format="integer" />
         <attr name="limitText" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="TXRatingView">
+        <attr name="maxRating" format="integer" />
+        <attr name="rating" format="integer" />
+        <attr name="emptyDrawable" format="reference" />
+        <attr name="filledDrawable" format="reference" />
+        <attr name="ratingSize" format="dimension" />
+        <attr name="itemSpace" format="dimension" />
+        <attr name="enabled" format="boolean" />
+    </declare-styleable>
 </resources>
