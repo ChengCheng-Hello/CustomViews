@@ -63,6 +63,7 @@
 
     <com.cc.custom.rating.TXRatingView
         android:id="@+id/hh"
+        android:layout_marginLeft="50dp"
         app:ratingSize="32dp"
         app:itemSpace="4dp"
         app:maxRating="5"

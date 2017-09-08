@@ -120,12 +120,19 @@ public class TXRatingView extends View {
             }
 
             @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                handleMoveEvent(e2);
+                return true;
+            }
+
+            @Override
             public boolean onSingleTapUp(MotionEvent e) {
                 handleClickEvent(e);
                 return super.onSingleTapUp(e);
             }
         };
         mGestureDetector = new GestureDetectorCompat(getContext(), gestureListener);
+        mGestureDetector.setIsLongpressEnabled(false);
     }
 
     @Override
@@ -203,15 +210,8 @@ public class TXRatingView extends View {
             }
         }
 
-        onRatingClick(rating + 1);
-    }
+        rating++;
 
-    /**
-     * 评分点击事件
-     *
-     * @param rating 评分
-     */
-    private void onRatingClick(int rating) {
         if (rating < 0 && rating > mMaxRating) {
             return;
         }
@@ -222,6 +222,42 @@ public class TXRatingView extends View {
                 mRating = 0;
             }
         } else {
+            mRating = rating;
+        }
+
+        invalidate();
+    }
+
+    /**
+     * 处理移动事件
+     *
+     * @param e event
+     */
+    private void handleMoveEvent(MotionEvent e) {
+        int rating = -1;
+        for (int i = 0; i < mMaxRating; i++) {
+            int startX = mStartArray[i] + mRatingSize / 2;
+            float x = e.getX();
+            if (x <= 0) {
+                break;
+            } else if (x >= mStartArray[mMaxRating - 1]) {
+                rating = mMaxRating;
+                break;
+            } else if (e.getX() <= startX) {
+                rating = i;
+                break;
+            }
+        }
+
+        if (rating < 0) {
+            mRating = 0;
+        } else if (rating >= mMaxRating) {
+            mRating = mMaxRating;
+        } else {
+            rating++;
+            if (rating == mRating) {
+                return;
+            }
             mRating = rating;
         }
 
@@ -248,12 +284,12 @@ public class TXRatingView extends View {
 
         private int rating;
 
-        SavedState(Parcel source) {
+        private SavedState(Parcel source) {
             super(source);
             rating = source.readInt();
         }
 
-        SavedState(Parcelable parcelable) {
+        private SavedState(Parcelable parcelable) {
             super(parcelable);
         }
 
