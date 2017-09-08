@@ -22,12 +22,19 @@
     </declare-styleable>
 
     <declare-styleable name="TXRatingView">
+        <!-- 最大分 -->
         <attr name="maxRating" format="integer" />
+        <!-- 当前分 -->
         <attr name="rating" format="integer" />
+        <!-- 没分的icon -->
         <attr name="emptyDrawable" format="reference" />
+        <!-- 有分的icon -->
         <attr name="filledDrawable" format="reference" />
+        <!-- icon大小 -->
         <attr name="ratingSize" format="dimension" />
+        <!-- icon间距 -->
         <attr name="itemSpace" format="dimension" />
+        <!-- 是否能修改分数 -->
         <attr name="enabled" format="boolean" />
     </declare-styleable>
 </resources>

@@ -62,6 +62,7 @@
         android:visibility="gone" />
 
     <com.cc.custom.rating.TXRatingView
+        android:id="@+id/hh"
         app:ratingSize="32dp"
         app:itemSpace="4dp"
         app:maxRating="5"

@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -186,6 +188,11 @@ public class TXRatingView extends View {
         return mEnabled && mGestureDetector.onTouchEvent(event);
     }
 
+    /**
+     * 处理点击事件
+     *
+     * @param e event
+     */
     private void handleClickEvent(MotionEvent e) {
         int rating = -1;
         for (int i = 0; i < mMaxRating; i++) {
@@ -199,6 +206,11 @@ public class TXRatingView extends View {
         onRatingClick(rating + 1);
     }
 
+    /**
+     * 评分点击事件
+     *
+     * @param rating 评分
+     */
     private void onRatingClick(int rating) {
         if (rating < 0 && rating > mMaxRating) {
             return;
@@ -214,5 +226,54 @@ public class TXRatingView extends View {
         }
 
         invalidate();
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable parcelable = super.onSaveInstanceState();
+        SavedState ss = new SavedState(parcelable);
+        ss.rating = mRating;
+        return ss;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(state);
+        mRating = ss.rating;
+        invalidate();
+    }
+
+    private static class SavedState extends BaseSavedState {
+
+        private int rating;
+
+        SavedState(Parcel source) {
+            super(source);
+            rating = source.readInt();
+        }
+
+        SavedState(Parcelable parcelable) {
+            super(parcelable);
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(rating);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+
+            @Override
+            public SavedState createFromParcel(Parcel source) {
+                return new SavedState(source);
+            }
+
+            @Override
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
     }
 }
