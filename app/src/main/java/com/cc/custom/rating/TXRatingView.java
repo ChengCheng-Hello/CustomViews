@@ -66,9 +66,9 @@ public class TXRatingView extends View {
             mFilledResourceId =
                 typedArray.getResourceId(R.styleable.TXRatingView_filledDrawable, R.drawable.rating_filled);
             mRatingSize = typedArray.getDimensionPixelOffset(R.styleable.TXRatingView_ratingSize,
-                getResources().getDimensionPixelOffset(R.dimen.tx_rating_item_size));
+                getResources().getDimensionPixelOffset(R.dimen.tx_rating_item_default_size));
             mItemSpace = typedArray.getDimensionPixelOffset(R.styleable.TXRatingView_itemSpace,
-                getResources().getDimensionPixelOffset(R.dimen.tx_rating_item_space));
+                getResources().getDimensionPixelOffset(R.dimen.tx_rating_item_default_space));
             mEnabled = typedArray.getBoolean(R.styleable.TXRatingView_enabled, false);
             typedArray.recycle();
         }
@@ -216,14 +216,14 @@ public class TXRatingView extends View {
             return;
         }
 
-        if (rating == mRating) {
-            mRating = mRating - 1;
-            if (mRating < 0) {
-                mRating = 0;
-            }
-        } else {
+//        if (rating == mRating) {
+//            mRating = mRating - 1;
+//            if (mRating < 0) {
+//                mRating = 0;
+//            }
+//        } else {
             mRating = rating;
-        }
+//        }
 
         invalidate();
     }
@@ -235,9 +235,9 @@ public class TXRatingView extends View {
      */
     private void handleMoveEvent(MotionEvent e) {
         int rating = -1;
+        float x = e.getX();
         for (int i = 0; i < mMaxRating; i++) {
             int startX = mStartArray[i] + mRatingSize / 2;
-            float x = e.getX();
             if (x <= 0) {
                 break;
             } else if (x >= mStartArray[mMaxRating - 1]) {
