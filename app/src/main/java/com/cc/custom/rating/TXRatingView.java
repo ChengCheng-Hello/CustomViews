@@ -2,15 +2,17 @@ package com.cc.custom.rating;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -31,18 +33,25 @@ public class TXRatingView extends View {
     private int mEmptyResourceId;
     private int mFilledResourceId;
 
-    private Bitmap mEmptyBitmap;
-    private Bitmap mFilledBitmap;
+    private Drawable mEmptyDrawable;
+    private Drawable mFilledDrawable;
 
-    private Paint mPaint;
+    private Paint mHintPaint;
+    private Paint mRatingValuePaint;
+    private Paint mRatingPaint;
 
-    private int[] mStartArray;
+    private int[] mEndArray;
 
     private int mMaxRating;
-    private int mRating;
+    private float mRating;
     private int mRatingSize;
     private int mItemSpace;
     private boolean mEnabled;
+
+    private int mHeaderHeight;
+    private int mTextSpace;
+    private String mHintText;
+    private String mRatingText;
 
     private GestureDetectorCompat mGestureDetector;
 
@@ -82,11 +91,13 @@ public class TXRatingView extends View {
      * @param rating 评分
      */
     public void setRating(int rating) {
-        if (rating < 0 || rating > mMaxRating) {
+        float realRating = rating / 100f;
+
+        if (realRating < 0 || realRating > mMaxRating) {
             return;
         }
 
-        mRating = rating;
+        mRating = realRating;
 
         invalidate();
     }
@@ -95,23 +106,40 @@ public class TXRatingView extends View {
      * 获取评分
      */
     public int getRating() {
-        return mRating;
+        return (int) (mRating * 100);
     }
 
     private void init() {
-        mStartArray = new int[mMaxRating];
+        mEndArray = new int[mMaxRating * 2];
 
-        mEmptyBitmap = BitmapFactory.decodeResource(getResources(), mEmptyResourceId);
-        mFilledBitmap = BitmapFactory.decodeResource(getResources(), mFilledResourceId);
+        mEmptyDrawable = getResources().getDrawable(mEmptyResourceId);
+        mFilledDrawable = getResources().getDrawable(mFilledResourceId);
 
-        int width = mEmptyBitmap.getWidth();
-        if (width != mRatingSize) {
-            mEmptyBitmap = Bitmap.createScaledBitmap(mEmptyBitmap, mRatingSize, mRatingSize, false);
-            mFilledBitmap = Bitmap.createScaledBitmap(mFilledBitmap, mRatingSize, mRatingSize, false);
-        }
+        mEmptyDrawable =
+            new ClipDrawable(mEmptyDrawable.getConstantState().newDrawable(), Gravity.END, ClipDrawable.HORIZONTAL);
+        mFilledDrawable =
+            new ClipDrawable(mFilledDrawable.getConstantState().newDrawable(), Gravity.START, ClipDrawable.HORIZONTAL);
 
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
+        mHintPaint = new Paint();
+        mHintPaint.setAntiAlias(true);
+        mHintPaint.setColor(Color.BLUE);
+        mHintPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.tx_rating_hint_text_size));
+
+        mRatingValuePaint = new Paint();
+        mRatingValuePaint.setAntiAlias(true);
+        mRatingValuePaint.setColor(Color.BLUE);
+        mRatingValuePaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.tx_rating_value_text_size));
+
+        mRatingPaint = new Paint();
+        mRatingPaint.setAntiAlias(true);
+        mRatingPaint.setColor(Color.BLUE);
+        mRatingPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.tx_rating_text_size));
+
+        mHintText = getContext().getString(R.string.tx_rating_hint_text);
+        mRatingText = getContext().getString(R.string.tx_rating);
+        mTextSpace = getResources().getDimensionPixelOffset(R.dimen.tx_rating_text_space);
+
+        mHeaderHeight = getResources().getDimensionPixelOffset(R.dimen.tx_rating_header_height);
 
         GestureDetector.SimpleOnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -141,6 +169,9 @@ public class TXRatingView extends View {
 
         int width = mRatingSize * mMaxRating + (mMaxRating - 1) * mItemSpace;
         int height = mRatingSize;
+        if (mEnabled) {
+            height += mHeaderHeight;
+        }
 
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -172,20 +203,53 @@ public class TXRatingView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        float y = getHeight() - mRatingSize - mTextSpace;
+        if (mRating < 0.5f) {
+            // hint text
+            float hintWidth = mHintPaint.measureText(mHintText);
+            canvas.drawText(mHintText, (getWidth() - hintWidth) / 2, y, mHintPaint);
+        } else {
+            // score
+            float valueWidth = mRatingValuePaint.measureText(String.valueOf(mRating));
+            float x = (getWidth() - valueWidth) / 2;
+            canvas.drawText(String.valueOf(mRating), x, y, mRatingValuePaint);
+            canvas.drawText(mRatingText, x + valueWidth, y, mRatingPaint);
+        }
+
         int left = getPaddingLeft();
         int top = getPaddingTop();
+
+        if (mEnabled) {
+            top += mHeaderHeight;
+        }
+
+        double minInt = Math.floor(mRating);
+        boolean hasHalf = mRating % 1 > 0f;
 
         for (int i = 0, len = mMaxRating; i < len; i++) {
             if (i > 0) {
                 left += mRatingSize + mItemSpace;
             }
-            mStartArray[i] = left + mRatingSize;
-            if (i < mRating) {
+            mEndArray[i] = left + mRatingSize;
+
+            if (i < minInt) {
                 // filled
-                canvas.drawBitmap(mFilledBitmap, left, top, mPaint);
+                mFilledDrawable.setBounds(left, top, left + mRatingSize, top + mRatingSize);
+                mFilledDrawable.setLevel(10000);
+                mFilledDrawable.draw(canvas);
+            } else if (i == minInt && hasHalf) {
+                // may half
+                mEmptyDrawable.setBounds(left, top, left + mRatingSize, top + mRatingSize);
+                mEmptyDrawable.draw(canvas);
+                mEmptyDrawable.setLevel(10000 / 2);
+                mFilledDrawable.setBounds(left, top, left + mRatingSize, top + mRatingSize);
+                mFilledDrawable.setLevel(10000 / 2);
+                mFilledDrawable.draw(canvas);
             } else {
                 // empty
-                canvas.drawBitmap(mEmptyBitmap, left, top, mPaint);
+                mEmptyDrawable.setBounds(left, top, left + mRatingSize, top + mRatingSize);
+                mEmptyDrawable.setLevel(10000);
+                mEmptyDrawable.draw(canvas);
             }
         }
     }
@@ -201,29 +265,24 @@ public class TXRatingView extends View {
      * @param e event
      */
     private void handleClickEvent(MotionEvent e) {
-        int rating = -1;
+        float rating = -1;
+        float x = e.getX();
         for (int i = 0; i < mMaxRating; i++) {
-            int startX = mStartArray[i];
-            if (e.getX() <= startX) {
-                rating = i;
+            int startX = mEndArray[i];
+            if (x < startX - mRatingSize / 2) {
+                rating = i + 0.5f;
+                break;
+            } else if (x <= startX) {
+                rating = i + 1;
                 break;
             }
         }
-
-        rating++;
 
         if (rating < 0 && rating > mMaxRating) {
             return;
         }
 
-//        if (rating == mRating) {
-//            mRating = mRating - 1;
-//            if (mRating < 0) {
-//                mRating = 0;
-//            }
-//        } else {
-            mRating = rating;
-//        }
+        mRating = rating;
 
         invalidate();
     }
@@ -234,27 +293,30 @@ public class TXRatingView extends View {
      * @param e event
      */
     private void handleMoveEvent(MotionEvent e) {
-        int rating = -1;
+        float rating = -1;
         float x = e.getX();
         for (int i = 0; i < mMaxRating; i++) {
-            int startX = mStartArray[i] + mRatingSize / 2;
-            if (x <= 0) {
+            int startX = mEndArray[i] + mRatingSize / 2;
+            if (x <= mRatingSize / 2) {
+                rating = 0.5f;
                 break;
-            } else if (x >= mStartArray[mMaxRating - 1]) {
+            } else if (x >= mEndArray[mMaxRating - 1]) {
                 rating = mMaxRating;
                 break;
-            } else if (e.getX() <= startX) {
-                rating = i;
+            } else if (x <= startX - mRatingSize * 3 / 4) {
+                rating = i + 0.5f;
+                break;
+            } else if (x <= startX - mRatingSize / 4) {
+                rating = i + 1;
                 break;
             }
         }
 
-        if (rating < 0) {
-            mRating = 0;
+        if (rating < 0.5f) {
+            mRating = 0.5f;
         } else if (rating >= mMaxRating) {
             mRating = mMaxRating;
         } else {
-            rating++;
             if (rating == mRating) {
                 return;
             }
@@ -282,11 +344,11 @@ public class TXRatingView extends View {
 
     private static class SavedState extends BaseSavedState {
 
-        private int rating;
+        private float rating;
 
         private SavedState(Parcel source) {
             super(source);
-            rating = source.readInt();
+            rating = source.readFloat();
         }
 
         private SavedState(Parcelable parcelable) {
@@ -296,7 +358,7 @@ public class TXRatingView extends View {
         @Override
         public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);
-            out.writeInt(rating);
+            out.writeFloat(rating);
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {

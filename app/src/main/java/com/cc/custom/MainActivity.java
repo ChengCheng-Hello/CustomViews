@@ -3,9 +3,11 @@ package com.cc.custom;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.cc.custom.chart.ChartItem;
 import com.cc.custom.chart.LineChartView2;
+import com.cc.custom.rating.TXRatingView;
 import com.cc.custom.stepview.StepItem;
 import com.cc.custom.stepview.StepView;
 
@@ -15,6 +17,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private LineChartView2 lineChartView;
+    private TXRatingView ratingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
                 mChartData.add(new ChartItem(80, "10日", false));
 
                 lineChartView.setData(mChartData);
+
+                Toast.makeText(MainActivity.this, "" + ratingView.getRating(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -62,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lineChartView.setData(new ArrayList<ChartItem>());
+                ratingView.setRating(450);
             }
         });
 
@@ -71,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
                 lineChartView.smoothScrollTo(2);
             }
         });
+
+
+        ratingView = (TXRatingView) findViewById(R.id.ratingView);
 
     }
 }
