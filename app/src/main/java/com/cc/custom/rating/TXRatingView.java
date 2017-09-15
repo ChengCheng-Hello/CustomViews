@@ -203,17 +203,19 @@ public class TXRatingView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        float y = getHeight() - mRatingSize - mTextSpace;
-        if (mRating < 0.5f) {
-            // hint text
-            float hintWidth = mHintPaint.measureText(mHintText);
-            canvas.drawText(mHintText, (getWidth() - hintWidth) / 2, y, mHintPaint);
-        } else {
-            // score
-            float valueWidth = mRatingValuePaint.measureText(String.valueOf(mRating));
-            float x = (getWidth() - valueWidth) / 2;
-            canvas.drawText(String.valueOf(mRating), x, y, mRatingValuePaint);
-            canvas.drawText(mRatingText, x + valueWidth, y, mRatingPaint);
+        if (mEnabled) {
+            float y = getHeight() - mRatingSize - mTextSpace;
+            if (mRating < 0.5f) {
+                // hint text
+                float hintWidth = mHintPaint.measureText(mHintText);
+                canvas.drawText(mHintText, (getWidth() - hintWidth) / 2, y, mHintPaint);
+            } else {
+                // score
+                float valueWidth = mRatingValuePaint.measureText(String.valueOf(mRating));
+                float x = (getWidth() - valueWidth) / 2;
+                canvas.drawText(String.valueOf(mRating), x, y, mRatingValuePaint);
+                canvas.drawText(mRatingText, x + valueWidth, y, mRatingPaint);
+            }
         }
 
         int left = getPaddingLeft();

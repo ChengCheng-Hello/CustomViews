@@ -62,6 +62,16 @@
         android:visibility="gone" />
 
     <com.cc.custom.rating.TXRatingView
+        android:layout_marginLeft="50dp"
+        app:ratingSize="32dp"
+        app:itemSpace="4dp"
+        app:maxRating="5"
+        app:rating="0"
+        app:enabled="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.cc.custom.rating.TXRatingView
         android:id="@+id/ratingView"
         android:layout_marginLeft="50dp"
         app:ratingSize="32dp"
