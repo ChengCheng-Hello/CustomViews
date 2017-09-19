@@ -242,10 +242,10 @@ public class TXRatingView extends View {
             } else if (i == minInt && hasHalf) {
                 // may half
                 mEmptyDrawable.setBounds(left, top, left + mRatingSize, top + mRatingSize);
-                mEmptyDrawable.draw(canvas);
                 mEmptyDrawable.setLevel(10000 / 2);
                 mFilledDrawable.setBounds(left, top, left + mRatingSize, top + mRatingSize);
                 mFilledDrawable.setLevel(10000 / 2);
+                mEmptyDrawable.draw(canvas);
                 mFilledDrawable.draw(canvas);
             } else {
                 // empty
