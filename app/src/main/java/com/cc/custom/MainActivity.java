@@ -10,6 +10,7 @@ import com.cc.custom.chart.LineChartView2;
 import com.cc.custom.rating.TXRatingView;
 import com.cc.custom.stepview.StepItem;
 import com.cc.custom.stepview.StepView;
+import com.cc.custom.viewpager.TXVpDemoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,5 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
         ratingView = (TXRatingView) findViewById(R.id.ratingView);
 
+
+        findViewById(R.id.btn_vp).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TXVpDemoActivity.launch(v.getContext());
+            }
+        });
     }
 }
