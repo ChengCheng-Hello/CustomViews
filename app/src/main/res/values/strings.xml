@@ -3,4 +3,9 @@
     <string name="limit_default_text">最多输入%1$d个字</string>
     <string name="tx_rating_hint_text">请滑动星星评分</string>
     <string name="tx_rating">分</string>
+
+    <string name="tx_day">日</string>
+    <string name="tx_week">周</string>
+    <string name="tx_month">月</string>
+    <string name="tx_year">年</string>
 </resources>

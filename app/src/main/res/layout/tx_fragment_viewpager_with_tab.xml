@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.cc.custom.uikit.PagerSlidingTabStrip
+        android:id="@+id/tx_viewpager_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/TX_CO_WHITE"
+        app:pstsShouldExpand="true" />
+
+    <com.cc.custom.uikit.UnScrollViewPager
+        android:id="@+id/tx_viewpager_vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

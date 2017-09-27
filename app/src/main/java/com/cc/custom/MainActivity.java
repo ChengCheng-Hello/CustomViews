@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.cc.custom.calender.TXCalenderDemoActivity;
 import com.cc.custom.chart.ChartItem;
 import com.cc.custom.chart.LineChartView2;
 import com.cc.custom.rating.TXRatingView;
@@ -87,6 +88,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 TXVpDemoActivity.launch(v.getContext());
+            }
+        });
+
+        findViewById(R.id.btn_calender).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TXCalenderDemoActivity.launch(v.getContext());
             }
         });
     }
