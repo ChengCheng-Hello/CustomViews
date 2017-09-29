@@ -149,6 +149,10 @@ public class TXCalendarPickerDayPresenter implements TXCalenderPickerContract.Pr
             dates.add(monthModel);
         }
 
+        TXMonthModel monthModel = new TXMonthModel(null);
+        monthModel.isHolder = true;
+        dates.add(monthModel);
+
         return dates;
     }
 

@@ -133,6 +133,10 @@ public class TXCalendarPickerYearPresenter implements TXCalenderPickerContract.P
             dates.add(yearModel);
         }
 
+        TXYearModel holderModel = new TXYearModel(null);
+        holderModel.isHolder = true;
+        dates.add(holderModel);
+
         return dates;
     }
 

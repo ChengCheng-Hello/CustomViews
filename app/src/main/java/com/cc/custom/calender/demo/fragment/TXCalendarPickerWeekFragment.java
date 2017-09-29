@@ -34,6 +34,11 @@ public class TXCalendarPickerWeekFragment extends TXCalendarPickerBaseFragment<T
     }
 
     @Override
+    public int getCellViewType(TXMonthModel data) {
+        return 0;
+    }
+
+    @Override
     public TXBaseListCell<TXMonthModel> onCreateCell(int i) {
         return new TXCalendarWeekCell(this);
     }

@@ -204,7 +204,7 @@ public class TXMonthView2 extends View {
 
             if (i < mWeekCount - 1) {
                 int lineY = mRowHeight * (i + 1);
-                canvas.drawLine(0, mRowHeight * (i + 1), mWidth, lineY, mLinePaint);
+                canvas.drawLine(0, lineY, mWidth, lineY, mLinePaint);
             }
         }
     }

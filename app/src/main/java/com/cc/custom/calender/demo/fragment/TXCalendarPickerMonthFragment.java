@@ -3,6 +3,7 @@ package com.cc.custom.calender.demo.fragment;
 import com.cc.custom.calender.demo.TXCalendarConst;
 import com.cc.custom.calender.demo.TXCalenderPickerContract;
 import com.cc.custom.calender.demo.cell.TXCalendarMonthCell;
+import com.cc.custom.calender.demo.cell.TXCalendarMonthHolderCell;
 import com.cc.custom.calender.demo.listener.TXOnSelectDateListener;
 import com.cc.custom.calender.demo.model.TXYearModel;
 import com.cc.custom.calender.demo.presenter.TXCalendarPickerMonthPresenter;
@@ -34,7 +35,20 @@ public class TXCalendarPickerMonthFragment extends TXCalendarPickerBaseFragment<
     }
 
     @Override
-    public TXBaseListCell<TXYearModel> onCreateCell(int i) {
-        return new TXCalendarMonthCell(this);
+    public int getCellViewType(TXYearModel data) {
+        if (data == null) {
+            return 0;
+        } else {
+            return data.isHolder ? 1 : 0;
+        }
+    }
+
+    @Override
+    public TXBaseListCell<TXYearModel> onCreateCell(int type) {
+        if (type == 0) {
+            return new TXCalendarMonthCell(this);
+        } else {
+            return new TXCalendarMonthHolderCell();
+        }
     }
 }

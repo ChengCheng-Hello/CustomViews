@@ -13,6 +13,7 @@ public class TXYearModel {
 
     public List<TXMonthModel> monthList;
     public TXDateModel year;
+    public boolean isHolder;
 
     public TXYearModel(TXDateModel date) {
         this.year = date;

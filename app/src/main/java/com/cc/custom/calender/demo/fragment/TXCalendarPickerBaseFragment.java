@@ -18,6 +18,7 @@ import com.cc.custom.calender.demo.listener.TXOnSelectDateListener;
 import com.tx.listview.TXListView;
 import com.tx.listview.base.cell.TXBaseListCell;
 import com.tx.listview.base.listener.TXOnCreateCellListener;
+import com.tx.listview.base.listener.TXOnGetCellViewTypeListener;
 
 import java.util.List;
 
@@ -33,7 +34,8 @@ import static com.cc.custom.calender.demo.TXCalendarConst.INTENT_TYPE;
  * Created by Cheng on 2017/9/27.
  */
 public abstract class TXCalendarPickerBaseFragment<T> extends TXBaseFragment
-    implements TXCalenderPickerContract.View<T>, TXOnCreateCellListener<T>, TXOnSelectDateListener {
+    implements TXCalenderPickerContract.View<T>, TXOnCreateCellListener<T>, TXOnSelectDateListener,
+    TXOnGetCellViewTypeListener<T> {
 
     private TXCalenderPickerContract.Presenter mPresenter;
 
@@ -50,7 +52,10 @@ public abstract class TXCalendarPickerBaseFragment<T> extends TXBaseFragment
     public abstract int getType();
 
     @Override
-    public abstract TXBaseListCell<T> onCreateCell(int i);
+    public abstract int getCellViewType(T data);
+
+    @Override
+    public abstract TXBaseListCell<T> onCreateCell(int type);
 
     public void setArgs(TXDate startDate, TXDate endDate) {
         Bundle args = new Bundle();
@@ -73,6 +78,7 @@ public abstract class TXCalendarPickerBaseFragment<T> extends TXBaseFragment
 
         listView = (TXListView<T>) view.findViewById(R.id.listView);
         listView.setOnCreateCellListener(this);
+        listView.setOnGetCellViewTypeListener(this);
 
         TXDate startDate = null;
         TXDate endDate = null;

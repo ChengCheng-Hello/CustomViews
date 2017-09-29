@@ -21,6 +21,8 @@ public class TXMonthModel {
 
     public int lastDayOfMonth;
 
+    public boolean isHolder;
+
     public TXMonthModel(TXDateModel date) {
         this.month = date;
     }
