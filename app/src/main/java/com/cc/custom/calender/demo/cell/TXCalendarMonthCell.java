@@ -12,8 +12,8 @@ import com.cc.custom.R;
 import com.cc.custom.calender.demo.TXCalenderViewPoolManager;
 import com.cc.custom.calender.demo.TXDate;
 import com.cc.custom.calender.demo.listener.TXOnSelectDateListener;
-import com.cc.custom.calender.demo.model.TXMonthModel;
-import com.cc.custom.calender.demo.model.TXYearModel;
+import com.cc.custom.calender.demo.model.TXCalendarMonthModel;
+import com.cc.custom.calender.demo.model.TXCalendarYearModel;
 import com.tx.listview.base.cell.TXBaseListCell;
 
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
  * <p>
  * Created by Cheng on 2017/9/28.
  */
-public class TXCalendarMonthCell implements TXBaseListCell<TXYearModel> {
+public class TXCalendarMonthCell implements TXBaseListCell<TXCalendarYearModel> {
 
     private TextView mTvTitle;
     private RecyclerView mRv;
@@ -36,12 +36,12 @@ public class TXCalendarMonthCell implements TXBaseListCell<TXYearModel> {
     }
 
     @Override
-    public void setData(TXYearModel model) {
+    public void setData(TXCalendarYearModel model) {
         if (model == null) {
             return;
         }
 
-        int year = model.dateModel.date.getYear();
+        int year = model.year.day.getYear();
 
         mTvTitle.setText(String.format("%1$d年", year));
 
@@ -64,14 +64,14 @@ public class TXCalendarMonthCell implements TXBaseListCell<TXYearModel> {
 
     private static class MyAdapter extends RecyclerView.Adapter<MyHolder> {
 
-        private List<TXMonthModel> listData;
+        private List<TXCalendarMonthModel> listData;
         private TXOnSelectDateListener selectDateRangeListener;
 
         public MyAdapter(TXOnSelectDateListener selectDateRangeListener) {
             this.selectDateRangeListener = selectDateRangeListener;
         }
 
-        public void setListData(List<TXMonthModel> listData) {
+        public void setListData(List<TXCalendarMonthModel> listData) {
             this.listData = listData;
             this.notifyDataSetChanged();
         }
@@ -85,20 +85,20 @@ public class TXCalendarMonthCell implements TXBaseListCell<TXYearModel> {
 
         @Override
         public void onBindViewHolder(MyHolder holder, int position) {
-            TXMonthModel model = listData.get(position);
-            final TXDate data = model.dateModel.date;
+            TXCalendarMonthModel model = listData.get(position);
+            final TXDate data = model.month.day;
 
-            int month = model.dateModel.date.getMonth();
+            int month = model.month.day.getMonth();
 
             holder.tvContent.setText(String.format("%1$d月", month + 1));
 
-            if (model.dateModel.isSelected) {
+            if (model.month.isSelected) {
                 holder.tvContent.setTextColor(Color.BLUE);
             } else {
                 holder.tvContent.setTextColor(Color.BLACK);
             }
 
-            if (model.dateModel.isShowTodayMark) {
+            if (model.month.isShowTodayMark) {
                 holder.markView.setVisibility(View.VISIBLE);
             } else {
                 holder.markView.setVisibility(View.GONE);

@@ -5,12 +5,12 @@ import com.cc.custom.calender.demo.TXCalenderPickerContract;
 import com.cc.custom.calender.demo.cell.TXCalendarDayCell;
 import com.cc.custom.calender.demo.cell.TXCalendarDayHolderCell;
 import com.cc.custom.calender.demo.listener.TXOnSelectDateListener;
-import com.cc.custom.calender.demo.model.TXMonthModel;
+import com.cc.custom.calender.demo.model.TXCalendarMonthModel;
 import com.cc.custom.calender.demo.presenter.TXCalendarPickerDayPresenter;
 import com.tx.listview.base.cell.TXBaseListCell;
 import com.tx.listview.base.listener.TXOnCreateCellListener;
 
-import static com.cc.custom.calender.demo.model.TXCalendarModel.TYPE_NORMAL;
+import static com.cc.custom.calender.demo.TXCalendarConst.ShowType.TYPE_NORMAL;
 
 /**
  * TODO: 类的一句话描述
@@ -19,8 +19,8 @@ import static com.cc.custom.calender.demo.model.TXCalendarModel.TYPE_NORMAL;
  * <p>
  * Created by Cheng on 2017/9/27.
  */
-public class TXCalendarPickerDayFragment extends TXCalendarPickerBaseFragment<TXMonthModel> implements
-    TXCalenderPickerContract.View<TXMonthModel>, TXOnCreateCellListener<TXMonthModel>, TXOnSelectDateListener {
+public class TXCalendarPickerDayFragment extends TXCalendarPickerBaseFragment<TXCalendarMonthModel> implements
+    TXCalenderPickerContract.View<TXCalendarMonthModel>, TXOnCreateCellListener<TXCalendarMonthModel>, TXOnSelectDateListener {
 
     public static TXCalendarPickerDayFragment newInstance() {
         return new TXCalendarPickerDayFragment();
@@ -37,7 +37,7 @@ public class TXCalendarPickerDayFragment extends TXCalendarPickerBaseFragment<TX
     }
 
     @Override
-    public TXBaseListCell<TXMonthModel> onCreateCell(int type) {
+    public TXBaseListCell<TXCalendarMonthModel> onCreateCell(int type) {
         if (type == TYPE_NORMAL) {
             return new TXCalendarDayCell(this);
         } else {

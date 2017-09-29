@@ -14,8 +14,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.cc.custom.calender.demo.listener.TXOnSelectDateListener;
-import com.cc.custom.calender.demo.model.TXDayModel;
-import com.cc.custom.calender.demo.model.TXMonthModel;
+import com.cc.custom.calender.demo.model.TXCalendarDayModel;
+import com.cc.custom.calender.demo.model.TXCalendarMonthModel;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class TXMonthView2 extends View {
 
-    private List<TXDayModel> mDayList;
+    private List<TXCalendarDayModel> mDayList;
     private int mWeekCount;
     private int mLastDayOfMonth;
 
@@ -76,7 +76,7 @@ public class TXMonthView2 extends View {
         init();
     }
 
-    public void setData(@NonNull TXMonthModel data, TXOnSelectDateListener listener) {
+    public void setData(@NonNull TXCalendarMonthModel data, TXOnSelectDateListener listener) {
         this.mDayList = data.dayList;
         this.mWeekCount = data.weekCount;
         this.mLastDayOfMonth = data.lastDayOfMonth;
@@ -178,10 +178,10 @@ public class TXMonthView2 extends View {
                 int centerX = mColumnWidth * j + mColumnWidth / 2;
                 int centerY = mRowHeight * i + mRowHeight / 2 + mLineWidth * i;
 
-                TXDayModel dataModel = mDayList.get(index);
-                if (dataModel.date != null) {
+                TXCalendarDayModel dataModel = mDayList.get(index);
+                if (dataModel.day != null) {
                     // text
-                    String content = String.valueOf(dataModel.date.getDay());
+                    String content = String.valueOf(dataModel.day.getDay());
                     float textWidth = mDayTextPaint.measureText(content);
 
                     // bg
@@ -235,13 +235,13 @@ public class TXMonthView2 extends View {
         if (index < 0 || index >= mDayList.size()) {
             return;
         }
-        TXDayModel dataModel = mDayList.get(index);
-        if (dataModel == null || dataModel.date == null) {
+        TXCalendarDayModel dataModel = mDayList.get(index);
+        if (dataModel == null || dataModel.day == null) {
             return;
         }
 
         if (mSelectDateListener != null) {
-            mSelectDateListener.onSelectDate(dataModel.date);
+            mSelectDateListener.onSelectDate(dataModel.day);
         }
     }
 }

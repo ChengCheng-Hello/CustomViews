@@ -26,7 +26,7 @@ import java.util.List;
 import static com.cc.custom.calender.demo.TXCalendarConst.INTENT_END_DATE;
 import static com.cc.custom.calender.demo.TXCalendarConst.INTENT_START_DATE;
 import static com.cc.custom.calender.demo.TXCalendarConst.INTENT_TYPE;
-import static com.cc.custom.calender.demo.model.TXCalendarModel.TYPE_HOLDER;
+import static com.cc.custom.calender.demo.TXCalendarConst.ShowType.TYPE_HOLDER;
 
 /**
  * TODO: 类的一句话描述

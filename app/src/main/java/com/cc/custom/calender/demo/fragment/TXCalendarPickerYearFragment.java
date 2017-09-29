@@ -5,7 +5,7 @@ import com.cc.custom.calender.demo.TXCalenderPickerContract;
 import com.cc.custom.calender.demo.cell.TXCalendarYearCell;
 import com.cc.custom.calender.demo.cell.TXCalendarYearHolderCell;
 import com.cc.custom.calender.demo.listener.TXOnSelectDateListener;
-import com.cc.custom.calender.demo.model.TXYearModel;
+import com.cc.custom.calender.demo.model.TXCalendarYearModel;
 import com.cc.custom.calender.demo.presenter.TXCalendarPickerYearPresenter;
 import com.tx.listview.base.cell.TXBaseListCell;
 import com.tx.listview.base.listener.TXOnCreateCellListener;
@@ -17,8 +17,8 @@ import com.tx.listview.base.listener.TXOnCreateCellListener;
  * <p>
  * Created by Cheng on 2017/9/27.
  */
-public class TXCalendarPickerYearFragment extends TXCalendarPickerBaseFragment<TXYearModel>
-    implements TXCalenderPickerContract.View<TXYearModel>, TXOnCreateCellListener<TXYearModel>, TXOnSelectDateListener {
+public class TXCalendarPickerYearFragment extends TXCalendarPickerBaseFragment<TXCalendarYearModel>
+    implements TXCalenderPickerContract.View<TXCalendarYearModel>, TXOnCreateCellListener<TXCalendarYearModel>, TXOnSelectDateListener {
 
     public static TXCalendarPickerYearFragment newInstance() {
         return new TXCalendarPickerYearFragment();
@@ -35,7 +35,7 @@ public class TXCalendarPickerYearFragment extends TXCalendarPickerBaseFragment<T
     }
 
     @Override
-    public TXBaseListCell<TXYearModel> onCreateCell(int type) {
+    public TXBaseListCell<TXCalendarYearModel> onCreateCell(int type) {
         if (type == 0) {
             return new TXCalendarYearCell(this);
         } else {

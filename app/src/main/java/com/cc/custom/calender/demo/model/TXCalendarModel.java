@@ -1,5 +1,9 @@
 package com.cc.custom.calender.demo.model;
 
+import com.cc.custom.calender.demo.TXCalendarConst;
+
+import static com.cc.custom.calender.demo.TXCalendarConst.ShowType.TYPE_NORMAL;
+
 /**
  * TODO: 类的一句话描述
  * <p>
@@ -9,15 +13,10 @@ package com.cc.custom.calender.demo.model;
  */
 public class TXCalendarModel {
 
-    public static final int TYPE_NORMAL = 0;
-    public static final int TYPE_HOLDER = 1;
-
+    @TXCalendarConst.ShowType.TYPE
     public int type;
 
-    public TXDayModel dateModel;
-
-    public TXCalendarModel(TXDayModel date) {
-        this.dateModel = date;
+    public TXCalendarModel() {
         this.type = TYPE_NORMAL;
     }
 }

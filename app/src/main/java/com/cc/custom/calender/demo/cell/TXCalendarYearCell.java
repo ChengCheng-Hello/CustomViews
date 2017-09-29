@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.cc.custom.R;
 import com.cc.custom.calender.demo.TXDate;
 import com.cc.custom.calender.demo.listener.TXOnSelectDateListener;
-import com.cc.custom.calender.demo.model.TXYearModel;
+import com.cc.custom.calender.demo.model.TXCalendarYearModel;
 import com.tx.listview.base.cell.TXBaseListCell;
 
 /**
@@ -17,7 +17,7 @@ import com.tx.listview.base.cell.TXBaseListCell;
  * <p>
  * Created by Cheng on 2017/9/27.
  */
-public class TXCalendarYearCell implements TXBaseListCell<TXYearModel> {
+public class TXCalendarYearCell implements TXBaseListCell<TXCalendarYearModel> {
 
     private TextView mTvYear;
     private View mTodayMarkView;
@@ -28,25 +28,25 @@ public class TXCalendarYearCell implements TXBaseListCell<TXYearModel> {
     }
 
     @Override
-    public void setData(final TXYearModel data) {
+    public void setData(final TXCalendarYearModel data) {
         if (data == null) {
             return;
         }
 
-        final TXDate model = data.dateModel.date;
+        final TXDate model = data.year.day;
 
         int year = model.getYear();
         mTvYear.setText(String.format("%1$d年", year));
 
         // selected
-        if (data.dateModel.isSelected) {
+        if (data.year.isSelected) {
             mTvYear.setTextColor(Color.BLUE);
         } else {
             mTvYear.setTextColor(Color.BLACK);
         }
 
         // todayMark
-        if (data.dateModel.isShowTodayMark) {
+        if (data.year.isShowTodayMark) {
             mTodayMarkView.setVisibility(View.VISIBLE);
         } else {
             mTodayMarkView.setVisibility(View.GONE);

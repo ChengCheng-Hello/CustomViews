@@ -6,7 +6,7 @@ import android.widget.TextView;
 import com.cc.custom.R;
 import com.cc.custom.calender.TXMonthView2;
 import com.cc.custom.calender.demo.listener.TXOnSelectDateListener;
-import com.cc.custom.calender.demo.model.TXMonthModel;
+import com.cc.custom.calender.demo.model.TXCalendarMonthModel;
 import com.tx.listview.base.cell.TXBaseListCell;
 
 /**
@@ -16,7 +16,7 @@ import com.tx.listview.base.cell.TXBaseListCell;
  * <p>
  * Created by Cheng on 2017/9/28.
  */
-public class TXCalendarDayCell implements TXBaseListCell<TXMonthModel> {
+public class TXCalendarDayCell implements TXBaseListCell<TXCalendarMonthModel> {
 
     private TextView mTvTitle;
     private TXMonthView2 mMonthView;
@@ -27,13 +27,13 @@ public class TXCalendarDayCell implements TXBaseListCell<TXMonthModel> {
     }
 
     @Override
-    public void setData(TXMonthModel model) {
+    public void setData(TXCalendarMonthModel model) {
         if (model == null) {
             return;
         }
 
-        int year = model.dateModel.date.getYear();
-        int month = model.dateModel.date.getMonth();
+        int year = model.month.day.getYear();
+        int month = model.month.day.getMonth();
 
         mTvTitle.setText(String.format("%1$d年%2$d月", year, month + 1));
 

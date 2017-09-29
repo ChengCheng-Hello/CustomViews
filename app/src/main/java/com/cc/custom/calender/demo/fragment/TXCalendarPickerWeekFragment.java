@@ -4,7 +4,7 @@ import com.cc.custom.calender.demo.TXCalendarConst;
 import com.cc.custom.calender.demo.TXCalenderPickerContract;
 import com.cc.custom.calender.demo.cell.TXCalendarWeekCell;
 import com.cc.custom.calender.demo.listener.TXOnSelectDateListener;
-import com.cc.custom.calender.demo.model.TXMonthModel;
+import com.cc.custom.calender.demo.model.TXCalendarMonthModel;
 import com.cc.custom.calender.demo.presenter.TXCalendarPickerWeekPresenter;
 import com.tx.listview.base.cell.TXBaseListCell;
 import com.tx.listview.base.listener.TXOnCreateCellListener;
@@ -16,8 +16,8 @@ import com.tx.listview.base.listener.TXOnCreateCellListener;
  * <p>
  * Created by Cheng on 2017/9/27.
  */
-public class TXCalendarPickerWeekFragment extends TXCalendarPickerBaseFragment<TXMonthModel> implements
-    TXCalenderPickerContract.View<TXMonthModel>, TXOnCreateCellListener<TXMonthModel>, TXOnSelectDateListener {
+public class TXCalendarPickerWeekFragment extends TXCalendarPickerBaseFragment<TXCalendarMonthModel> implements
+    TXCalenderPickerContract.View<TXCalendarMonthModel>, TXOnCreateCellListener<TXCalendarMonthModel>, TXOnSelectDateListener {
 
     public static TXCalendarPickerWeekFragment newInstance() {
         return new TXCalendarPickerWeekFragment();
@@ -34,7 +34,7 @@ public class TXCalendarPickerWeekFragment extends TXCalendarPickerBaseFragment<T
     }
 
     @Override
-    public TXBaseListCell<TXMonthModel> onCreateCell(int i) {
+    public TXBaseListCell<TXCalendarMonthModel> onCreateCell(int i) {
         return new TXCalendarWeekCell(this);
     }
 }

@@ -4,8 +4,8 @@ import android.os.AsyncTask;
 
 import com.cc.custom.calender.demo.TXCalenderPickerContract;
 import com.cc.custom.calender.demo.TXDate;
-import com.cc.custom.calender.demo.model.TXDayModel;
-import com.cc.custom.calender.demo.model.TXMonthModel;
+import com.cc.custom.calender.demo.model.TXCalendarDayModel;
+import com.cc.custom.calender.demo.model.TXCalendarMonthModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,14 +20,14 @@ import java.util.List;
  */
 public class TXCalendarPickerWeekPresenter implements TXCalenderPickerContract.Presenter {
 
-    private TXCalenderPickerContract.View<TXMonthModel> mView;
+    private TXCalenderPickerContract.View<TXCalendarMonthModel> mView;
 
     // 向前2年对应月数
     private static final int MONTH_OFFSET = 24;
     // 需要显示置顶的日期
-    private TXMonthModel mShowTopDate;
+    private TXCalendarMonthModel mShowTopDate;
 
-    public TXCalendarPickerWeekPresenter(TXCalenderPickerContract.View<TXMonthModel> view) {
+    public TXCalendarPickerWeekPresenter(TXCalenderPickerContract.View<TXCalendarMonthModel> view) {
         this.mView = view;
         this.mView.setPresenter(this);
     }
@@ -40,7 +40,7 @@ public class TXCalendarPickerWeekPresenter implements TXCalenderPickerContract.P
     public void loadDates(TXDate startDate, TXDate endDate) {
         AsyncTask<TXDate, Void, Void> task = new AsyncTask<TXDate, Void, Void>() {
 
-            private List<TXMonthModel> dates;
+            private List<TXCalendarMonthModel> dates;
 
             @Override
             protected Void doInBackground(TXDate...params) {
@@ -87,7 +87,7 @@ public class TXCalendarPickerWeekPresenter implements TXCalenderPickerContract.P
      *
      * @param selectedStartDate 选中开始日期
      */
-    private List<TXMonthModel> getMonthList(TXDate selectedStartDate, TXDate selectedEndDate) {
+    private List<TXCalendarMonthModel> getMonthList(TXDate selectedStartDate, TXDate selectedEndDate) {
         TXDate today = new TXDate(System.currentTimeMillis());
         int todayYear = today.getYear();
         int todayMonth = today.getMonth();
@@ -102,7 +102,7 @@ public class TXCalendarPickerWeekPresenter implements TXCalenderPickerContract.P
             selectedMonth = selectedStartDate.getMonth();
         }
 
-        List<TXMonthModel> dates = new ArrayList<>(monthCount);
+        List<TXCalendarMonthModel> dates = new ArrayList<>(monthCount);
 
         for (int i = 0; i < monthCount; i++) {
             Calendar calendar = Calendar.getInstance();
@@ -114,7 +114,7 @@ public class TXCalendarPickerWeekPresenter implements TXCalenderPickerContract.P
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
 
-            TXMonthModel monthModel = new TXMonthModel(new TXDayModel(new TXDate(calendar.getTimeInMillis())));
+            TXCalendarMonthModel monthModel = new TXCalendarMonthModel(new TXCalendarDayModel(new TXDate(calendar.getTimeInMillis())));
 
             int calendarYear = calendar.get(Calendar.YEAR);
             int calendarMonth = calendar.get(Calendar.MONTH);
@@ -153,14 +153,14 @@ public class TXCalendarPickerWeekPresenter implements TXCalenderPickerContract.P
         return dates;
     }
 
-    private List<TXDayModel> getDayList(int year, int month, int todayYear, int todayMonth, int todayDay,
-        int firstDayOffset, int lastDayOfMonth, int dayCount, long startTime, long endTime) {
+    private List<TXCalendarDayModel> getDayList(int year, int month, int todayYear, int todayMonth, int todayDay,
+                                                int firstDayOffset, int lastDayOfMonth, int dayCount, long startTime, long endTime) {
 
-        List<TXDayModel> dayList = new ArrayList<>(dayCount);
+        List<TXCalendarDayModel> dayList = new ArrayList<>(dayCount);
 
         for (int i = 0; i < dayCount; i++) {
             if (i < firstDayOffset || i >= lastDayOfMonth + firstDayOffset) {
-                TXDayModel model = new TXDayModel(null);
+                TXCalendarDayModel model = new TXCalendarDayModel(null);
                 dayList.add(model);
                 continue;
             }
@@ -175,8 +175,8 @@ public class TXCalendarPickerWeekPresenter implements TXCalenderPickerContract.P
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
 
-            TXDayModel dateModel = new TXDayModel(new TXDate(calendar.getTimeInMillis()));
-            long milliseconds = dateModel.date.getMilliseconds();
+            TXCalendarDayModel dateModel = new TXCalendarDayModel(new TXDate(calendar.getTimeInMillis()));
+            long milliseconds = dateModel.day.getMilliseconds();
             // 选中日期
             dateModel.isSelected = milliseconds >= startTime && milliseconds <= endTime;
             // 当日标志

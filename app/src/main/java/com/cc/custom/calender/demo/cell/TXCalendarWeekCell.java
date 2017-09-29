@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.cc.custom.R;
 import com.cc.custom.calender.demo.listener.TXOnSelectDateListener;
-import com.cc.custom.calender.demo.model.TXDayModel;
-import com.cc.custom.calender.demo.model.TXMonthModel;
+import com.cc.custom.calender.demo.model.TXCalendarDayModel;
+import com.cc.custom.calender.demo.model.TXCalendarMonthModel;
 import com.tx.listview.base.cell.TXBaseListCell;
 
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.List;
  * <p>
  * Created by Cheng on 2017/9/28.
  */
-public class TXCalendarWeekCell implements TXBaseListCell<TXMonthModel> {
+public class TXCalendarWeekCell implements TXBaseListCell<TXCalendarMonthModel> {
 
     private TextView mTvTitle;
     private MyAdapter mAdapter;
@@ -33,13 +33,13 @@ public class TXCalendarWeekCell implements TXBaseListCell<TXMonthModel> {
     }
 
     @Override
-    public void setData(TXMonthModel model) {
+    public void setData(TXCalendarMonthModel model) {
         if (model == null) {
             return;
         }
 
-        int year = model.dateModel.date.getYear();
-        int month = model.dateModel.date.getMonth();
+        int year = model.month.day.getYear();
+        int month = model.month.day.getMonth();
 
         mTvTitle.setText(String.format("%1$d年%2$d月", year, month + 1));
 
@@ -61,14 +61,14 @@ public class TXCalendarWeekCell implements TXBaseListCell<TXMonthModel> {
 
     private static class MyAdapter extends RecyclerView.Adapter<MyHolder> {
 
-        private List<TXDayModel> listData;
+        private List<TXCalendarDayModel> listData;
         private TXOnSelectDateListener selectDateRangeListener;
 
         public MyAdapter(TXOnSelectDateListener selectDateRangeListener) {
             this.selectDateRangeListener = selectDateRangeListener;
         }
 
-        public void setListData(List<TXDayModel> listData) {
+        public void setListData(List<TXCalendarDayModel> listData) {
             this.listData = listData;
             this.notifyDataSetChanged();
         }
@@ -82,15 +82,15 @@ public class TXCalendarWeekCell implements TXBaseListCell<TXMonthModel> {
 
         @Override
         public void onBindViewHolder(MyHolder holder, int position) {
-            final TXDayModel model = listData.get(position);
-            if (model.date == null) {
+            final TXCalendarDayModel model = listData.get(position);
+            if (model.day == null) {
                 holder.tvContent.setText(null);
                 holder.markView.setVisibility(View.GONE);
                 holder.tvContent.setOnClickListener(null);
                 return;
             }
 
-            int day = model.date.getDay();
+            int day = model.day.getDay();
 
             holder.tvContent.setText(String.valueOf(day));
 
@@ -110,7 +110,7 @@ public class TXCalendarWeekCell implements TXBaseListCell<TXMonthModel> {
                 @Override
                 public void onClick(View v) {
                     if (selectDateRangeListener != null) {
-                        selectDateRangeListener.onSelectDate(model.date);
+                        selectDateRangeListener.onSelectDate(model.day);
                     }
                 }
             });

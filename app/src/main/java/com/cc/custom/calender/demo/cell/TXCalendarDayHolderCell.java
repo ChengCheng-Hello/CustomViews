@@ -3,7 +3,7 @@ package com.cc.custom.calender.demo.cell;
 import android.view.View;
 
 import com.cc.custom.R;
-import com.cc.custom.calender.demo.model.TXMonthModel;
+import com.cc.custom.calender.demo.model.TXCalendarMonthModel;
 import com.tx.listview.base.cell.TXBaseListCell;
 
 /**
@@ -13,13 +13,13 @@ import com.tx.listview.base.cell.TXBaseListCell;
  * <p>
  * Created by Cheng on 2017/9/28.
  */
-public class TXCalendarDayHolderCell implements TXBaseListCell<TXMonthModel> {
+public class TXCalendarDayHolderCell implements TXBaseListCell<TXCalendarMonthModel> {
 
     public TXCalendarDayHolderCell() {
     }
 
     @Override
-    public void setData(TXMonthModel model) {
+    public void setData(TXCalendarMonthModel model) {
     }
 
     @Override

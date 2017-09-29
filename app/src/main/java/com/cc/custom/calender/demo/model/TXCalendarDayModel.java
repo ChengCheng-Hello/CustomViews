@@ -9,20 +9,21 @@ import com.cc.custom.calender.demo.TXDate;
  * <p>
  * Created by Cheng on 2017/9/28.
  */
-public class TXDayModel {
+public class TXCalendarDayModel extends TXCalendarModel {
 
-    public TXDate date;
+    public TXDate day;
 
     public boolean isSelected;
 
     public boolean isShowTodayMark;
 
-    public TXDayModel(TXDate date) {
-        this.date = date;
+    public TXCalendarDayModel(TXDate date) {
+        super();
+        this.day = date;
     }
 
     @Override
     public String toString() {
-        return "TXDayModel{" + "date=" + date + ", isSelected=" + isSelected + '}';
+        return "TXCalendarDayModel{" + "day=" + day + ", isSelected=" + isSelected + '}';
     }
 }

@@ -9,9 +9,11 @@ import java.util.List;
  * <p>
  * Created by Cheng on 2017/9/28.
  */
-public class TXMonthModel extends TXCalendarModel {
+public class TXCalendarMonthModel extends TXCalendarModel {
 
-    public List<TXDayModel> dayList;
+    public TXCalendarDayModel month;
+
+    public List<TXCalendarDayModel> dayList;
 
     public int weekCount;
 
@@ -19,12 +21,13 @@ public class TXMonthModel extends TXCalendarModel {
 
     public int lastDayOfMonth;
 
-    public TXMonthModel(TXDayModel date) {
-        super(date);
+    public TXCalendarMonthModel(TXCalendarDayModel date) {
+        super();
+        this.month = date;
     }
 
     @Override
     public String toString() {
-        return "TXMonthModel{" + "dayList=" + dayList + ", dateModel=" + dateModel + '}';
+        return "TXCalendarMonthModel{" + "dayList=" + dayList + ", month=" + month + '}';
     }
 }

@@ -4,12 +4,14 @@ import android.os.AsyncTask;
 
 import com.cc.custom.calender.demo.TXCalenderPickerContract;
 import com.cc.custom.calender.demo.TXDate;
-import com.cc.custom.calender.demo.model.TXDayModel;
-import com.cc.custom.calender.demo.model.TXYearModel;
+import com.cc.custom.calender.demo.model.TXCalendarDayModel;
+import com.cc.custom.calender.demo.model.TXCalendarYearModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import static com.cc.custom.calender.demo.TXCalendarConst.ShowType.TYPE_HOLDER;
 
 /**
  * TODO: 类的一句话描述
@@ -20,16 +22,16 @@ import java.util.List;
  */
 public class TXCalendarPickerYearPresenter implements TXCalenderPickerContract.Presenter {
 
-    private TXCalenderPickerContract.View<TXYearModel> mView;
+    private TXCalenderPickerContract.View<TXCalendarYearModel> mView;
 
     // 显示总年数：6
     private static final int YEAR_COUNT = 6;
     // 向前显示年数：5
     private static final int YEAR_OFFSET = 5;
     // 需要显示置顶的日期
-    private TXYearModel mShowTopDate;
+    private TXCalendarYearModel mShowTopDate;
 
-    public TXCalendarPickerYearPresenter(TXCalenderPickerContract.View<TXYearModel> view) {
+    public TXCalendarPickerYearPresenter(TXCalenderPickerContract.View<TXCalendarYearModel> view) {
         this.mView = view;
         this.mView.setPresenter(this);
     }
@@ -42,7 +44,7 @@ public class TXCalendarPickerYearPresenter implements TXCalenderPickerContract.P
     public void loadDates(TXDate startDate, TXDate endDate) {
         AsyncTask<TXDate, Void, Void> task = new AsyncTask<TXDate, Void, Void>() {
 
-            private List<TXYearModel> dates;
+            private List<TXCalendarYearModel> dates;
 
             @Override
             protected Void doInBackground(TXDate...params) {
@@ -84,7 +86,7 @@ public class TXCalendarPickerYearPresenter implements TXCalenderPickerContract.P
      * 
      * @param selectedStartDate 选中开始日期
      */
-    private List<TXYearModel> getYearList(TXDate selectedStartDate) {
+    private List<TXCalendarYearModel> getYearList(TXDate selectedStartDate) {
         TXDate today = new TXDate(System.currentTimeMillis());
         int todayYear = today.getYear();
 
@@ -93,7 +95,7 @@ public class TXCalendarPickerYearPresenter implements TXCalenderPickerContract.P
             selectedYear = selectedStartDate.getYear();
         }
 
-        List<TXYearModel> dates = new ArrayList<>(YEAR_COUNT);
+        List<TXCalendarYearModel> dates = new ArrayList<>(YEAR_COUNT);
 
         for (int i = 0; i < YEAR_COUNT; i++) {
             Calendar calendar = Calendar.getInstance();
@@ -106,11 +108,11 @@ public class TXCalendarPickerYearPresenter implements TXCalenderPickerContract.P
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
 
-            TXDayModel dateModel = new TXDayModel(new TXDate(calendar.getTimeInMillis()));
+            TXCalendarDayModel dateModel = new TXCalendarDayModel(new TXDate(calendar.getTimeInMillis()));
             // 选中年份
             dateModel.isSelected = selectedYear == calendarYear;
 
-            TXYearModel yearModel = new TXYearModel(dateModel);
+            TXCalendarYearModel yearModel = new TXCalendarYearModel(dateModel);
 
             if (selectedYear == -1) {
                 // 没有选中日期，置顶日期为当日
@@ -124,12 +126,12 @@ public class TXCalendarPickerYearPresenter implements TXCalenderPickerContract.P
                 }
             }
 
-            yearModel.dateModel.isShowTodayMark = todayYear == calendarYear;
+            yearModel.year.isShowTodayMark = todayYear == calendarYear;
             dates.add(yearModel);
         }
 
-        TXYearModel holderModel = new TXYearModel(null);
-        holderModel.type = TXYearModel.TYPE_HOLDER;
+        TXCalendarYearModel holderModel = new TXCalendarYearModel(null);
+        holderModel.type = TYPE_HOLDER;
         dates.add(holderModel);
 
         return dates;

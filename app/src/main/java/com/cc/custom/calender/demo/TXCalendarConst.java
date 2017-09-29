@@ -7,8 +7,8 @@ import java.lang.annotation.RetentionPolicy;
 
 public class TXCalendarConst {
 
-    public static final String INTENT_START_DATE = "intent.start.date";
-    public static final String INTENT_END_DATE = "intent.end.date";
+    public static final String INTENT_START_DATE = "intent.start.day";
+    public static final String INTENT_END_DATE = "intent.end.day";
     public static final String INTENT_TYPE = "intent.type";
 
     /**
@@ -30,4 +30,18 @@ public class TXCalendarConst {
         }
     }
 
+    /**
+     * 显示类型
+     */
+    public static class ShowType {
+        // 普通数据
+        public static final int TYPE_NORMAL = 0;
+        // 占位数据
+        public static final int TYPE_HOLDER = 1;
+
+        @IntDef({ TYPE_NORMAL, TYPE_HOLDER })
+        @Retention(RetentionPolicy.SOURCE)
+        public @interface TYPE {
+        }
+    }
 }
