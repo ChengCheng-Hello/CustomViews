@@ -9,7 +9,7 @@ import com.cc.custom.calender.demo.TXDate;
  * <p>
  * Created by Cheng on 2017/9/27.
  */
-public interface TXOnSelectDateRangeListener {
+public interface TXOnSelectDateListener {
 
-    void onSelectRange(TXDate startDate, TXDate endDate);
+    void onSelectDate(TXDate selectDate);
 }

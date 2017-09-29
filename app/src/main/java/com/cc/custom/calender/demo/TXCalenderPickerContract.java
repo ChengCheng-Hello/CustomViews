@@ -19,26 +19,20 @@ public class TXCalenderPickerContract {
         /**
          * 加载日期数据
          * 
-         * @param type 日期类型
          * @param startDate 开始日期
          * @param endDate 结束日期
          */
-        void loadDates(@TXCalendarConst.Type.TYPE int type, TXDate startDate, TXDate endDate);
+        void loadDates(TXDate startDate, TXDate endDate);
 
         /**
          * 选择日期范围
          * 
-         * @param selectedStartDate 选择的开始时间
-         * @param selectedEndDate 选择的结束时间
+         * @param selectedDate 选择的日期
          */
-        void selectDateRange(TXDate selectedStartDate, TXDate selectedEndDate);
-
-        TXDate getStartDate();
-
-        TXDate getEndDate();
+        void selectDateRange(TXDate selectedDate);
     }
 
-    public interface View extends TXBaseView<Presenter> {
+    public interface View<T> extends TXBaseView<Presenter> {
 
         /**
          * 显示日期数据
@@ -47,14 +41,14 @@ public class TXCalenderPickerContract {
          * @param selectedStartDate 选择的开始时间
          * @param selectedEndDate 选择的结束时间
          */
-        void showDates(List<TXDate> dates, TXDate selectedStartDate, TXDate selectedEndDate);
+        void showDates(List<T> dates, TXDate selectedStartDate, TXDate selectedEndDate);
 
         /**
          * 显示滚动到选中的日期项
          * 
          * @param showTopDate 置顶的日期
          */
-        void showScrollToTopDate(TXDate showTopDate);
+        void showScrollToTopDate(T showTopDate);
 
         /**
          * 显示选择日期完成
@@ -62,6 +56,6 @@ public class TXCalenderPickerContract {
          * @param selectedStartDate 选择的开始时间
          * @param selectedEndDate 选择的结束时间
          */
-        void showSelectCompleted(@TXCalendarConst.Type.TYPE int type, TXDate selectedStartDate, TXDate selectedEndDate);
+        void showSelectCompleted(TXDate selectedStartDate, TXDate selectedEndDate);
     }
 }

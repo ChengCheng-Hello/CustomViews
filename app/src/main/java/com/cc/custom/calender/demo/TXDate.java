@@ -448,4 +448,9 @@ public class TXDate implements Serializable {
         calendar.setTimeInMillis(milliseconds);
         return calendar.get(Calendar.DAY_OF_MONTH);
     }
+
+    @Override
+    public String toString() {
+        return "TXDate{" + formatYYYYMDHHMM() + '}';
+    }
 }

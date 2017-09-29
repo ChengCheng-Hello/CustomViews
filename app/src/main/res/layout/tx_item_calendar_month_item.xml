@@ -5,7 +5,7 @@
     android:layout_height="48dp">
 
     <TextView
-        android:id="@+id/tv_year"
+        android:id="@+id/tv_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -13,15 +13,17 @@
         android:paddingLeft="@dimen/tx_cell_space_20"
         android:paddingRight="@dimen/tx_cell_space_20"
         android:paddingTop="@dimen/tx_cell_space_10"
-        tools:text="2017" />
+        tools:text="1月" />
 
     <View
         android:id="@+id/today_mark"
         android:layout_width="4dp"
         android:layout_height="4dp"
-        android:layout_below="@id/tv_year"
+        android:layout_below="@id/tv_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="2dp"
         android:background="#F8A633"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:visibility="visible" />
+
 </RelativeLayout>

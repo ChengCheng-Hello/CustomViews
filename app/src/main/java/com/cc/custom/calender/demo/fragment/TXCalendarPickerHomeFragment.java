@@ -5,12 +5,15 @@ import android.support.v4.app.Fragment;
 
 import com.cc.custom.R;
 import com.cc.custom.TXAbsViewPagerTabFragment;
-import com.cc.custom.calender.demo.TXCalendarConst;
 import com.cc.custom.calender.demo.TXDate;
 
 import static com.cc.custom.calender.demo.TXCalendarConst.INTENT_END_DATE;
 import static com.cc.custom.calender.demo.TXCalendarConst.INTENT_START_DATE;
 import static com.cc.custom.calender.demo.TXCalendarConst.INTENT_TYPE;
+import static com.cc.custom.calender.demo.TXCalendarConst.Type.DAY;
+import static com.cc.custom.calender.demo.TXCalendarConst.Type.MONTH;
+import static com.cc.custom.calender.demo.TXCalendarConst.Type.WEEK;
+import static com.cc.custom.calender.demo.TXCalendarConst.Type.YEAR;
 
 /**
  * TODO: 类的一句话描述
@@ -19,18 +22,21 @@ import static com.cc.custom.calender.demo.TXCalendarConst.INTENT_TYPE;
  * <p>
  * Created by Cheng on 2017/9/27.
  */
-public class TXCalendarPickerFragment extends TXAbsViewPagerTabFragment {
+public class TXCalendarPickerHomeFragment extends TXAbsViewPagerTabFragment {
 
     private static final int COUNT = 4;
     private static final int POS_DAY = 0;
     private static final int POS_WEEK = 1;
     private static final int POS_MONTH = 2;
     private static final int POS_YEAR = 3;
+
     private TXDate mStartDate;
     private TXDate mEndDate;
     private int mType;
 
-    public static TXCalendarPickerFragment newInstance(int type, TXDate startDate, TXDate endDate) {
+    private TXCalendarPickerBaseFragment[] mFragments;
+
+    public static TXCalendarPickerHomeFragment newInstance(int type, TXDate startDate, TXDate endDate) {
         // TODO: 2017/9/27 null
 
         Bundle args = new Bundle();
@@ -38,7 +44,7 @@ public class TXCalendarPickerFragment extends TXAbsViewPagerTabFragment {
         args.putSerializable(INTENT_START_DATE, startDate);
         args.putSerializable(INTENT_END_DATE, endDate);
 
-        TXCalendarPickerFragment fragment = new TXCalendarPickerFragment();
+        TXCalendarPickerHomeFragment fragment = new TXCalendarPickerHomeFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,32 +53,43 @@ public class TXCalendarPickerFragment extends TXAbsViewPagerTabFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mFragments = new TXCalendarPickerBaseFragment[COUNT];
+        mFragments[POS_DAY] = TXCalendarPickerDayFragment.newInstance();
+        mFragments[POS_WEEK] = TXCalendarPickerWeekFragment.newInstance();
+        mFragments[POS_MONTH] = TXCalendarPickerMonthFragment.newInstance();
+        mFragments[POS_YEAR] = TXCalendarPickerYearFragment.newInstance();
+
         Bundle arguments = getArguments();
         if (arguments == null) {
             return;
         }
 
-        mType = arguments.getInt(INTENT_TYPE, TXCalendarConst.Type.DAY);
+        mType = arguments.getInt(INTENT_TYPE, DAY);
         mStartDate = (TXDate) arguments.getSerializable(INTENT_START_DATE);
         mEndDate = (TXDate) arguments.getSerializable(INTENT_END_DATE);
 
         int position;
         switch (mType) {
-            case TXCalendarConst.Type.DAY:
+            case DAY:
                 position = POS_DAY;
+                mFragments[POS_DAY].setArgs(mStartDate, mEndDate);
                 break;
-            case TXCalendarConst.Type.WEEK:
+            case WEEK:
                 position = POS_WEEK;
+                mFragments[WEEK].setArgs(mStartDate, mEndDate);
                 break;
-            case TXCalendarConst.Type.MONTH:
+            case MONTH:
                 position = POS_MONTH;
+                mFragments[POS_MONTH].setArgs(mStartDate, mEndDate);
                 break;
-            case TXCalendarConst.Type.YEAR:
+            case YEAR:
             default:
+                mFragments[POS_YEAR].setArgs(mStartDate, mEndDate);
                 position = POS_YEAR;
                 break;
         }
 
+        mViewPager.setOffscreenPageLimit(COUNT);
         mViewPager.setCurrentItem(position, false);
     }
 
@@ -85,14 +102,14 @@ public class TXCalendarPickerFragment extends TXAbsViewPagerTabFragment {
     protected Fragment getFragment(int position) {
         switch (position) {
             case POS_DAY:
-                return TXCalendarDayPickerFragment.newInstance();
+                return mFragments[POS_DAY];
             case POS_WEEK:
-                return TXCalendarDayPickerFragment.newInstance();
+                return mFragments[POS_WEEK];
             case POS_MONTH:
-                return TXCalendarDayPickerFragment.newInstance();
+                return mFragments[POS_MONTH];
             case POS_YEAR:
             default:
-                return TXCalendarYearPickerFragment.newInstance(mStartDate, mEndDate);
+                return mFragments[POS_YEAR];
         }
     }
 

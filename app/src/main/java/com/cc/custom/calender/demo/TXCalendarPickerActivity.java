@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import com.cc.custom.R;
-import com.cc.custom.calender.demo.fragment.TXCalendarPickerFragment;
+import com.cc.custom.calender.demo.fragment.TXCalendarPickerHomeFragment;
 
 import static com.cc.custom.calender.demo.TXCalendarConst.INTENT_END_DATE;
 import static com.cc.custom.calender.demo.TXCalendarConst.INTENT_START_DATE;
@@ -52,7 +52,7 @@ public class TXCalendarPickerActivity extends FragmentActivity {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentByTag(TAG);
         if (fragment == null) {
-            fragment = TXCalendarPickerFragment.newInstance(type, startDate, endDate);
+            fragment = TXCalendarPickerHomeFragment.newInstance(type, startDate, endDate);
             fm.beginTransaction().add(R.id.fl_content, fragment, TAG).commitAllowingStateLoss();
         }
     }
