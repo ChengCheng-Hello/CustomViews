@@ -33,20 +33,20 @@ public class TXCalendarYearCell implements TXBaseListCell<TXYearModel> {
             return;
         }
 
-        final TXDate model = data.year.date;
+        final TXDate model = data.dateModel.date;
 
         int year = model.getYear();
         mTvYear.setText(String.format("%1$d年", year));
 
         // selected
-        if (data.year.isSelected) {
+        if (data.dateModel.isSelected) {
             mTvYear.setTextColor(Color.BLUE);
         } else {
             mTvYear.setTextColor(Color.BLACK);
         }
 
         // todayMark
-        if (data.year.isShowTodayMark) {
+        if (data.dateModel.isShowTodayMark) {
             mTodayMarkView.setVisibility(View.VISIBLE);
         } else {
             mTodayMarkView.setVisibility(View.GONE);

@@ -14,7 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.cc.custom.calender.demo.listener.TXOnSelectDateListener;
-import com.cc.custom.calender.demo.model.TXDateModel;
+import com.cc.custom.calender.demo.model.TXDayModel;
 import com.cc.custom.calender.demo.model.TXMonthModel;
 
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class TXMonthView2 extends View {
 
-    private List<TXDateModel> mDayList;
+    private List<TXDayModel> mDayList;
     private int mWeekCount;
     private int mLastDayOfMonth;
 
@@ -178,7 +178,7 @@ public class TXMonthView2 extends View {
                 int centerX = mColumnWidth * j + mColumnWidth / 2;
                 int centerY = mRowHeight * i + mRowHeight / 2 + mLineWidth * i;
 
-                TXDateModel dataModel = mDayList.get(index);
+                TXDayModel dataModel = mDayList.get(index);
                 if (dataModel.date != null) {
                     // text
                     String content = String.valueOf(dataModel.date.getDay());
@@ -235,7 +235,7 @@ public class TXMonthView2 extends View {
         if (index < 0 || index >= mDayList.size()) {
             return;
         }
-        TXDateModel dataModel = mDayList.get(index);
+        TXDayModel dataModel = mDayList.get(index);
         if (dataModel == null || dataModel.date == null) {
             return;
         }

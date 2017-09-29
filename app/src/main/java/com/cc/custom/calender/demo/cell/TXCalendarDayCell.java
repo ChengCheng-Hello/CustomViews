@@ -32,8 +32,8 @@ public class TXCalendarDayCell implements TXBaseListCell<TXMonthModel> {
             return;
         }
 
-        int year = model.month.date.getYear();
-        int month = model.month.date.getMonth();
+        int year = model.dateModel.date.getYear();
+        int month = model.dateModel.date.getMonth();
 
         mTvTitle.setText(String.format("%1$d年%2$d月", year, month + 1));
 

@@ -9,7 +9,7 @@ import com.cc.custom.calender.demo.TXDate;
  * <p>
  * Created by Cheng on 2017/9/28.
  */
-public class TXDateModel {
+public class TXDayModel {
 
     public TXDate date;
 
@@ -17,12 +17,12 @@ public class TXDateModel {
 
     public boolean isShowTodayMark;
 
-    public TXDateModel(TXDate date) {
+    public TXDayModel(TXDate date) {
         this.date = date;
     }
 
     @Override
     public String toString() {
-        return "TXDateModel{" + "date=" + date + ", isSelected=" + isSelected + '}';
+        return "TXDayModel{" + "date=" + date + ", isSelected=" + isSelected + '}';
     }
 }

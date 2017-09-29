@@ -35,15 +35,6 @@ public class TXCalendarPickerYearFragment extends TXCalendarPickerBaseFragment<T
     }
 
     @Override
-    public int getCellViewType(TXYearModel data) {
-        if (data == null) {
-            return 0;
-        } else {
-            return data.isHolder ? 1 : 0;
-        }
-    }
-
-    @Override
     public TXBaseListCell<TXYearModel> onCreateCell(int type) {
         if (type == 0) {
             return new TXCalendarYearCell(this);

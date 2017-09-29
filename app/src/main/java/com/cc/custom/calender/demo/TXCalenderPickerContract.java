@@ -2,6 +2,7 @@ package com.cc.custom.calender.demo;
 
 import com.cc.custom.TXBasePresenter;
 import com.cc.custom.TXBaseView;
+import com.cc.custom.calender.demo.model.TXCalendarModel;
 
 import java.util.List;
 
@@ -25,23 +26,21 @@ public class TXCalenderPickerContract {
         void loadDates(TXDate startDate, TXDate endDate);
 
         /**
-         * 选择日期范围
+         * 选择日期
          * 
          * @param selectedDate 选择的日期
          */
-        void selectDateRange(TXDate selectedDate);
+        void selectDate(TXDate selectedDate);
     }
 
-    public interface View<T> extends TXBaseView<Presenter> {
+    public interface View<T extends TXCalendarModel> extends TXBaseView<Presenter> {
 
         /**
          * 显示日期数据
          * 
          * @param dates 日期数据
-         * @param selectedStartDate 选择的开始时间
-         * @param selectedEndDate 选择的结束时间
          */
-        void showDates(List<T> dates, TXDate selectedStartDate, TXDate selectedEndDate);
+        void showDates(List<T> dates);
 
         /**
          * 显示滚动到选中的日期项

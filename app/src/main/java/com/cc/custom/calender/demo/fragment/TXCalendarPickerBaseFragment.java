@@ -15,6 +15,7 @@ import com.cc.custom.calender.demo.TXCalendarConst;
 import com.cc.custom.calender.demo.TXCalenderPickerContract;
 import com.cc.custom.calender.demo.TXDate;
 import com.cc.custom.calender.demo.listener.TXOnSelectDateListener;
+import com.cc.custom.calender.demo.model.TXCalendarModel;
 import com.tx.listview.TXListView;
 import com.tx.listview.base.cell.TXBaseListCell;
 import com.tx.listview.base.listener.TXOnCreateCellListener;
@@ -25,6 +26,7 @@ import java.util.List;
 import static com.cc.custom.calender.demo.TXCalendarConst.INTENT_END_DATE;
 import static com.cc.custom.calender.demo.TXCalendarConst.INTENT_START_DATE;
 import static com.cc.custom.calender.demo.TXCalendarConst.INTENT_TYPE;
+import static com.cc.custom.calender.demo.model.TXCalendarModel.TYPE_HOLDER;
 
 /**
  * TODO: 类的一句话描述
@@ -33,7 +35,7 @@ import static com.cc.custom.calender.demo.TXCalendarConst.INTENT_TYPE;
  * <p>
  * Created by Cheng on 2017/9/27.
  */
-public abstract class TXCalendarPickerBaseFragment<T> extends TXBaseFragment
+public abstract class TXCalendarPickerBaseFragment<T extends TXCalendarModel> extends TXBaseFragment
     implements TXCalenderPickerContract.View<T>, TXOnCreateCellListener<T>, TXOnSelectDateListener,
     TXOnGetCellViewTypeListener<T> {
 
@@ -50,9 +52,6 @@ public abstract class TXCalendarPickerBaseFragment<T> extends TXBaseFragment
 
     @TXCalendarConst.Type.TYPE
     public abstract int getType();
-
-    @Override
-    public abstract int getCellViewType(T data);
 
     @Override
     public abstract TXBaseListCell<T> onCreateCell(int type);
@@ -99,7 +98,7 @@ public abstract class TXCalendarPickerBaseFragment<T> extends TXBaseFragment
     }
 
     @Override
-    public void showDates(List<T> dates, TXDate selectedStartDate, TXDate selectedEndDate) {
+    public void showDates(List<T> dates) {
         listView.setAllData(dates);
     }
 
@@ -124,7 +123,16 @@ public abstract class TXCalendarPickerBaseFragment<T> extends TXBaseFragment
 
     @Override
     public void onSelectDate(TXDate selectedDate) {
-        mPresenter.selectDateRange(selectedDate);
+        mPresenter.selectDate(selectedDate);
+    }
+
+    @Override
+    public int getCellViewType(T data) {
+        if (data == null) {
+            return TYPE_HOLDER;
+        } else {
+            return data.type;
+        }
     }
 
     @Override

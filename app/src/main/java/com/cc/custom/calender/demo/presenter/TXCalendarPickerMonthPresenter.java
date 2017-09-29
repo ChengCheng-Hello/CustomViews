@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import com.cc.custom.calender.demo.TXCalenderPickerContract;
 import com.cc.custom.calender.demo.TXDate;
-import com.cc.custom.calender.demo.model.TXDateModel;
+import com.cc.custom.calender.demo.model.TXDayModel;
 import com.cc.custom.calender.demo.model.TXMonthModel;
 import com.cc.custom.calender.demo.model.TXYearModel;
 
@@ -45,15 +45,10 @@ public class TXCalendarPickerMonthPresenter implements TXCalenderPickerContract.
         AsyncTask<TXDate, Void, Void> task = new AsyncTask<TXDate, Void, Void>() {
 
             private List<TXYearModel> dates;
-            private TXDate endDate;
-            private TXDate startDate;
 
             @Override
             protected Void doInBackground(TXDate...params) {
-                startDate = params[0];
-                endDate = params[1];
-
-                dates = getYearList(startDate);
+                dates = getYearList(params[0]);
                 return null;
             }
 
@@ -61,16 +56,16 @@ public class TXCalendarPickerMonthPresenter implements TXCalenderPickerContract.
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
 
-                mView.showDates(dates, startDate, endDate);
+                mView.showDates(dates);
                 mView.showScrollToTopDate(mShowTopDate);
             }
         };
 
-        task.execute(startDate, endDate);
+        task.execute(startDate);
     }
 
     @Override
-    public void selectDateRange(TXDate selectedDate) {
+    public void selectDate(TXDate selectedDate) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, selectedDate.getYear());
         calendar.set(Calendar.MONTH, selectedDate.getMonth());
@@ -116,7 +111,7 @@ public class TXCalendarPickerMonthPresenter implements TXCalenderPickerContract.
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
 
-            TXYearModel yearModel = new TXYearModel(new TXDateModel(new TXDate(calendar.getTimeInMillis())));
+            TXYearModel yearModel = new TXYearModel(new TXDayModel(new TXDate(calendar.getTimeInMillis())));
 
             if (selectedYear == -1) {
                 // 没有选中日期，置顶日期为当日
@@ -137,7 +132,7 @@ public class TXCalendarPickerMonthPresenter implements TXCalenderPickerContract.
         }
 
         TXYearModel holderModel = new TXYearModel(null);
-        holderModel.isHolder = true;
+        holderModel.type = TXYearModel.TYPE_HOLDER;
         dates.add(holderModel);
 
         return dates;
@@ -167,7 +162,7 @@ public class TXCalendarPickerMonthPresenter implements TXCalenderPickerContract.
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
 
-            TXDateModel dateModel = new TXDateModel(new TXDate(calendar.getTimeInMillis()));
+            TXDayModel dateModel = new TXDayModel(new TXDate(calendar.getTimeInMillis()));
             // 选中月份
             dateModel.isSelected = selectedYear == year && selectedMonth == i;
             // 当日标志

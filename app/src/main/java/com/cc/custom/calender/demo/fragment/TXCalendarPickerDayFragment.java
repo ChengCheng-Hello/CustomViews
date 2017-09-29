@@ -10,6 +10,8 @@ import com.cc.custom.calender.demo.presenter.TXCalendarPickerDayPresenter;
 import com.tx.listview.base.cell.TXBaseListCell;
 import com.tx.listview.base.listener.TXOnCreateCellListener;
 
+import static com.cc.custom.calender.demo.model.TXCalendarModel.TYPE_NORMAL;
+
 /**
  * TODO: 类的一句话描述
  * <p>
@@ -35,17 +37,8 @@ public class TXCalendarPickerDayFragment extends TXCalendarPickerBaseFragment<TX
     }
 
     @Override
-    public int getCellViewType(TXMonthModel data) {
-        if (data == null) {
-            return 0;
-        } else {
-            return data.isHolder ? 1 : 0;
-        }
-    }
-
-    @Override
     public TXBaseListCell<TXMonthModel> onCreateCell(int type) {
-        if (type == 0) {
+        if (type == TYPE_NORMAL) {
             return new TXCalendarDayCell(this);
         } else {
             return new TXCalendarDayHolderCell();

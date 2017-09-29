@@ -9,18 +9,16 @@ import java.util.List;
  * <p>
  * Created by Cheng on 2017/9/28.
  */
-public class TXYearModel {
+public class TXYearModel extends TXCalendarModel {
 
     public List<TXMonthModel> monthList;
-    public TXDateModel year;
-    public boolean isHolder;
 
-    public TXYearModel(TXDateModel date) {
-        this.year = date;
+    public TXYearModel(TXDayModel date) {
+        super(date);
     }
 
     @Override
     public String toString() {
-        return "TXYearModel{" + "monthList=" + monthList + ", year=" + year + '}';
+        return "TXYearModel{" + "monthList=" + monthList + ", dateModel=" + dateModel + '}';
     }
 }

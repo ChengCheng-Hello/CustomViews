@@ -41,7 +41,7 @@ public class TXCalendarMonthCell implements TXBaseListCell<TXYearModel> {
             return;
         }
 
-        int year = model.year.date.getYear();
+        int year = model.dateModel.date.getYear();
 
         mTvTitle.setText(String.format("%1$d年", year));
 
@@ -86,19 +86,19 @@ public class TXCalendarMonthCell implements TXBaseListCell<TXYearModel> {
         @Override
         public void onBindViewHolder(MyHolder holder, int position) {
             TXMonthModel model = listData.get(position);
-            final TXDate data = model.month.date;
+            final TXDate data = model.dateModel.date;
 
-            int month = model.month.date.getMonth();
+            int month = model.dateModel.date.getMonth();
 
             holder.tvContent.setText(String.format("%1$d月", month + 1));
 
-            if (model.month.isSelected) {
+            if (model.dateModel.isSelected) {
                 holder.tvContent.setTextColor(Color.BLUE);
             } else {
                 holder.tvContent.setTextColor(Color.BLACK);
             }
 
-            if (model.month.isShowTodayMark) {
+            if (model.dateModel.isShowTodayMark) {
                 holder.markView.setVisibility(View.VISIBLE);
             } else {
                 holder.markView.setVisibility(View.GONE);

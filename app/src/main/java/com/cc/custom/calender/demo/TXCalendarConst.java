@@ -7,8 +7,8 @@ import java.lang.annotation.RetentionPolicy;
 
 public class TXCalendarConst {
 
-    public static final String INTENT_START_DATE = "intent.start.month";
-    public static final String INTENT_END_DATE = "intent.end.month";
+    public static final String INTENT_START_DATE = "intent.start.date";
+    public static final String INTENT_END_DATE = "intent.end.date";
     public static final String INTENT_TYPE = "intent.type";
 
     /**
