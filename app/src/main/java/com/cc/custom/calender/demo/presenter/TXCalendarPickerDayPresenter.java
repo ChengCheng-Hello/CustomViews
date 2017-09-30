@@ -53,8 +53,7 @@ public class TXCalendarPickerDayPresenter implements TXCalenderPickerContract.Pr
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                mView.showDates(dates);
-                mView.showScrollToTopDate(mShowTopDate);
+                mView.showDates(dates, mShowTopDate);
             }
         };
 

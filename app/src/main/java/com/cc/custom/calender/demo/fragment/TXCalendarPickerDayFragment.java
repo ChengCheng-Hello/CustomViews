@@ -60,7 +60,7 @@ public class TXCalendarPickerDayFragment extends TXCalendarPickerBaseFragment<TX
     }
 
     @Override
-    public void showDates(final List<TXCalendarMonthModel> dates) {
+    public void showDates(final List<TXCalendarMonthModel> dates, final TXCalendarMonthModel showTopDate) {
         listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -84,23 +84,14 @@ public class TXCalendarPickerDayFragment extends TXCalendarPickerBaseFragment<TX
                 TXCalendarMonthModel model = dates.get(dates.size() - 1);
 
                 listView.setPaddingBottom(mScreenHeight - locations[1] - 48 * 3  - 48 * 3 * model.weekCount);
-            }
-        });
 
-        listView.post(new Runnable() {
-            @Override
-            public void run() {
-                listView.setAllData(dates);
-            }
-        });
-    }
-
-    @Override
-    public void showScrollToTopDate(final TXCalendarMonthModel showTopDate) {
-        listView.post(new Runnable() {
-            @Override
-            public void run() {
-                listView.scrollToData(showTopDate);
+                listView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        listView.setAllData(dates);
+                        listView.scrollToData(showTopDate);
+                    }
+                });
             }
         });
     }

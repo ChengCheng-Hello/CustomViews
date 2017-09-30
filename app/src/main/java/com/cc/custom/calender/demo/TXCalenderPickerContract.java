@@ -39,15 +39,9 @@ public class TXCalenderPickerContract {
          * 显示日期数据
          * 
          * @param dates 日期数据
-         */
-        void showDates(List<T> dates);
-
-        /**
-         * 显示滚动到选中的日期项
-         * 
          * @param showTopDate 置顶的日期
          */
-        void showScrollToTopDate(T showTopDate);
+        void showDates(List<T> dates, T showTopDate);
 
         /**
          * 显示选择日期完成

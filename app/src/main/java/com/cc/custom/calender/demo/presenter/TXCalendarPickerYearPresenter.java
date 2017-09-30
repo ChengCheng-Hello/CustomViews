@@ -54,8 +54,7 @@ public class TXCalendarPickerYearPresenter implements TXCalenderPickerContract.P
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
 
-                mView.showDates(dates);
-                mView.showScrollToTopDate(mShowTopDate);
+                mView.showDates(dates, mShowTopDate);
             }
         };
 

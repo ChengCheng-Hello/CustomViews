@@ -98,12 +98,8 @@ public abstract class TXCalendarPickerBaseFragment<T extends TXCalendarModel> ex
     }
 
     @Override
-    public void showDates(List<T> dates) {
+    public void showDates(List<T> dates, T showTopDate) {
         listView.setAllData(dates);
-    }
-
-    @Override
-    public void showScrollToTopDate(T showTopDate) {
         listView.scrollToData(showTopDate);
     }
 
