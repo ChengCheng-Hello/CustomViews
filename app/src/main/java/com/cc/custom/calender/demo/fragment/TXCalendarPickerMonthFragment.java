@@ -1,5 +1,12 @@
 package com.cc.custom.calender.demo.fragment;
 
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.ViewTreeObserver;
+
 import com.cc.custom.calender.demo.TXCalendarConst;
 import com.cc.custom.calender.demo.TXCalenderPickerContract;
 import com.cc.custom.calender.demo.cell.TXCalendarMonthCell;
@@ -34,6 +41,34 @@ public class TXCalendarPickerMonthFragment extends TXCalendarPickerBaseFragment<
     @Override
     public int getType() {
         return TXCalendarConst.Type.MONTH;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    listView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    listView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+
+                int[] locations = new int[2];
+                listView.getLocationOnScreen(locations);
+
+                int[] locations2 = new int[2];
+                listView.getLocationInWindow(locations2);
+
+                int a = 10;
+
+                DisplayMetrics dm = getResources().getDisplayMetrics();
+                int  mScreenHeight = dm.heightPixels;
+                listView.setPaddingBottom(mScreenHeight - locations[1] - 48 * 3 * 4);
+            }
+        });
     }
 
     @Override

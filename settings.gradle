@@ -1,1 +1,3 @@
-include ':app'
+include ':app', ':library'
+
+project(':library').projectDir = new File('../ListView/library')

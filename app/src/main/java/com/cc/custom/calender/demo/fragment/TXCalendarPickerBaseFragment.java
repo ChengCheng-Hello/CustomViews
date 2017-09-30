@@ -41,7 +41,7 @@ public abstract class TXCalendarPickerBaseFragment<T extends TXCalendarModel> ex
 
     private TXCalenderPickerContract.Presenter mPresenter;
 
-    private TXListView<T> listView;
+    public TXListView<T> listView;
 
     @LayoutRes
     public int getLayoutId() {

@@ -36,6 +36,7 @@ public class TXCalendarYearCell implements TXBaseListCell<TXCalendarYearModel> {
         final TXDate model = data.year.day;
 
         int year = model.getYear();
+
         mTvYear.setText(String.format("%1$d年", year));
 
         // selected

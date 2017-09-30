@@ -5,14 +5,12 @@ import android.os.AsyncTask;
 import com.cc.custom.calender.demo.TXCalenderPickerContract;
 import com.cc.custom.calender.demo.TXDate;
 import com.cc.custom.calender.demo.model.TXCalendarDayModel;
-import com.cc.custom.calender.demo.model.TXCalendarYearModel;
 import com.cc.custom.calender.demo.model.TXCalendarMonthModel;
+import com.cc.custom.calender.demo.model.TXCalendarYearModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import static com.cc.custom.calender.demo.TXCalendarConst.ShowType.TYPE_HOLDER;
 
 /**
  * TODO: 类的一句话描述
@@ -127,10 +125,6 @@ public class TXCalendarPickerMonthPresenter implements TXCalenderPickerContract.
 
             dates.add(yearModel);
         }
-
-        TXCalendarYearModel holderModel = new TXCalendarYearModel(null);
-        holderModel.type = TYPE_HOLDER;
-        dates.add(holderModel);
 
         return dates;
     }

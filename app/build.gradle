@@ -27,7 +27,9 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.0.0'
     compile "com.android.support.constraint:constraint-layout:1.0.2"
 
-    compile(name: "library-debug", ext: 'aar') {
-        transitive = true
-    }
+    compile project(':library')
+
+//    compile(name: "library-debug", ext: 'aar') {
+//        transitive = true
+//    }
 }

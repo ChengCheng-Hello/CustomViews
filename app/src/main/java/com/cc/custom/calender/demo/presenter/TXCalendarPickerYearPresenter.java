@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import static com.cc.custom.calender.demo.TXCalendarConst.ShowType.TYPE_HOLDER;
-
 /**
  * TODO: 类的一句话描述
  * <p>
@@ -124,10 +122,6 @@ public class TXCalendarPickerYearPresenter implements TXCalenderPickerContract.P
             yearModel.year.isShowTodayMark = todayYear == calendarYear;
             dates.add(yearModel);
         }
-
-        TXCalendarYearModel holderModel = new TXCalendarYearModel(null);
-        holderModel.type = TYPE_HOLDER;
-        dates.add(holderModel);
 
         return dates;
     }
