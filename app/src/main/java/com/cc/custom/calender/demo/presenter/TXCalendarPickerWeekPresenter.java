@@ -72,14 +72,10 @@ public class TXCalendarPickerWeekPresenter implements TXCalenderPickerContract.P
         startCalendar.add(Calendar.DAY_OF_MONTH, -week + 1);
 
         Calendar endCalendar = (Calendar) startCalendar.clone();
-        endCalendar.add(Calendar.DAY_OF_MONTH, 6);
-        endCalendar.set(Calendar.HOUR_OF_DAY, 23);
-        endCalendar.set(Calendar.MINUTE, 59);
-        endCalendar.set(Calendar.SECOND, 59);
-        endCalendar.set(Calendar.MILLISECOND, 0);
+        endCalendar.add(Calendar.DAY_OF_MONTH, 7);
 
         mView.showSelectCompleted(new TXDate(startCalendar.getTimeInMillis()),
-            new TXDate(endCalendar.getTimeInMillis()));
+            new TXDate(endCalendar.getTimeInMillis() - 1));
     }
 
     /**
@@ -132,7 +128,7 @@ public class TXCalendarPickerWeekPresenter implements TXCalenderPickerContract.P
 
             // firstDayOffset
             int firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-            monthModel.firstDayOffset = getWeek(firstDayOfWeek) - 1;
+            int firstDayOffset = getWeek(firstDayOfWeek) - 1;
             monthModel.lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
             // weekCount
@@ -143,7 +139,7 @@ public class TXCalendarPickerWeekPresenter implements TXCalenderPickerContract.P
             // dayList
             int dayCount = monthModel.weekCount * 7;
             monthModel.dayList = getDayList(calendarYear, calendarMonth, todayYear, todayMonth, todayDay,
-                monthModel.firstDayOffset, monthModel.lastDayOfMonth, dayCount,
+                firstDayOffset, monthModel.lastDayOfMonth, dayCount,
                 selectedStartDate == null ? 0 : selectedStartDate.getMilliseconds(),
                 selectedEndDate == null ? 0 : selectedEndDate.getMilliseconds());
 

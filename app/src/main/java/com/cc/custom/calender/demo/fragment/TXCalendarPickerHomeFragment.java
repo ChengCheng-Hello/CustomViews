@@ -37,8 +37,6 @@ public class TXCalendarPickerHomeFragment extends TXAbsViewPagerTabFragment {
     private TXCalendarPickerBaseFragment[] mFragments;
 
     public static TXCalendarPickerHomeFragment newInstance(int type, TXDate startDate, TXDate endDate) {
-        // TODO: 2017/9/27 null
-
         Bundle args = new Bundle();
         args.putInt(INTENT_TYPE, type);
         args.putSerializable(INTENT_START_DATE, startDate);
@@ -72,19 +70,19 @@ public class TXCalendarPickerHomeFragment extends TXAbsViewPagerTabFragment {
         switch (mType) {
             case DAY:
                 position = POS_DAY;
-                mFragments[POS_DAY].setArgs(mStartDate, mEndDate);
+                mFragments[POS_DAY].setArguments(mStartDate, mEndDate);
                 break;
             case WEEK:
                 position = POS_WEEK;
-                mFragments[WEEK].setArgs(mStartDate, mEndDate);
+                mFragments[WEEK].setArguments(mStartDate, mEndDate);
                 break;
             case MONTH:
                 position = POS_MONTH;
-                mFragments[POS_MONTH].setArgs(mStartDate, mEndDate);
+                mFragments[POS_MONTH].setArguments(mStartDate, mEndDate);
                 break;
             case YEAR:
             default:
-                mFragments[POS_YEAR].setArgs(mStartDate, mEndDate);
+                mFragments[POS_YEAR].setArguments(mStartDate, mEndDate);
                 position = POS_YEAR;
                 break;
         }

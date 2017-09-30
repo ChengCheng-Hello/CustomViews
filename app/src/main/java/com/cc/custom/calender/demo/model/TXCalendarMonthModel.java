@@ -17,8 +17,6 @@ public class TXCalendarMonthModel extends TXCalendarModel {
 
     public int weekCount;
 
-    public int firstDayOffset;
-
     public int lastDayOfMonth;
 
     public TXCalendarMonthModel(TXCalendarDayModel date) {

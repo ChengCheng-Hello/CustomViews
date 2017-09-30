@@ -13,6 +13,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.cc.custom.calender.demo.TXCalendarConst;
 import com.cc.custom.calender.demo.listener.TXOnSelectDateListener;
 import com.cc.custom.calender.demo.model.TXCalendarDayModel;
 import com.cc.custom.calender.demo.model.TXCalendarMonthModel;
@@ -179,7 +180,7 @@ public class TXMonthView2 extends View {
                 int centerY = mRowHeight * i + mRowHeight / 2 + mLineWidth * i;
 
                 TXCalendarDayModel dataModel = mDayList.get(index);
-                if (dataModel.day != null) {
+                if (dataModel.type == TXCalendarConst.ShowType.TYPE_NORMAL) {
                     // text
                     String content = String.valueOf(dataModel.day.getDay());
                     float textWidth = mDayTextPaint.measureText(content);
@@ -236,7 +237,7 @@ public class TXMonthView2 extends View {
             return;
         }
         TXCalendarDayModel dataModel = mDayList.get(index);
-        if (dataModel == null || dataModel.day == null) {
+        if (dataModel.type == TXCalendarConst.ShowType.TYPE_HOLDER) {
             return;
         }
 

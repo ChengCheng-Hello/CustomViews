@@ -56,7 +56,7 @@ public abstract class TXCalendarPickerBaseFragment<T extends TXCalendarModel> ex
     @Override
     public abstract TXBaseListCell<T> onCreateCell(int type);
 
-    public void setArgs(TXDate startDate, TXDate endDate) {
+    public void setArguments(TXDate startDate, TXDate endDate) {
         Bundle args = new Bundle();
         args.putSerializable(INTENT_START_DATE, startDate);
         args.putSerializable(INTENT_END_DATE, endDate);

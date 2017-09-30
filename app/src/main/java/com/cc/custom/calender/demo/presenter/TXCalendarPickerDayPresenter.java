@@ -64,15 +64,10 @@ public class TXCalendarPickerDayPresenter implements TXCalenderPickerContract.Pr
     @Override
     public void selectDate(TXDate selectedDate) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, selectedDate.getYear());
-        calendar.set(Calendar.MONTH, selectedDate.getMonth());
-        calendar.set(Calendar.DAY_OF_MONTH, selectedDate.getDay());
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.setTimeInMillis(selectedDate.getMilliseconds());
+        calendar.set(Calendar.DAY_OF_MONTH, selectedDate.getDay() + 1);
 
-        TXDate endDate = new TXDate(calendar.getTimeInMillis());
+        TXDate endDate = new TXDate(calendar.getTimeInMillis() - 1);
 
         mView.showSelectCompleted(selectedDate, endDate);
     }
@@ -129,7 +124,7 @@ public class TXCalendarPickerDayPresenter implements TXCalenderPickerContract.Pr
 
             // firstDayOffset
             int firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-            monthModel.firstDayOffset = getWeek(firstDayOfWeek) - 1;
+            int firstDayOffset = getWeek(firstDayOfWeek) - 1;
             monthModel.lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
             // weekCount
@@ -140,7 +135,7 @@ public class TXCalendarPickerDayPresenter implements TXCalenderPickerContract.Pr
             // dayList
             int dayCount = monthModel.weekCount * 7;
             monthModel.dayList =
-                getDayList(calendarYear, calendarMonth, todayYear, todayMonth, todayDay, monthModel.firstDayOffset,
+                getDayList(calendarYear, calendarMonth, todayYear, todayMonth, todayDay, firstDayOffset,
                     monthModel.lastDayOfMonth, dayCount, selectedYear, selectedMonth, selectedDay);
 
             dates.add(monthModel);
@@ -161,6 +156,7 @@ public class TXCalendarPickerDayPresenter implements TXCalenderPickerContract.Pr
         for (int i = 0; i < dayCount; i++) {
             if (i < firstDayOffset || i >= lastDayOfMonth + firstDayOffset) {
                 TXCalendarDayModel model = new TXCalendarDayModel(null);
+                model.type = TYPE_HOLDER;
                 dayList.add(model);
                 continue;
             }

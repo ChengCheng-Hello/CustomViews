@@ -28,7 +28,6 @@ public class TXCalendarPickerActivity extends FragmentActivity {
 
     public static void launchForResult(Activity activity, @TXCalendarConst.Type.TYPE int type, TXDate startDate,
         TXDate endDate, int requestCode) {
-        // TODO null
 
         Intent intent = new Intent(activity, TXCalendarPickerActivity.class);
         intent.putExtra(INTENT_TYPE, type);

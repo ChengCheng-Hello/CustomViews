@@ -68,15 +68,10 @@ public class TXCalendarPickerYearPresenter implements TXCalenderPickerContract.P
     @Override
     public void selectDate(TXDate selectedDate) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, selectedDate.getYear());
-        calendar.set(Calendar.MONTH, 11);
-        calendar.set(Calendar.DAY_OF_MONTH, 31);
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.setTimeInMillis(selectedDate.getMilliseconds());
+        calendar.set(Calendar.YEAR, selectedDate.getYear() + 1);
 
-        TXDate endDate = new TXDate(calendar.getTimeInMillis());
+        TXDate endDate = new TXDate(calendar.getTimeInMillis() - 1);
 
         mView.showSelectCompleted(selectedDate, endDate);
     }
