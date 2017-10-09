@@ -21,6 +21,7 @@
         <activity android:name=".calender.TXCalenderDemoActivity" />
         <activity android:name=".calender.TXCalenderListDemoActivity" />
         <activity android:name=".calender.demo.TXCalendarPickerActivity" />
+        <activity android:name=".stepview.TXStepViewDemoActivity" />
     </application>
 
 </manifest>

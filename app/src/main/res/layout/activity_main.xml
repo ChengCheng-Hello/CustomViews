@@ -9,89 +9,73 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.cc.custom.MainActivity">
 
-    <Button
-        android:id="@+id/btn_vp"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="ViewPager" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btn_calender"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="Calender" />
+        <Button
+            android:id="@+id/btn_vp"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="ViewPager" />
+
+        <Button
+            android:id="@+id/btn_calender"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Calender" />
+
+        <Button
+            android:id="@+id/btn_step"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="StepView" />
+    </LinearLayout>
 
     <com.cc.custom.edittext.TXEditText
         android:layout_width="match_parent"
         android:layout_height="48dp"
         app:limitLength="3" />
 
-    <com.cc.custom.stepview.StepView
-        android:id="@+id/stepView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        app:circleRadius="4dp"
-        app:dateTextSize="10sp"
-        app:lineHeight="2dp"
-        app:statusTextSize="12sp"
-        app:textSpace="8dp" />
-
-    <!--<com.cc.stepview.stepview.StepView2-->
-    <!--android:id="@+id/stepView2"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginTop="100dp"-->
-    <!--app:circleRadius="4dp"-->
-    <!--app:dateTextSize="10sp"-->
-    <!--app:lineHeight="2dp"-->
-    <!--app:statusTextSize="12sp"-->
-    <!--app:textSpace="8dp" />-->
-
     <com.cc.custom.chart.LineChartView2
         android:id="@+id/lineChart"
         android:layout_width="match_parent"
         android:layout_height="200dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:text="load data" />
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="load data" />
 
-    <Button
-        android:id="@+id/button_clear"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:text="data clear" />
+        <Button
+            android:id="@+id/button_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="data clear" />
 
-    <Button
-        android:id="@+id/button_scroll"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:text="button_scroll"
-        android:visibility="gone" />
-
-    <com.cc.custom.rating.TXRatingView
-        android:layout_marginLeft="50dp"
-        app:ratingSize="32dp"
-        app:itemSpace="4dp"
-        app:maxRating="5"
-        app:rating="0"
-        app:enabled="false"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button_scroll"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="button_scroll"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <com.cc.custom.rating.TXRatingView
         android:id="@+id/ratingView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
-        app:ratingSize="32dp"
+        app:enabled="true"
         app:itemSpace="4dp"
         app:maxRating="5"
         app:rating="0"
-        app:enabled="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+        app:ratingSize="32dp" />
 </LinearLayout>
