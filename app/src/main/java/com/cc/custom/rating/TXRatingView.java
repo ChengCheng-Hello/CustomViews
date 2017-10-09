@@ -18,6 +18,8 @@ import android.view.View;
 
 import com.cc.custom.R;
 
+import java.util.Locale;
+
 /**
  * 评分View
  * <p>
@@ -211,10 +213,17 @@ public class TXRatingView extends View {
                 canvas.drawText(mHintText, (getWidth() - hintWidth) / 2, y, mHintPaint);
             } else {
                 // score
-                float valueWidth = mRatingValuePaint.measureText(String.valueOf(mRating));
-                float x = (getWidth() - valueWidth) / 2;
-                canvas.drawText(String.valueOf(mRating), x, y, mRatingValuePaint);
-                canvas.drawText(mRatingText, x + valueWidth, y, mRatingPaint);
+                String score;
+                if (mRating == (int) (mRating)) {
+                    score = String.format(Locale.getDefault(), "%d", (int) mRating);
+                } else {
+                    score = String.format(Locale.getDefault(), "%1$.1f", mRating);
+                }
+                float scoreWidth = mRatingValuePaint.measureText(score);
+                float textWidth = mRatingPaint.measureText(mRatingText);
+                float x = (getWidth() - scoreWidth - textWidth) / 2;
+                canvas.drawText(score, x, y, mRatingValuePaint);
+                canvas.drawText(mRatingText, x + scoreWidth, y, mRatingPaint);
             }
         }
 
