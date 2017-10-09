@@ -58,13 +58,11 @@ public class TXCalendarPickerHomeFragment extends TXAbsViewPagerTabFragment {
         mFragments[POS_YEAR] = TXCalendarPickerYearFragment.newInstance();
 
         Bundle arguments = getArguments();
-        if (arguments == null) {
-            return;
+        if (arguments != null) {
+            mType = arguments.getInt(INTENT_TYPE, DAY);
+            mStartDate = (TXDate) arguments.getSerializable(INTENT_START_DATE);
+            mEndDate = (TXDate) arguments.getSerializable(INTENT_END_DATE);
         }
-
-        mType = arguments.getInt(INTENT_TYPE, DAY);
-        mStartDate = (TXDate) arguments.getSerializable(INTENT_START_DATE);
-        mEndDate = (TXDate) arguments.getSerializable(INTENT_END_DATE);
 
         int position;
         switch (mType) {

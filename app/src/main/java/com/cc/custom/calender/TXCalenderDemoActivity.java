@@ -87,7 +87,7 @@ public class TXCalenderDemoActivity extends FragmentActivity {
                     mEndDate = new TXDate(selectEndCalendar.getTimeInMillis());
                 }
 
-                TXCalendarPickerActivity.launchForResult(TXCalenderDemoActivity.this, mType, mStartDate, mEndDate,
+                TXCalendarPickerActivity.launchForResult(TXCalenderDemoActivity.this, mType, null, null,
                     1001);
             }
         });
