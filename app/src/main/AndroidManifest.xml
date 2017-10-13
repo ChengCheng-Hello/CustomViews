@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cc.custom">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,6 +25,8 @@
         <activity android:name=".calender.TXCalenderListDemoActivity" />
         <activity android:name=".calender.demo.TXCalendarPickerActivity" />
         <activity android:name=".stepview.TXStepViewDemoActivity" />
+        <activity android:name=".video.TXVideoEditDemoActivity" />
+        <activity android:name=".ndk.TXNDKDemoActivity" />
     </application>
 
 </manifest>

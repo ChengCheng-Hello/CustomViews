@@ -167,15 +167,10 @@ public class TXMonthView2 extends View {
             return;
         }
 
-        int count = mDayList.size();
         int index = 0;
 
         for (int i = 0; i < mWeekCount; i++) {
             for (int j = 0; j < mColumnCount; j++) {
-                if (index > count) {
-                    break;
-                }
-
                 int centerX = mColumnWidth * j + mColumnWidth / 2;
                 int centerY = mRowHeight * i + mRowHeight / 2 + mLineWidth * i;
 

@@ -8,8 +8,10 @@ import android.widget.Toast;
 import com.cc.custom.calender.TXCalenderDemoActivity;
 import com.cc.custom.chart.ChartItem;
 import com.cc.custom.chart.LineChartView2;
+import com.cc.custom.ndk.TXNDKDemoActivity;
 import com.cc.custom.rating.TXRatingView;
 import com.cc.custom.stepview.TXStepViewDemoActivity;
+import com.cc.custom.video.TXVideoEditDemoActivity;
 import com.cc.custom.viewpager.TXVpDemoActivity;
 
 import java.util.ArrayList;
@@ -85,6 +87,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 TXStepViewDemoActivity.launch(v.getContext());
+            }
+        });
+
+        findViewById(R.id.btn_video).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TXVideoEditDemoActivity.launch(v.getContext());
+            }
+        });
+
+        findViewById(R.id.btn_ndk).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TXNDKDemoActivity.launch(v.getContext());
             }
         });
     }

@@ -214,10 +214,11 @@ public class TXRatingView extends View {
             } else {
                 // score
                 String score;
-                if (mRating == (int) (mRating)) {
-                    score = String.format(Locale.getDefault(), "%d", (int) mRating);
-                } else {
+                int value = (int) (mRating * 100);
+                if (value % 100 > 0) {
                     score = String.format(Locale.getDefault(), "%1$.1f", mRating);
+                } else {
+                    score = String.format(Locale.getDefault(), "%d", (int) mRating);
                 }
                 float scoreWidth = mRatingValuePaint.measureText(score);
                 float textWidth = mRatingPaint.measureText(mRatingText);
