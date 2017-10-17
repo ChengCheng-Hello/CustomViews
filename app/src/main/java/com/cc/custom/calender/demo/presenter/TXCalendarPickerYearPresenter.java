@@ -1,6 +1,7 @@
 package com.cc.custom.calender.demo.presenter;
 
 import android.os.AsyncTask;
+import android.os.Handler;
 
 import com.cc.custom.calender.demo.TXCalenderPickerContract;
 import com.cc.custom.calender.demo.TXDate;
@@ -64,13 +65,36 @@ public class TXCalendarPickerYearPresenter implements TXCalenderPickerContract.P
 
     @Override
     public void selectDate(TXDate selectedDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(selectedDate.getMilliseconds());
-        calendar.set(Calendar.YEAR, selectedDate.getYear() + 1);
+        AsyncTask<TXDate, Void, TXDate> task = new AsyncTask<TXDate, Void, TXDate>() {
 
-        TXDate endDate = new TXDate(calendar.getTimeInMillis() - 1);
+            private List<TXCalendarYearModel> dates;
 
-        mView.showSelectCompleted(selectedDate, endDate);
+            @Override
+            protected TXDate doInBackground(TXDate...params) {
+                dates = getYearList(params[0]);
+                return params[0];
+            }
+
+            @Override
+            protected void onPostExecute(final TXDate selectedDate) {
+                mView.showDates(dates, null);
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(selectedDate.getMilliseconds());
+                calendar.set(Calendar.YEAR, selectedDate.getYear() + 1);
+
+                final TXDate endDate = new TXDate(calendar.getTimeInMillis() - 1);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView.showSelectCompleted(selectedDate, endDate);
+                    }
+                }, 200);
+            }
+        };
+
+        task.execute(selectedDate);
     }
 
     /**
