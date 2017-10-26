@@ -27,6 +27,7 @@
         <activity android:name=".stepview.TXStepViewDemoActivity" />
         <activity android:name=".video.TXVideoEditDemoActivity" />
         <activity android:name=".ndk.TXNDKDemoActivity" />
+        <activity android:name=".opengl.TXOpenGLDemoActivity" />
     </application>
 
 </manifest>

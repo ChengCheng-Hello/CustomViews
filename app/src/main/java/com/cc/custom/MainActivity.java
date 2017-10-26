@@ -1,6 +1,7 @@
 package com.cc.custom;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
@@ -8,6 +9,12 @@ import android.widget.Toast;
 import com.cc.custom.calender.TXCalenderDemoActivity;
 import com.cc.custom.chart.ChartItem;
 import com.cc.custom.chart.LineChartView2;
+import com.cc.custom.gallery.listener.TXAlbumTaskListener;
+import com.cc.custom.gallery.listener.TXVideoTaskListener;
+import com.cc.custom.gallery.model.TXAlbumModel;
+import com.cc.custom.gallery.model.TXVideoModel;
+import com.cc.custom.gallery.task.TXVideoAlbumTask;
+import com.cc.custom.gallery.task.TXVideoTask;
 import com.cc.custom.ndk.TXNDKDemoActivity;
 import com.cc.custom.rating.TXRatingView;
 import com.cc.custom.stepview.TXStepViewDemoActivity;
@@ -15,6 +22,7 @@ import com.cc.custom.video.TXVideoEditDemoActivity;
 import com.cc.custom.viewpager.TXVpDemoActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lineChartView = (LineChartView2) findViewById(R.id.lineChart);
+        TXContextManager.getInstance().init(getApplicationContext());
 
+        lineChartView = (LineChartView2) findViewById(R.id.lineChart);
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,9 +74,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         ratingView = (TXRatingView) findViewById(R.id.ratingView);
-
 
         findViewById(R.id.btn_vp).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +108,32 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 TXNDKDemoActivity.launch(v.getContext());
+            }
+        });
+
+        findViewById(R.id.btn_open_gl).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TXOpenGLDemoActivity.launch(v.getContext());
+                new TXVideoAlbumTask().load(new TXAlbumTaskListener() {
+                    @Override
+                    public void postAlbumList(@Nullable List<TXAlbumModel> list) {
+                        for (TXAlbumModel item : list) {
+                            new TXVideoTask().load(item.bucketId, 0, new TXVideoTaskListener() {
+                                @Override
+                                public void postImages(@Nullable List<TXVideoModel> videoList, int count,
+                                    String bucketId) {
+                                    int i = 0;
+                                }
+
+                                @Override
+                                public boolean needFilter(String path) {
+                                    return false;
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
     }
