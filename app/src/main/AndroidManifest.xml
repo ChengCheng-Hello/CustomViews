@@ -28,6 +28,7 @@
         <activity android:name=".video.TXVideoEditDemoActivity" />
         <activity android:name=".ndk.TXNDKDemoActivity" />
         <activity android:name=".opengl.TXOpenGLDemoActivity" />
+        <activity android:name=".seek.TXSeekDemoActivity"/>
     </application>
 
 </manifest>

@@ -56,7 +56,7 @@ public class TXVideoEditDemoActivity extends FragmentActivity {
 
         mRetriever = new MediaMetadataRetriever();
 
-        mRetriever.setDataSource("/mnt/sdcard/DCIM/Camera/VID_20170929_113913.mp4");
+        mRetriever.setDataSource("/mnt/sdcard/2.mp4");
 
         String width = mRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
         String height = mRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);

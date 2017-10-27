@@ -57,6 +57,18 @@
             android:text="OPEN_GL" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_seek"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Seek" />
+    </LinearLayout>
+
     <com.cc.custom.edittext.TXEditText
         android:layout_width="match_parent"
         android:layout_height="48dp"
