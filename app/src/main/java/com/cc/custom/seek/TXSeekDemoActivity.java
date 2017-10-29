@@ -2,10 +2,13 @@ package com.cc.custom.seek;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.VideoView;
 
 import com.cc.custom.R;
 
@@ -16,10 +19,12 @@ import com.cc.custom.R;
  * <p>
  * Created by Cheng on 2017/10/26.
  */
-public class TXSeekDemoActivity extends FragmentActivity {
+public class TXSeekDemoActivity extends FragmentActivity implements TXFrameSeekBar.TXOnRangeChangedListener {
 
-    private RangeSeekbar mSeekBar;
+    private static final String TAG = "TXSeekDemoActivity";
+
     private TXFrameSeekBar mFrameBar;
+    private VideoView mVideoView;
 
     public static void launch(Context context) {
         Intent intent = new Intent(context, TXSeekDemoActivity.class);
@@ -32,26 +37,61 @@ public class TXSeekDemoActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_seek_demo);
 
-        mSeekBar = (RangeSeekbar) findViewById(R.id.seekbar);
-        mSeekBar.setLeftSelection(2);
-        mSeekBar.setRightSelection(4);
-
-        findViewById(R.id.set_left).setOnClickListener(new View.OnClickListener() {
+        String path = "/mnt/sdcard/3.mp4";
+        mVideoView = (VideoView) findViewById(R.id.videoView);
+        mVideoView.setVideoPath(path);
+        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
-            public void onClick(View v) {
-                mSeekBar.setLeftSelection(0);
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                Log.d(TAG, "onPrepared");
             }
         });
-
-        findViewById(R.id.set_right).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSeekBar.setRightSelection(5);
-            }
-        });
+        videoStart();
 
         mFrameBar = (TXFrameSeekBar) findViewById(R.id.frameBar);
 //        mFrameBar.setVideoPath("/mnt/sdcard/3.mp4");
-        mFrameBar.setVideoPath("/mnt/sdcard/3.mp4");
+        mFrameBar.setVideoPath(path);
+        mFrameBar.setListener(this);
+    }
+
+    private void videoStart() {
+        Log.d(TAG, "----videoStart----->>>>>>>");
+        mVideoView.start();
+//        positionIcon.clearAnimation();
+//        if (animator != null && animator.isRunning()) {
+//            animator.cancel();
+//        }
+//        anim();
+//        handler.removeCallbacks(run);
+//        handler.post(run);
+    }
+
+    private void videoPause() {
+//        isSeeking = false;
+        if (mVideoView != null && mVideoView.isPlaying()) {
+            mVideoView.pause();
+//            handler.removeCallbacks(run);
+        }
+        Log.d(TAG, "----videoPause----->>>>>>>");
+//        if (positionIcon.getVisibility() == View.VISIBLE) {
+//            positionIcon.setVisibility(View.GONE);
+//        }
+//        positionIcon.clearAnimation();
+//        if (animator != null && animator.isRunning()) {
+//            animator.cancel();
+//        }
+    }
+
+    @Override
+    public void onChanged(int startTime, int endTime, int status) {
+        if (status == TXRangeSeekBar.STATUS_DOWN) {
+            videoPause();
+        } else if (status == TXRangeSeekBar.STATUS_MOVE) {
+//            mVideoView.seekTo(startTime);
+        } else if (status == TXRangeSeekBar.STATUS_UP) {
+            mVideoView.seekTo(startTime);
+            mVideoView.start();
+//            mVideoView.resume();
+        }
     }
 }

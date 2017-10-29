@@ -6,7 +6,7 @@
 
     <ImageView
         android:id="@+id/iv_thumb"
-        android:layout_width="10dp"
+        android:layout_width="50dp"
         android:layout_height="50dp"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY" />
 </LinearLayout>

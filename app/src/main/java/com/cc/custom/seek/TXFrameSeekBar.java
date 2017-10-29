@@ -13,7 +13,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.start;
+import static android.R.string.no;
+
 /**
  * TODO: 类的一句话描述
  * <p>
@@ -35,7 +40,9 @@ import java.util.List;
  * <p>
  * Created by Cheng on 2017/10/27.
  */
-public class TXFrameSeekBar extends FrameLayout {
+public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRangeChangeListener {
+
+    private static final String TAG = "TXFrameSeekBar";
 
     private MediaMetadataRetriever mRetriever;
     private int mDuration;
@@ -50,6 +57,10 @@ public class TXFrameSeekBar extends FrameLayout {
             }
         }
     };
+    private TXRangeSeekBar mSeekBar;
+    private int mCount;
+    private int mOffset;
+    private TXOnRangeChangedListener mListener;
 
     public TXFrameSeekBar(@NonNull Context context) {
         this(context, null);
@@ -67,6 +78,8 @@ public class TXFrameSeekBar extends FrameLayout {
 
     private void init() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.tx_layout_seek_bar, this);
+        mSeekBar = (TXRangeSeekBar) view.findViewById(R.id.seekBar);
+        mSeekBar.setOnRangeChangeListener(this);
         RecyclerView mRv = (RecyclerView) view.findViewById(R.id.rv);
         mRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         mAdapter = new MyAdapter();
@@ -84,6 +97,21 @@ public class TXFrameSeekBar extends FrameLayout {
 
         mDuration = Integer.parseInt(duration);
 
+        mCount = 10;
+        mOffset = 6 * 1000;
+        float minScale;
+        if (mDuration > 60 * 1000) {
+            mCount = mDuration / (6 * 1000);
+            if (mDuration % (6 * 1000) > 0) {
+                mCount++;
+            }
+            minScale = 3f / 60f;
+        } else {
+            mOffset = mDuration / 10;
+            minScale = 3 * 1000f / mDuration;
+        }
+        mSeekBar.setMinScale(minScale);
+
         getFrames();
     }
 
@@ -91,18 +119,9 @@ public class TXFrameSeekBar extends FrameLayout {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int count = 10;
-                int offset = 6 * 1000;
-                if (mDuration > 60 * 1000) {
-                    count = mDuration / 60 * 1000;
-                    if (mDuration % 60 * 1000 > 0) {
-                        count++;
-                    }
-                } else {
-                    offset = mDuration / 10;
-                }
+                ArrayList<TXVideoInfoModel> list = new ArrayList<>(mCount);
 
-                for (int i = 0; i < count; i++) {
+                for (int i = 0; i < mCount; i++) {
                     File file = new File("/mnt/sdcard/Pictures/test_" + i + ".jpg");
                     try {
                         file.createNewFile();
@@ -110,8 +129,8 @@ public class TXFrameSeekBar extends FrameLayout {
                         e.printStackTrace();
                     }
 
-                    Bitmap thbBitmap = Bitmap.createScaledBitmap(mRetriever.getFrameAtTime(i * offset * 1000 + 1),
-                        mWidth, mHeight, false);
+                    Bitmap thbBitmap = Bitmap.createScaledBitmap(mRetriever.getFrameAtTime(i * mOffset * 1000 + 1),
+                            mWidth, mHeight, false);
 
                     FileOutputStream fos;
                     try {
@@ -125,14 +144,16 @@ public class TXFrameSeekBar extends FrameLayout {
 
                     TXVideoInfoModel model = new TXVideoInfoModel();
                     model.path = file.getAbsolutePath();
-                    model.startTime = i * offset;
-                    model.endTime = (i + 1) * offset > mDuration ? mDuration : (i + 1) * offset;
+                    model.startTime = i * mOffset;
+                    model.endTime = (i + 1) * mOffset > mDuration ? mDuration : (i + 1) * mOffset;
                     long duration = model.endTime - model.startTime;
-                    if (duration == offset) {
+                    if (duration == mOffset) {
                         model.width = mWidth;
                     } else {
-                        model.width = mWidth * duration / offset;
+                        model.width = mWidth * duration / mOffset;
                     }
+
+                    list.add(model);
                     Message message = mHandler.obtainMessage(100);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("model", model);
@@ -141,6 +162,22 @@ public class TXFrameSeekBar extends FrameLayout {
                 }
             }
         }).start();
+    }
+
+    @Override
+    public void onChange(float startPosition, float endPosition, int status) {
+        Log.d(TAG, "onChange startPosition " + startPosition + ", endPosition " + endPosition + ", status " + status);
+        int startTime;
+        int endTime;
+        if (mDuration <= 60 * 1000) {
+            startTime = (int) (mDuration * startPosition);
+            endTime = (int) (mDuration * endPosition);
+        } else {
+            startTime = (int) (60 * 1000 * startPosition);
+            endTime = (int) (60 * 1000 * endPosition);
+        }
+
+        mListener.onChanged(startTime, endTime, status);
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyHolder> {
@@ -152,9 +189,9 @@ public class TXFrameSeekBar extends FrameLayout {
             this.notifyDataSetChanged();
         }
 
-        public void addData(TXVideoInfoModel model) {
-            this.mList.add(model);
-            this.notifyDataSetChanged();
+        public synchronized void addData(TXVideoInfoModel model) {
+            mList.add(model);
+            this.notifyItemInserted(mList.size());
         }
 
         @Override
@@ -188,5 +225,13 @@ public class TXFrameSeekBar extends FrameLayout {
             super(itemView);
             iv = (ImageView) itemView.findViewById(R.id.iv_thumb);
         }
+    }
+
+    public void setListener(TXOnRangeChangedListener listener) {
+        this.mListener = listener;
+    }
+
+    public interface TXOnRangeChangedListener {
+        void onChanged(int startTime, int endTime, int status);
     }
 }

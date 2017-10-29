@@ -31,7 +31,8 @@ public class TXRangeSeekBar extends View {
 
     private int mWidth;
     private int mHeight;
-    private int mMinSpace = 100;
+    private float mMinSpace = -1;
+    private float mMinScale = -1;
     private int mLineWidth = 5;
 
     private Drawable mLeftSliderDrawable;
@@ -53,6 +54,10 @@ public class TXRangeSeekBar extends View {
     private float mRightPointLastX;
     private float mLeftMoveX;
     private float mRightMoveX;
+
+    private float mStartPosition = 0f;
+    private float mEndPosition = 100f;
+    private TXOnRangeChangeListener mListener;
 
     public TXRangeSeekBar(Context context) {
         this(context, null);
@@ -82,7 +87,7 @@ public class TXRangeSeekBar extends View {
 
         mMaxRangePaint = new Paint();
         mMaxRangePaint.setAntiAlias(true);
-        mMaxRangePaint.setColor(Color.GRAY);
+        mMaxRangePaint.setColor(Color.WHITE);
         mMaxRangePaint.setStyle(Paint.Style.STROKE);
         mMaxRangePaint.setStrokeWidth(mLineWidth);
 
@@ -130,33 +135,18 @@ public class TXRangeSeekBar extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        if (mMinSpace < 0 && mMinScale > 0) {
+            mMinSpace = (mWidth - getPaddingLeft() - getPaddingRight()) * mMinScale;
+        }
+
         // 最长范围线
         if (mIsLeftDown || mIsRightDown) {
             canvas.drawRect(getPaddingLeft() + mLineWidth / 2, mLineWidth / 2,
-                mWidth - getPaddingRight() - mLineWidth / 2, mHeight - mLineWidth / 2, mMaxRangePaint);
+                    mWidth - getPaddingRight() - mLineWidth / 2, mHeight - mLineWidth / 2, mMaxRangePaint);
         }
 
-        if (mIsLeftDown) {
-            mSliderLeft += mLeftMoveX;
-            if (mSliderLeft < getPaddingLeft()) {
-                mSliderLeft = getPaddingLeft();
-            }
-            // 不能超过右滑块，还有最小间距
-            if (mSliderLeft >= mSliderRight - mSliderWidth - mMinSpace) {
-                mSliderLeft = mSliderRight - mSliderWidth - mMinSpace;
-            }
-        }
-        if (mIsRightDown) {
-            mSliderRight += mRightMoveX;
-            if (mSliderRight > mWidth - getPaddingRight()) {
-                mSliderRight = mWidth - getPaddingRight();
-            }
-            // 不能超过左滑块，还有最小间距
-            if (mSliderRight <= mSliderLeft + mSliderWidth + mMinSpace) {
-                mSliderRight = mSliderLeft + mSliderWidth + mMinSpace;
-            }
-        }
-
+        calcLeft();
+        calcRight();
         // 左滑块
         mLeftSliderDrawable.setBounds(mSliderLeft, 0, mSliderLeft + mSliderWidth, mHeight);
         mLeftSliderDrawable.draw(canvas);
@@ -165,9 +155,19 @@ public class TXRangeSeekBar extends View {
         mRightSliderDrawable.draw(canvas);
         // 上下滑线
         canvas.drawLine(mSliderLeft + mSliderWidth, mLineWidth / 2, mSliderRight - mSliderWidth, mLineWidth / 2,
-            mSliderPaint);
+                mSliderPaint);
         canvas.drawLine(mSliderLeft + mSliderWidth, mHeight - mLineWidth / 2, mSliderRight - mSliderWidth,
-            mHeight - mLineWidth / 2, mSliderPaint);
+                mHeight - mLineWidth / 2, mSliderPaint);
+    }
+
+    private void calcLeft() {
+        float dWidth = mWidth - getPaddingLeft() - getPaddingRight();
+        mStartPosition = (mSliderLeft - getPaddingLeft()) / dWidth;
+    }
+
+    private void calcRight() {
+        float dWidth = mWidth - getPaddingLeft() - getPaddingRight();
+        mEndPosition = (mSliderRight - getPaddingLeft()) / dWidth;
     }
 
     @Override
@@ -180,97 +180,156 @@ public class TXRangeSeekBar extends View {
         switch (actionMasked) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
-                handleDown(event);
-                return true;
+                return handleDown(event);
             case MotionEvent.ACTION_MOVE:
-                handleMove(event);
-                return true;
+                return handleMove(event);
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
             case MotionEvent.ACTION_CANCEL:
-                handleUp(event);
-                break;
+                return handleUp(event);
         }
 
-        return true;
+        return super.onTouchEvent(event);
     }
 
-    private void handleDown(MotionEvent event) {
+    private boolean handleDown(MotionEvent event) {
         int actionIndex = MotionEventCompat.getActionIndex(event);
         if (actionIndex == -1) {
-            return;
+            return false;
         }
         float downX = event.getX(actionIndex);
         float downY = event.getY(actionIndex);
 
         if (downX >= mSliderLeft - TOUCH_OFFSET_W && downX <= mSliderLeft + mSliderWidth + TOUCH_OFFSET_W
-            && downY >= 0 - TOUCH_OFFSET_H && downY <= mHeight + TOUCH_OFFSET_H) {
+                && downY >= 0 - TOUCH_OFFSET_H && downY <= mHeight + TOUCH_OFFSET_H) {
             mLeftPointerId = event.getPointerId(actionIndex);
             mLeftPointLastX = downX;
             mIsLeftDown = true;
+            if (mListener != null) {
+                mListener.onChange(mStartPosition, mEndPosition, STATUS_DOWN);
+            }
             Log.d(TAG, "handleDown isLeftSlider " + mLeftPointerId + ", mLeftPointLastX " + downX);
+            return true;
         } else if (downX >= mSliderRight - mSliderWidth - TOUCH_OFFSET_W && downX <= mSliderRight + TOUCH_OFFSET_W
-            && downY >= 0 - TOUCH_OFFSET_H && downY <= mHeight + TOUCH_OFFSET_H) {
+                && downY >= 0 - TOUCH_OFFSET_H && downY <= mHeight + TOUCH_OFFSET_H) {
             mRightPointerId = event.getPointerId(actionIndex);
             mRightPointLastX = downX;
             mIsRightDown = true;
+            if (mListener != null) {
+                mListener.onChange(mStartPosition, mEndPosition, STATUS_DOWN);
+            }
             Log.d(TAG, "handleDown isRightSlider " + mRightPointerId + ", mRightPointLastX " + downX);
+            return true;
         } else {
             Log.d(TAG, "handlerDown other");
+            return false;
         }
     }
 
-    private void handleMove(MotionEvent event) {
+    private boolean handleMove(MotionEvent event) {
+        boolean move = false;
         if (mIsLeftDown && mLeftPointerId != -1) {
             int index = event.findPointerIndex(mLeftPointerId);
-            if (index == -1) {
-                return;
+            if (index != -1) {
+                float x = event.getX(index);
+                mLeftMoveX = x - mLeftPointLastX;
+                mLeftPointLastX = x;
+                mSliderLeft += mLeftMoveX;
+                if (mSliderLeft < getPaddingLeft()) {
+                    mSliderLeft = getPaddingLeft();
+                }
+                // 不能超过右滑块，还有最小间距
+                if (mSliderLeft >= mSliderRight - mSliderWidth * 2 - mMinSpace) {
+                    mSliderLeft = (int) (mSliderRight - mSliderWidth * 2 - mMinSpace);
+                }
+                calcLeft();
+                Log.d(TAG, "handleMoveLeft " + mLeftMoveX);
+                move = true;
+                invalidate();
             }
-            float x = event.getX(index);
-            mLeftMoveX = x - mLeftPointLastX;
-            mLeftPointLastX = x;
-            Log.d(TAG, "handleMoveLeft " + mLeftMoveX);
-            invalidate();
         }
         if (mIsRightDown && mRightPointerId != -1) {
             int index = event.findPointerIndex(mRightPointerId);
-            if (index == -1) {
-                return;
+            if (index != -1) {
+                float x = event.getX(index);
+                mRightMoveX = x - mRightPointLastX;
+                mRightPointLastX = x;
+                mSliderRight += mRightMoveX;
+                if (mSliderRight > mWidth - getPaddingRight()) {
+                    mSliderRight = mWidth - getPaddingRight();
+                }
+                // 不能超过左滑块，还有最小间距
+                if (mSliderRight <= mSliderLeft + mSliderWidth * 2 + mMinSpace) {
+                    mSliderRight = (int) (mSliderLeft + mSliderWidth * 2 + mMinSpace);
+                }
+                calcRight();
+                Log.d(TAG, "handleMoveRight " + mRightMoveX);
+                move = true;
+                invalidate();
             }
-            float x = event.getX(index);
-            mRightMoveX = x - mRightPointLastX;
-            mRightPointLastX = x;
-            Log.d(TAG, "handleMoveRight " + mRightMoveX);
-            invalidate();
         }
+        if (move) {
+            if (mListener != null) {
+                mListener.onChange(mStartPosition, mEndPosition, STATUS_MOVE);
+            }
+        }
+        return move;
     }
 
-    private void handleUp(MotionEvent event) {
+    private boolean handleUp(MotionEvent event) {
         int actionIndex = MotionEventCompat.getActionIndex(event);
         if (actionIndex == -1) {
-            return;
+            return false;
         }
         int pointerId = event.getPointerId(actionIndex);
         if (pointerId == mLeftPointerId) {
             if (!mIsLeftDown) {
-                return;
+                return false;
+            }
+            calcLeft();
+            if (mListener != null) {
+                mListener.onChange(mStartPosition, mEndPosition, STATUS_UP);
             }
             mLeftPointLastX = 0;
             mLeftPointerId = -1;
             mIsLeftDown = false;
             Log.d(TAG, "handleUpLeft");
             invalidate();
+            return true;
         } else if (pointerId == mRightPointerId) {
             if (!mIsRightDown) {
-                return;
+                return false;
+            }
+            calcRight();
+            if (mListener != null) {
+                mListener.onChange(mStartPosition, mEndPosition, STATUS_UP);
             }
             mRightPointLastX = 0;
             mRightPointerId = -1;
             mIsRightDown = false;
             Log.d(TAG, "handleUpRight");
             invalidate();
+            return true;
         } else {
             Log.d(TAG, "handleUpOther");
+            return false;
         }
     }
+
+    public void setOnRangeChangeListener(TXOnRangeChangeListener listener) {
+        this.mListener = listener;
+    }
+
+    public void setMinScale(float min) {
+        this.mMinScale = min;
+    }
+
+
+    public interface TXOnRangeChangeListener {
+        void onChange(float startPosition, float endPosition, int status);
+    }
+
+    public static final int STATUS_DOWN = 0;
+    public static final int STATUS_MOVE = 1;
+    public static final int STATUS_UP = 2;
 }
