@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -42,6 +43,7 @@ public class TXRangeSeekBar extends View {
 
     private Paint mSliderPaint;
     private Paint mMaxRangePaint;
+    private Paint mCoverPaint;
 
     private int mSliderWidth;
     private int mSliderLeft;
@@ -90,6 +92,11 @@ public class TXRangeSeekBar extends View {
         mMaxRangePaint.setColor(Color.WHITE);
         mMaxRangePaint.setStyle(Paint.Style.STROKE);
         mMaxRangePaint.setStrokeWidth(mLineWidth);
+
+        mCoverPaint = new Paint();
+        mCoverPaint.setAntiAlias(true);
+        mCoverPaint.setColor(ContextCompat.getColor(getContext(), R.color.TX_CO_BLACK_30));
+        mCoverPaint.setStyle(Paint.Style.FILL);
 
         mSliderWidth = 40;
     }
@@ -147,6 +154,11 @@ public class TXRangeSeekBar extends View {
 
         calcLeft();
         calcRight();
+
+        // 阴影遮罩
+        canvas.drawRect(0, 0, mSliderLeft, mHeight, mCoverPaint);
+        canvas.drawRect(mSliderRight, 0, mWidth, mHeight, mCoverPaint);
+
         // 左滑块
         mLeftSliderDrawable.setBounds(mSliderLeft, 0, mSliderLeft + mSliderWidth, mHeight);
         mLeftSliderDrawable.draw(canvas);

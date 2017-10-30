@@ -1,5 +1,6 @@
 package com.cc.custom.seek;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,14 +14,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.cc.custom.R;
 
@@ -29,9 +31,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.R.attr.start;
-import static android.R.string.no;
 
 /**
  * TODO: 类的一句话描述
@@ -61,6 +60,17 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
     private int mCount;
     private int mOffset;
     private TXOnRangeChangedListener mListener;
+    private boolean mIsRvMoved;
+    private RecyclerView mRv;
+    private int mStartTime;
+    private int mEndTime;
+    private int mRvOffset;
+    private ImageView mIvPosition;
+    private int mPadding;
+    private ValueAnimator mAnimator;
+    private int mDistance;
+    private int mRangeStart;
+    private int mRangeEnd;
 
     public TXFrameSeekBar(@NonNull Context context) {
         this(context, null);
@@ -80,14 +90,15 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
         View view = LayoutInflater.from(getContext()).inflate(R.layout.tx_layout_seek_bar, this);
         mSeekBar = (TXRangeSeekBar) view.findViewById(R.id.seekBar);
         mSeekBar.setOnRangeChangeListener(this);
-        RecyclerView mRv = (RecyclerView) view.findViewById(R.id.rv);
+        mIvPosition = (ImageView) view.findViewById(R.id.iv_position);
+        mRv = (RecyclerView) view.findViewById(R.id.rv);
         mRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         mAdapter = new MyAdapter();
         mRv.setAdapter(mAdapter);
 
         mHeight = getResources().getDimensionPixelOffset(R.dimen.tx_frame_height);
-        int padding = getResources().getDimensionPixelOffset(R.dimen.tx_range_seek_bar_padding);
-        mWidth = (getResources().getDisplayMetrics().widthPixels - padding * 2) / 10;
+        mPadding = getResources().getDimensionPixelOffset(R.dimen.tx_range_seek_bar_padding);
+        mWidth = (getResources().getDisplayMetrics().widthPixels - mPadding * 2) / 10;
     }
 
     public void setVideoPath(String path) {
@@ -96,7 +107,10 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
         String duration = mRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
 
         mDuration = Integer.parseInt(duration);
+        Log.d(TAG, "mDuration " + mDuration);
 
+        mStartTime = 0;
+        mRangeStart = 0;
         mCount = 10;
         mOffset = 6 * 1000;
         float minScale;
@@ -106,13 +120,47 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
                 mCount++;
             }
             minScale = 3f / 60f;
+            mEndTime = 60 * 1000;
+            mRangeEnd = 60 * 1000;
+            mRv.addOnScrollListener(mOnScrollListener);
         } else {
             mOffset = mDuration / 10;
             minScale = 3 * 1000f / mDuration;
+            mEndTime = mDuration;
+            mRangeStart = mDuration;
         }
         mSeekBar.setMinScale(minScale);
 
         getFrames();
+    }
+
+    public void anim() {
+        if (mAnimator != null && mAnimator.isRunning()) {
+            mAnimator.cancel();
+        }
+
+        if (!mIvPosition.isShown()) {
+            mIvPosition.setVisibility(View.VISIBLE);
+        }
+
+        final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mIvPosition.getLayoutParams();
+        int start = mPadding - mDistance + mWidth * mStartTime / mOffset;
+        int end = mPadding - mDistance + mWidth * mEndTime / mOffset;
+        mAnimator = ValueAnimator.ofInt(start, end).setDuration(mEndTime - mStartTime);
+        mAnimator.setInterpolator(new LinearInterpolator());
+        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                params.leftMargin = (int) animation.getAnimatedValue();
+                mIvPosition.setLayoutParams(params);
+            }
+        });
+        mAnimator.start();
+    }
+
+    public static int dip2px(Context context, int dip) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) ((float) dip * scale + 0.5F);
     }
 
     private void getFrames() {
@@ -130,7 +178,7 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
                     }
 
                     Bitmap thbBitmap = Bitmap.createScaledBitmap(mRetriever.getFrameAtTime(i * mOffset * 1000 + 1),
-                            mWidth, mHeight, false);
+                        mWidth, mHeight, false);
 
                     FileOutputStream fos;
                     try {
@@ -167,17 +215,29 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
     @Override
     public void onChange(float startPosition, float endPosition, int status) {
         Log.d(TAG, "onChange startPosition " + startPosition + ", endPosition " + endPosition + ", status " + status);
-        int startTime;
-        int endTime;
         if (mDuration <= 60 * 1000) {
-            startTime = (int) (mDuration * startPosition);
-            endTime = (int) (mDuration * endPosition);
+            mRangeStart = (int) (mDuration * startPosition);
+            mRangeEnd = (int) (mDuration * endPosition);
         } else {
-            startTime = (int) (60 * 1000 * startPosition);
-            endTime = (int) (60 * 1000 * endPosition);
+            mRangeStart = (int) (60 * 1000 * startPosition);
+            mRangeEnd = (int) (60 * 1000 * endPosition);
         }
+        mStartTime = mRangeStart + mRvOffset;
+        mEndTime = mRangeEnd + mRvOffset;
 
-        mListener.onChanged(startTime, endTime, status);
+        if (status == TXRangeSeekBar.STATUS_DOWN) {
+            mListener.onChanged(mStartTime, mEndTime, Const.STATUS_PAUSE);
+            if (mIvPosition.isShown()) {
+                mIvPosition.setVisibility(View.GONE);
+            }
+            if (mAnimator != null && mAnimator.isRunning()) {
+                mAnimator.cancel();
+            }
+        } else if (status == TXRangeSeekBar.STATUS_MOVE) {
+            mListener.onChanged(mStartTime, mEndTime, Const.STATUS_MOVE);
+        } else if (status == TXRangeSeekBar.STATUS_UP) {
+            mListener.onChanged(mStartTime, mEndTime, Const.STATUS_PLAY);
+        }
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyHolder> {
@@ -229,6 +289,62 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
 
     public void setListener(TXOnRangeChangedListener listener) {
         this.mListener = listener;
+    }
+
+    private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            Log.d(TAG, "onScrollStateChanged " + newState);
+            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                mIsRvMoved = false;
+                mStartTime = mRangeStart + mRvOffset;
+                mEndTime = mRangeEnd + mRvOffset;
+                mListener.onChanged(mStartTime, mEndTime, Const.STATUS_PLAY);
+            } else {
+                mIsRvMoved = true;
+                mListener.onChanged(-1, -1, Const.STATUS_PAUSE);
+                if (mIvPosition.isShown()) {
+                    mIvPosition.setVisibility(View.GONE);
+                }
+                if (mAnimator != null && mAnimator.isRunning()) {
+                    mAnimator.cancel();
+                }
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            Log.d(TAG, "onScrolled dx" + dx);
+            if (dx != 0) {
+                mIsRvMoved = true;
+                LinearLayoutManager layoutManager = (LinearLayoutManager) mRv.getLayoutManager();
+                int position = layoutManager.findFirstVisibleItemPosition();
+                View view = layoutManager.findViewByPosition(position);
+                int width = view.getWidth();
+                mDistance = width * position + mRv.getPaddingLeft() - view.getLeft();
+                mRvOffset = mDistance * mOffset / width;
+                Log.d(TAG, "distance " + mDistance + ", mRvOffset " + mRvOffset);
+                mListener.onChanged(-1, -1, Const.STATUS_MOVE);
+            }
+        }
+    };
+
+    public int getStartTime() {
+        return mStartTime;
+    }
+
+    public int getEndTime() {
+        return mEndTime;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mRv != null && mDuration > 60 * 1000) {
+            mRv.removeOnScrollListener(mOnScrollListener);
+        }
     }
 
     public interface TXOnRangeChangedListener {

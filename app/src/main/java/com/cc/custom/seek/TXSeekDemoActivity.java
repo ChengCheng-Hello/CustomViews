@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.VideoView;
 
 import com.cc.custom.R;
@@ -44,54 +44,89 @@ public class TXSeekDemoActivity extends FragmentActivity implements TXFrameSeekB
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
                 Log.d(TAG, "onPrepared");
+                videoStart();
             }
         });
-        videoStart();
+        // mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        // @Override
+        // public void onCompletion(MediaPlayer mp) {
+        // Log.d(TAG, "onCompletion");
+        // mVideoView.seekTo(mFrameBar.getStartTime());
+        // mVideoView.start();
+        // }
+        // });
 
         mFrameBar = (TXFrameSeekBar) findViewById(R.id.frameBar);
-//        mFrameBar.setVideoPath("/mnt/sdcard/3.mp4");
+        // mFrameBar.setVideoPath("/mnt/sdcard/3.mp4");
         mFrameBar.setVideoPath(path);
         mFrameBar.setListener(this);
     }
 
+    private Handler mHandler = new Handler();
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            int currentPosition = mVideoView.getCurrentPosition();
+//            Log.d(TAG, "currentPosition " + currentPosition);
+            if (currentPosition >= mFrameBar.getEndTime() - 100) {
+                mVideoView.seekTo(mFrameBar.getStartTime());
+                videoStart();
+            }
+
+            mHandler.postDelayed(mRunnable, 100);
+        }
+    };
+
     private void videoStart() {
         Log.d(TAG, "----videoStart----->>>>>>>");
         mVideoView.start();
-//        positionIcon.clearAnimation();
-//        if (animator != null && animator.isRunning()) {
-//            animator.cancel();
-//        }
-//        anim();
-//        handler.removeCallbacks(run);
-//        handler.post(run);
+        mFrameBar.anim();
+        mHandler.removeCallbacks(mRunnable);
+        mHandler.post(mRunnable);
+        // positionIcon.clearAnimation();
+        // if (animator != null && animator.isRunning()) {
+        // animator.cancel();
+        // }
+        // anim();
+        // handler.removeCallbacks(run);
+        // handler.post(run);
     }
 
     private void videoPause() {
-//        isSeeking = false;
+        // isSeeking = false;
         if (mVideoView != null && mVideoView.isPlaying()) {
             mVideoView.pause();
-//            handler.removeCallbacks(run);
+            mHandler.removeCallbacks(mRunnable);
         }
         Log.d(TAG, "----videoPause----->>>>>>>");
-//        if (positionIcon.getVisibility() == View.VISIBLE) {
-//            positionIcon.setVisibility(View.GONE);
-//        }
-//        positionIcon.clearAnimation();
-//        if (animator != null && animator.isRunning()) {
-//            animator.cancel();
-//        }
+        // if (positionIcon.getVisibility() == View.VISIBLE) {
+        // positionIcon.setVisibility(View.GONE);
+        // }
+        // positionIcon.clearAnimation();
+        // if (animator != null && animator.isRunning()) {
+        // animator.cancel();
+        // }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mHandler != null) {
+            mHandler.removeCallbacks(mRunnable);
+        }
     }
 
     @Override
     public void onChanged(int startTime, int endTime, int status) {
-        if (status == TXRangeSeekBar.STATUS_DOWN) {
+        Log.d(TAG, "onChanged startTime " + startTime + ", endTime " + endTime);
+        if (status == Const.STATUS_PAUSE) {
             videoPause();
-        } else if (status == TXRangeSeekBar.STATUS_MOVE) {
-//            mVideoView.seekTo(startTime);
-        } else if (status == TXRangeSeekBar.STATUS_UP) {
+        } else if (status == Const.STATUS_MOVE) {
+            // mVideoView.seekTo(startTime);
+        } else if (status == Const.STATUS_PLAY) {
             mVideoView.seekTo(startTime);
-            mVideoView.start();
-//            mVideoView.resume();
+            videoStart();
+            // mVideoView.resume();
         }
     }
 }
