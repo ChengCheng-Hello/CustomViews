@@ -37,7 +37,7 @@ public class TXSeekDemoActivity extends FragmentActivity implements TXFrameSeekB
 
         setContentView(R.layout.activity_seek_demo);
 
-        String path = "/mnt/sdcard/3.mp4";
+        String path = "/mnt/sdcard/3.mp4";//"/mnt/sdcard/DCIM/Camera/VID_20171031_100232.mp4";//
         mVideoView = (VideoView) findViewById(R.id.videoView);
         mVideoView.setVideoPath(path);
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -60,6 +60,9 @@ public class TXSeekDemoActivity extends FragmentActivity implements TXFrameSeekB
         // mFrameBar.setVideoPath("/mnt/sdcard/3.mp4");
         mFrameBar.setVideoPath(path);
         mFrameBar.setListener(this);
+
+        TXRangeSeekBar2 seekBar2 = (TXRangeSeekBar2) findViewById(R.id.rangeBar2);
+        seekBar2.setVideoPath(path);
     }
 
     private Handler mHandler = new Handler();

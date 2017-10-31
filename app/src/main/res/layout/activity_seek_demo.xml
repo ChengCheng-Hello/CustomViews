@@ -18,4 +18,12 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="50dp" />
+
+    <com.cc.custom.seek.TXRangeSeekBar2
+        android:id="@+id/rangeBar2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp" />
 </LinearLayout>
