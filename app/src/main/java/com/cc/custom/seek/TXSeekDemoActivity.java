@@ -61,8 +61,19 @@ public class TXSeekDemoActivity extends FragmentActivity implements TXFrameSeekB
         mFrameBar.setVideoPath(path);
         mFrameBar.setListener(this);
 
-        TXRangeSeekBar2 seekBar2 = (TXRangeSeekBar2) findViewById(R.id.rangeBar2);
-        seekBar2.setVideoPath(path);
+//        TXRangeSeekBar2 seekBar2 = (TXRangeSeekBar2) findViewById(R.id.rangeBar2);
+//        seekBar2.setVideoPath(path);
+
+
+        final TXFrameView frameView = (TXFrameView) findViewById(R.id.frameView);
+        TXRangeSeekBar3 rangeBar3 = (TXRangeSeekBar3) findViewById(R.id.rangBar3);
+        rangeBar3.registerSliderListener(new TXRangeSeekBar3.TXSliderListener() {
+            @Override
+            public void onSliderUpdated(int sliderLeft, int sliderRight) {
+                frameView.setSliderPosition(sliderLeft, sliderRight);
+            }
+        });
+        frameView.setVideoPath(path);
     }
 
     private Handler mHandler = new Handler();
