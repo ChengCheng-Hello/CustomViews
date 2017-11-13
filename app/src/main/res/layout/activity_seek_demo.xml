@@ -1,36 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/TX_CO_BLACK"
-    android:orientation="vertical">
-
-    <VideoView
-        android:id="@+id/videoView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp" />
-
-    <com.cc.custom.seek.TXFrameSeekBar
-        android:id="@+id/frameBar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="50dp" />
+    android:background="@color/TX_CO_BLACK">
 
     <!--<com.cc.custom.seek.TXRangeSeekBar2-->
-        <!--android:id="@+id/rangeBar2"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_marginTop="50dp"-->
-        <!--android:paddingLeft="50dp"-->
-        <!--android:paddingRight="50dp" />-->
+    <!--android:id="@+id/rangeBar2"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_marginTop="50dp"-->
+    <!--android:paddingLeft="50dp"-->
+    <!--android:paddingRight="50dp" />-->
 
     <RelativeLayout
+        android:id="@+id/rl_content"
         android:layout_width="match_parent"
-        android:layout_marginTop="50dp"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="50dp">
 
         <com.cc.custom.seek.TXFrameView
             android:id="@+id/frameView"
@@ -47,4 +34,20 @@
             android:paddingRight="50dp" />
     </RelativeLayout>
 
-</LinearLayout>
+    <com.cc.custom.seek.TXFrameSeekBar
+        android:id="@+id/frameBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_above="@id/rl_content"
+        android:layout_marginTop="50dp" />
+
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/frameBar"
+        android:layout_gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp" />
+
+</RelativeLayout>

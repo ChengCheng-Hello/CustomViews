@@ -44,6 +44,7 @@ public class TXRangeSeekBar extends View {
     private Paint mSliderPaint;
     private Paint mMaxRangePaint;
     private Paint mCoverPaint;
+    private Paint mSliderBgPaint;
 
     private int mSliderWidth;
     private int mSliderLeft;
@@ -98,7 +99,12 @@ public class TXRangeSeekBar extends View {
         mCoverPaint.setColor(ContextCompat.getColor(getContext(), R.color.TX_CO_BLACK_30));
         mCoverPaint.setStyle(Paint.Style.FILL);
 
-        mSliderWidth = 40;
+        mSliderBgPaint = new Paint();
+        mSliderBgPaint.setAntiAlias(true);
+        mSliderBgPaint.setColor(ContextCompat.getColor(getContext(), R.color.TX_CO_BNINE_30));
+        mSliderBgPaint.setStyle(Paint.Style.FILL);
+
+        mSliderWidth = mLeftSliderDrawable.getIntrinsicWidth();
     }
 
     @Override
@@ -146,30 +152,35 @@ public class TXRangeSeekBar extends View {
             mMinSpace = (mWidth - getPaddingLeft() - getPaddingRight()) * mMinScale;
         }
 
+        // 滑块背景占位
+        canvas.drawRect(getPaddingLeft() - mSliderWidth, 0, getPaddingLeft(), mHeight, mSliderBgPaint);
+        canvas.drawRect(mWidth - getPaddingRight(), 0, mWidth - getPaddingRight() + mSliderWidth, mHeight,
+            mSliderBgPaint);
+
         // 最长范围线
         if (mIsLeftDown || mIsRightDown) {
-            canvas.drawRect(getPaddingLeft() + mLineWidth / 2, mLineWidth / 2,
-                    mWidth - getPaddingRight() - mLineWidth / 2, mHeight - mLineWidth / 2, mMaxRangePaint);
+            canvas.drawRect(getPaddingLeft() - mLineWidth / 2, mLineWidth / 2,
+                mWidth - getPaddingRight() + mLineWidth / 2, mHeight - mLineWidth / 2, mMaxRangePaint);
         }
 
         calcLeft();
         calcRight();
 
         // 阴影遮罩
-        canvas.drawRect(0, 0, mSliderLeft, mHeight, mCoverPaint);
-        canvas.drawRect(mSliderRight, 0, mWidth, mHeight, mCoverPaint);
+        canvas.drawRect(0, 0, mSliderLeft - mSliderWidth, mHeight, mCoverPaint);
+        canvas.drawRect(mSliderRight + mSliderWidth, 0, mWidth, mHeight, mCoverPaint);
 
         // 左滑块
-        mLeftSliderDrawable.setBounds(mSliderLeft, 0, mSliderLeft + mSliderWidth, mHeight);
+        mLeftSliderDrawable.setBounds(mSliderLeft - mSliderWidth, 0, mSliderLeft, mHeight);
         mLeftSliderDrawable.draw(canvas);
         // 右滑块
-        mRightSliderDrawable.setBounds(mSliderRight - mSliderWidth, 0, mSliderRight, mHeight);
+        mRightSliderDrawable.setBounds(mSliderRight, 0, mSliderRight + mSliderWidth, mHeight);
         mRightSliderDrawable.draw(canvas);
         // 上下滑线
-        canvas.drawLine(mSliderLeft + mSliderWidth, mLineWidth / 2, mSliderRight - mSliderWidth, mLineWidth / 2,
-                mSliderPaint);
-        canvas.drawLine(mSliderLeft + mSliderWidth, mHeight - mLineWidth / 2, mSliderRight - mSliderWidth,
-                mHeight - mLineWidth / 2, mSliderPaint);
+        canvas.drawLine(mSliderLeft - mSliderWidth, mLineWidth / 2, mSliderRight + mSliderWidth, mLineWidth / 2,
+            mSliderPaint);
+        canvas.drawLine(mSliderLeft - mSliderWidth, mHeight - mLineWidth / 2, mSliderRight + mSliderWidth,
+            mHeight - mLineWidth / 2, mSliderPaint);
     }
 
     private void calcLeft() {
@@ -212,8 +223,8 @@ public class TXRangeSeekBar extends View {
         float downX = event.getX(actionIndex);
         float downY = event.getY(actionIndex);
 
-        if (downX >= mSliderLeft - TOUCH_OFFSET_W && downX <= mSliderLeft + mSliderWidth + TOUCH_OFFSET_W
-                && downY >= 0 - TOUCH_OFFSET_H && downY <= mHeight + TOUCH_OFFSET_H) {
+        if (downX >= mSliderLeft - mSliderWidth - TOUCH_OFFSET_W && downX <= mSliderLeft + TOUCH_OFFSET_W
+            && downY >= 0 - TOUCH_OFFSET_H && downY <= mHeight + TOUCH_OFFSET_H) {
             mLeftPointerId = event.getPointerId(actionIndex);
             mLeftPointLastX = downX;
             mIsLeftDown = true;
@@ -222,8 +233,8 @@ public class TXRangeSeekBar extends View {
             }
             Log.d(TAG, "handleDown isLeftSlider " + mLeftPointerId + ", mLeftPointLastX " + downX);
             return true;
-        } else if (downX >= mSliderRight - mSliderWidth - TOUCH_OFFSET_W && downX <= mSliderRight + TOUCH_OFFSET_W
-                && downY >= 0 - TOUCH_OFFSET_H && downY <= mHeight + TOUCH_OFFSET_H) {
+        } else if (downX >= mSliderRight - TOUCH_OFFSET_W && downX <= mSliderRight + mSliderWidth + TOUCH_OFFSET_W
+            && downY >= 0 - TOUCH_OFFSET_H && downY <= mHeight + TOUCH_OFFSET_H) {
             mRightPointerId = event.getPointerId(actionIndex);
             mRightPointLastX = downX;
             mIsRightDown = true;
@@ -239,7 +250,8 @@ public class TXRangeSeekBar extends View {
     }
 
     private boolean handleMove(MotionEvent event) {
-        boolean move = false;
+        boolean leftMove = false;
+        boolean rightMove = false;
         if (mIsLeftDown && mLeftPointerId != -1) {
             int index = event.findPointerIndex(mLeftPointerId);
             if (index != -1) {
@@ -251,12 +263,12 @@ public class TXRangeSeekBar extends View {
                     mSliderLeft = getPaddingLeft();
                 }
                 // 不能超过右滑块，还有最小间距
-                if (mSliderLeft >= mSliderRight - mSliderWidth * 2 - mMinSpace) {
-                    mSliderLeft = (int) (mSliderRight - mSliderWidth * 2 - mMinSpace);
+                if (mSliderLeft >= mSliderRight - mMinSpace) {
+                    mSliderLeft = (int) (mSliderRight - mMinSpace);
                 }
                 calcLeft();
                 Log.d(TAG, "handleMoveLeft " + mLeftMoveX);
-                move = true;
+                leftMove = true;
                 invalidate();
             }
         }
@@ -271,21 +283,27 @@ public class TXRangeSeekBar extends View {
                     mSliderRight = mWidth - getPaddingRight();
                 }
                 // 不能超过左滑块，还有最小间距
-                if (mSliderRight <= mSliderLeft + mSliderWidth * 2 + mMinSpace) {
-                    mSliderRight = (int) (mSliderLeft + mSliderWidth * 2 + mMinSpace);
+                if (mSliderRight <= mSliderLeft + mMinSpace) {
+                    mSliderRight = (int) (mSliderLeft + mMinSpace);
                 }
                 calcRight();
                 Log.d(TAG, "handleMoveRight " + mRightMoveX);
-                move = true;
+                rightMove = true;
                 invalidate();
             }
         }
-        if (move) {
+        if (leftMove || rightMove) {
             if (mListener != null) {
-                mListener.onChange(mStartPosition, mEndPosition, STATUS_MOVE);
+                if (leftMove && rightMove) {
+                    mListener.onChange(mStartPosition, mEndPosition, STATUS_MOVE_BOTH);
+                } else if (leftMove) {
+                    mListener.onChange(mStartPosition, mEndPosition, STATUS_MOVE_LEFT);
+                } else {
+                    mListener.onChange(mStartPosition, mEndPosition, STATUS_MOVE_RIGHT);
+                }
             }
         }
-        return move;
+        return leftMove || rightMove;
     }
 
     private boolean handleUp(MotionEvent event) {
@@ -336,12 +354,13 @@ public class TXRangeSeekBar extends View {
         this.mMinScale = min;
     }
 
-
     public interface TXOnRangeChangeListener {
         void onChange(float startPosition, float endPosition, int status);
     }
 
     public static final int STATUS_DOWN = 0;
-    public static final int STATUS_MOVE = 1;
-    public static final int STATUS_UP = 2;
+    public static final int STATUS_MOVE_LEFT = 1;
+    public static final int STATUS_MOVE_RIGHT = 2;
+    public static final int STATUS_MOVE_BOTH = 3;
+    public static final int STATUS_UP = 4;
 }

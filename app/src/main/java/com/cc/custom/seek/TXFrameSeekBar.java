@@ -170,8 +170,9 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
                 ArrayList<TXVideoInfoModel> list = new ArrayList<>(mCount);
 
                 for (int i = 0; i < mCount; i++) {
-                    File file = new File("/mnt/sdcard/Pictures/test_" + i + ".jpg");
+                    File file = new File("/mnt/sdcard/DCIM/CustomView/" + System.currentTimeMillis() + ".jpg");
                     try {
+                        file.getParentFile().mkdirs();
                         file.createNewFile();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -226,17 +227,19 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
         mEndTime = mRangeEnd + mRvOffset;
 
         if (status == TXRangeSeekBar.STATUS_DOWN) {
-            mListener.onChanged(mStartTime, mEndTime, Const.STATUS_PAUSE);
+            mListener.onChanged(-1, Const.STATUS_PAUSE);
             if (mIvPosition.isShown()) {
                 mIvPosition.setVisibility(View.GONE);
             }
             if (mAnimator != null && mAnimator.isRunning()) {
                 mAnimator.cancel();
             }
-        } else if (status == TXRangeSeekBar.STATUS_MOVE) {
-            mListener.onChanged(mStartTime, mEndTime, Const.STATUS_MOVE);
+        } else if (status == TXRangeSeekBar.STATUS_MOVE_BOTH || status == TXRangeSeekBar.STATUS_MOVE_LEFT) {
+            mListener.onChanged(mStartTime, Const.STATUS_MOVE);
+        } else if (status == TXRangeSeekBar.STATUS_MOVE_RIGHT) {
+            mListener.onChanged(mEndTime, Const.STATUS_MOVE);
         } else if (status == TXRangeSeekBar.STATUS_UP) {
-            mListener.onChanged(mStartTime, mEndTime, Const.STATUS_PLAY);
+            mListener.onChanged(mStartTime, Const.STATUS_PLAY);
         }
     }
 
@@ -300,10 +303,10 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
                 mIsRvMoved = false;
                 mStartTime = mRangeStart + mRvOffset;
                 mEndTime = mRangeEnd + mRvOffset;
-                mListener.onChanged(mStartTime, mEndTime, Const.STATUS_PLAY);
+                mListener.onChanged(mStartTime, Const.STATUS_PLAY);
             } else {
                 mIsRvMoved = true;
-                mListener.onChanged(-1, -1, Const.STATUS_PAUSE);
+                mListener.onChanged(-1, Const.STATUS_PAUSE);
                 if (mIvPosition.isShown()) {
                     mIvPosition.setVisibility(View.GONE);
                 }
@@ -326,7 +329,9 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
                 mDistance = width * position + mRv.getPaddingLeft() - view.getLeft();
                 mRvOffset = mDistance * mOffset / width;
                 Log.d(TAG, "distance " + mDistance + ", mRvOffset " + mRvOffset);
-                mListener.onChanged(-1, -1, Const.STATUS_MOVE);
+                mStartTime = mRvOffset;
+                mEndTime = mRvOffset + mEndTime;
+                mListener.onChanged(mStartTime, Const.STATUS_MOVE);
             }
         }
     };
@@ -348,6 +353,6 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
     }
 
     public interface TXOnRangeChangedListener {
-        void onChanged(int startTime, int endTime, int status);
+        void onChanged(int playTime, int status);
     }
 }

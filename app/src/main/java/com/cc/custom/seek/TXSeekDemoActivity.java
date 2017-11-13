@@ -37,7 +37,7 @@ public class TXSeekDemoActivity extends FragmentActivity implements TXFrameSeekB
 
         setContentView(R.layout.activity_seek_demo);
 
-        String path = "/mnt/sdcard/3.mp4";//"/mnt/sdcard/DCIM/Camera/VID_20171031_100232.mp4";//
+        String path = "/mnt/sdcard/3.mp4";// "/mnt/sdcard/DCIM/Camera/VID_20171031_100232.mp4";//
         mVideoView = (VideoView) findViewById(R.id.videoView);
         mVideoView.setVideoPath(path);
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -61,9 +61,8 @@ public class TXSeekDemoActivity extends FragmentActivity implements TXFrameSeekB
         mFrameBar.setVideoPath(path);
         mFrameBar.setListener(this);
 
-//        TXRangeSeekBar2 seekBar2 = (TXRangeSeekBar2) findViewById(R.id.rangeBar2);
-//        seekBar2.setVideoPath(path);
-
+        // TXRangeSeekBar2 seekBar2 = (TXRangeSeekBar2) findViewById(R.id.rangeBar2);
+        // seekBar2.setVideoPath(path);
 
         final TXFrameView frameView = (TXFrameView) findViewById(R.id.frameView);
         TXRangeSeekBar3 rangeBar3 = (TXRangeSeekBar3) findViewById(R.id.rangBar3);
@@ -81,7 +80,7 @@ public class TXSeekDemoActivity extends FragmentActivity implements TXFrameSeekB
         @Override
         public void run() {
             int currentPosition = mVideoView.getCurrentPosition();
-//            Log.d(TAG, "currentPosition " + currentPosition);
+            // Log.d(TAG, "currentPosition " + currentPosition);
             if (currentPosition >= mFrameBar.getEndTime() - 100) {
                 mVideoView.seekTo(mFrameBar.getStartTime());
                 videoStart();
@@ -97,13 +96,6 @@ public class TXSeekDemoActivity extends FragmentActivity implements TXFrameSeekB
         mFrameBar.anim();
         mHandler.removeCallbacks(mRunnable);
         mHandler.post(mRunnable);
-        // positionIcon.clearAnimation();
-        // if (animator != null && animator.isRunning()) {
-        // animator.cancel();
-        // }
-        // anim();
-        // handler.removeCallbacks(run);
-        // handler.post(run);
     }
 
     private void videoPause() {
@@ -113,13 +105,6 @@ public class TXSeekDemoActivity extends FragmentActivity implements TXFrameSeekB
             mHandler.removeCallbacks(mRunnable);
         }
         Log.d(TAG, "----videoPause----->>>>>>>");
-        // if (positionIcon.getVisibility() == View.VISIBLE) {
-        // positionIcon.setVisibility(View.GONE);
-        // }
-        // positionIcon.clearAnimation();
-        // if (animator != null && animator.isRunning()) {
-        // animator.cancel();
-        // }
     }
 
     @Override
@@ -131,14 +116,15 @@ public class TXSeekDemoActivity extends FragmentActivity implements TXFrameSeekB
     }
 
     @Override
-    public void onChanged(int startTime, int endTime, int status) {
-        Log.d(TAG, "onChanged startTime " + startTime + ", endTime " + endTime);
+    public void onChanged(int playTime, int status) {
+        Log.d(TAG, "onChanged playTime " + playTime);
         if (status == Const.STATUS_PAUSE) {
             videoPause();
         } else if (status == Const.STATUS_MOVE) {
-            // mVideoView.seekTo(startTime);
+            mVideoView.pause();
+            mVideoView.seekTo(playTime);
         } else if (status == Const.STATUS_PLAY) {
-            mVideoView.seekTo(startTime);
+            mVideoView.seekTo(playTime);
             videoStart();
             // mVideoView.resume();
         }
