@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,6 +24,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.cc.custom.R;
 
@@ -71,6 +73,9 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
     private int mDistance;
     private int mRangeStart;
     private int mRangeEnd;
+    private AsyncTask<Void, Void, Void> mTask;
+    private TextView mViewTime;
+    private int mScreenWidth;
 
     public TXFrameSeekBar(@NonNull Context context) {
         this(context, null);
@@ -90,6 +95,8 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
         View view = LayoutInflater.from(getContext()).inflate(R.layout.tx_layout_seek_bar, this);
         mSeekBar = (TXRangeSeekBar) view.findViewById(R.id.seekBar);
         mSeekBar.setOnRangeChangeListener(this);
+        mViewTime = (TextView) view.findViewById(R.id.tv_time);
+
         mIvPosition = (ImageView) view.findViewById(R.id.iv_position);
         mRv = (RecyclerView) view.findViewById(R.id.rv);
         mRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -98,40 +105,49 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
 
         mHeight = getResources().getDimensionPixelOffset(R.dimen.tx_frame_height);
         mPadding = getResources().getDimensionPixelOffset(R.dimen.tx_range_seek_bar_padding);
-        mWidth = (getResources().getDisplayMetrics().widthPixels - mPadding * 2) / 10;
+        mScreenWidth = getResources().getDisplayMetrics().widthPixels;
+        mWidth = (mScreenWidth - mPadding * 2) / 10;
     }
 
     public void setVideoPath(String path) {
         mRetriever = new MediaMetadataRetriever();
-        mRetriever.setDataSource(path);
-        String duration = mRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        try {
+            mRetriever.setDataSource(path);
+            String duration = mRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
 
-        mDuration = Integer.parseInt(duration);
-        Log.d(TAG, "mDuration " + mDuration);
+            mDuration = Integer.parseInt(duration);
+            Log.d(TAG, "mDuration " + mDuration);
 
-        mStartTime = 0;
-        mRangeStart = 0;
-        mCount = 10;
-        mOffset = 6 * 1000;
-        float minScale;
-        if (mDuration > 60 * 1000) {
-            mCount = mDuration / (6 * 1000);
-            if (mDuration % (6 * 1000) > 0) {
-                mCount++;
+            mStartTime = 0;
+            mRangeStart = 0;
+            mCount = 10;
+            mOffset = 6 * 1000;
+            float minScale;
+            if (mDuration > 60 * 1000) {
+                mCount = mDuration / (6 * 1000);
+                if (mDuration % (6 * 1000) > 0) {
+                    mCount++;
+                }
+                minScale = 3f / 60f;
+                mEndTime = 60 * 1000;
+                mRangeEnd = 60 * 1000;
+                mRv.addOnScrollListener(mOnScrollListener);
+            } else {
+                mOffset = mDuration / 10;
+                minScale = 3 * 1000f / mDuration;
+                mEndTime = mDuration;
+                mRangeStart = mDuration;
             }
-            minScale = 3f / 60f;
-            mEndTime = 60 * 1000;
-            mRangeEnd = 60 * 1000;
-            mRv.addOnScrollListener(mOnScrollListener);
-        } else {
-            mOffset = mDuration / 10;
-            minScale = 3 * 1000f / mDuration;
-            mEndTime = mDuration;
-            mRangeStart = mDuration;
-        }
-        mSeekBar.setMinScale(minScale);
+            mSeekBar.setMinScale(minScale);
 
-        getFrames();
+            calcTimePosition(0, 1);
+
+            getFrames();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mRetriever.release();
+        }
     }
 
     public void anim() {
@@ -164,12 +180,16 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
     }
 
     private void getFrames() {
-        new Thread(new Runnable() {
+        mTask = new AsyncTask<Void, Void, Void>() {
             @Override
-            public void run() {
+            protected Void doInBackground(Void... params) {
                 ArrayList<TXVideoInfoModel> list = new ArrayList<>(mCount);
 
                 for (int i = 0; i < mCount; i++) {
+                    if (isCancelled()) {
+                        break;
+                    }
+
                     File file = new File("/mnt/sdcard/DCIM/CustomView/" + System.currentTimeMillis() + ".jpg");
                     try {
                         file.getParentFile().mkdirs();
@@ -178,8 +198,10 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
                         e.printStackTrace();
                     }
 
+                    Log.d(TAG, "getFrames i " + i);
+
                     Bitmap thbBitmap = Bitmap.createScaledBitmap(mRetriever.getFrameAtTime(i * mOffset * 1000 + 1),
-                        mWidth, mHeight, false);
+                            mWidth, mHeight, false);
 
                     FileOutputStream fos;
                     try {
@@ -209,8 +231,33 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
                     message.setData(bundle);
                     mHandler.sendMessage(message);
                 }
+                return null;
             }
-        }).start();
+        };
+        mTask.execute();
+    }
+
+    public void release() {
+        if (mTask != null) {
+            mTask.cancel(true);
+        }
+    }
+
+    private void calcTimePosition(final float startPosition, final float endPosition) {
+        mViewTime.setText((mEndTime - mStartTime) / 1000 + "s");
+        mViewTime.post(new Runnable() {
+            @Override
+            public void run() {
+                int startX = (int) ((mScreenWidth - mPadding * 2) * startPosition) + mPadding;
+                int endX = (int) ((mScreenWidth - mPadding * 2) * endPosition) + mPadding;
+                mViewTime.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
+                int tvW = mViewTime.getWidth();
+                int tvX = (endX - startX - tvW) / 2 + startX;
+                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mViewTime.getLayoutParams();
+                lp.setMargins(tvX, 0, 0, 0);
+                mViewTime.setLayoutParams(lp);
+            }
+        });
     }
 
     @Override
@@ -225,6 +272,8 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
         }
         mStartTime = mRangeStart + mRvOffset;
         mEndTime = mRangeEnd + mRvOffset;
+
+        calcTimePosition(startPosition, endPosition);
 
         if (status == TXRangeSeekBar.STATUS_DOWN) {
             mListener.onChanged(-1, Const.STATUS_PAUSE);

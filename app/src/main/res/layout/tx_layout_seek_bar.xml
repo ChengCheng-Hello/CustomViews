@@ -32,4 +32,17 @@
             android:paddingLeft="50dp"
             android:paddingRight="50dp" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:gravity="bottom"
+        android:textColor="@color/TX_CO_WHITE"
+        android:shadowDx="2"
+        android:shadowDy="0"
+        android:shadowRadius="10"
+        android:shadowColor="@color/TX_CO_BLACK"
+        android:text="60s"
+        android:textSize="10sp" />
 </RelativeLayout>
