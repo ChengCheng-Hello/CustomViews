@@ -18,7 +18,6 @@ import com.cc.custom.gallery.task.TXVideoTask;
 import com.cc.custom.ndk.TXNDKDemoActivity;
 import com.cc.custom.progress.BubbleProgress;
 import com.cc.custom.rating.TXRatingView;
-import com.cc.custom.seek.TXSeekDemoActivity;
 import com.cc.custom.stepview.TXStepViewDemoActivity;
 import com.cc.custom.video.TXVideoEditDemoActivity;
 import com.cc.custom.viewpager.TXVpDemoActivity;
@@ -143,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_seek).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TXSeekDemoActivity.launch(v.getContext());
+//                TXSeekDemoActivity.launch(v.getContext());
                 mProgress.setProgress(150);
             }
         });

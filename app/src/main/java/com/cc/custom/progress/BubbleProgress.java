@@ -3,13 +3,14 @@ package com.cc.custom.progress;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -33,17 +34,19 @@ public class BubbleProgress extends View {
 
     private RectF mFrameRectF = new RectF(0, 0, 0, 0);
     private RectF mBubbleRectF = new RectF(0, 0, 0, 0);
+    private Rect mUnReachedRect = new Rect(0, 0, 0, 0);
+    private RectF mReachedRectF = new RectF(0, 0, 0, 0);
 
     private int mFrameLineWidth = 4;
-    private int mFrameHeight = 48;
-    private int mUnreachedHeight = 24;
-    private int mReachedHeight = 24;
+    private int mFrameHeight;
+    private int mUnreachedHeight;
+    private int mReachedHeight;
 
     private int mMaxProgress = 100;
     private int mCurrentProgress = 0;
 
     private BubbleDrawable mBubbleDrawable;
-    private CurvedAndTiled mTile;
+    private Drawable bubbleDrawable;
 
     public BubbleProgress(Context context) {
         this(context, null);
@@ -73,33 +76,40 @@ public class BubbleProgress extends View {
         mReachedPaint = new Paint();
         mReachedPaint.setAntiAlias(true);
         mReachedPaint.setColor(Color.BLUE);
-        mReachedPaint.setStrokeCap(Paint.Cap.ROUND);
         mReachedPaint.setStrokeWidth(mReachedHeight);
         mReachedPaint.setStyle(Paint.Style.FILL);
 
         mUnreachedPaint = new Paint();
         mUnreachedPaint.setAntiAlias(true);
-        mUnreachedPaint.setColor(Color.BLACK);
-        mUnreachedPaint.setStrokeCap(Paint.Cap.ROUND);
-        mUnreachedPaint.setStrokeWidth(mUnreachedHeight);
-        mUnreachedPaint.setStyle(Paint.Style.FILL);
-        Shader shader =
-            new LinearGradient(30, 15, 15, 30, Color.parseColor("#333333"), Color.BLACK, Shader.TileMode.REPEAT);
-        mUnreachedPaint.setShader(shader);
+//        mUnreachedPaint.setColor(Color.BLACK);
+//        mUnreachedPaint.setStrokeCap(Paint.Cap.ROUND);
+//        mUnreachedPaint.setStrokeWidth(mUnreachedHeight);
+//        mUnreachedPaint.setStyle(Paint.Style.FILL);
+//        Shader shader =
+//                new LinearGradient(30, 15, 15, 30, Color.parseColor("#333333"), Color.BLACK, Shader.TileMode.REPEAT);
+//        mUnreachedPaint.setShader(shader);
 
         mBubbleRectF.left = 0;
         mBubbleRectF.top = 0;
         mBubbleRectF.right = 170;
         mBubbleRectF.bottom = 100;
         mBubbleDrawable =
-            new BubbleDrawable.Builder().rect(mBubbleRectF).arrowLocation(BubbleDrawable.ArrowLocation.BOTTOM)
-                .bubbleType(BubbleDrawable.BubbleType.COLOR).arrowHeight(10).arrowWidth(10).arrowCenter(true).build();
+                new BubbleDrawable.Builder().rect(mBubbleRectF).arrowLocation(BubbleDrawable.ArrowLocation.BOTTOM)
+                        .bubbleType(BubbleDrawable.BubbleType.COLOR).arrowHeight(10).arrowWidth(10).arrowCenter(true).build();
+
+        bubbleDrawable = getResources().getDrawable(R.drawable.test_svg);
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.slice);
-        mUnreachedHeight = mReachedHeight = bitmap.getHeight();
-        mTile =
-            new CurvedAndTiled(bitmap, mUnreachedHeight / 2);
+        mReachedHeight = mUnreachedHeight = bitmap.getHeight();
+        mFrameHeight = mReachedHeight * 2 + mFrameLineWidth;
+//        mFrameHeight = 48;
+
+        mBitmapShader = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.MIRROR);
+
+        mUnreachedPaint.setShader(mBitmapShader);
     }
+
+    private BitmapShader mBitmapShader;
 
     public void setProgress(int progress) {
         mCurrentProgress = progress;
@@ -134,32 +144,38 @@ public class BubbleProgress extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        int bubbleHeight = 100;
         mBubbleRectF.left = mCurrentProgress;
         mBubbleRectF.top = 0;
         mBubbleRectF.right = 170 + mCurrentProgress;
         mBubbleRectF.bottom = 100;
-        // mBubbleDrawable.setBounds((int) mBubbleRectF.left, (int) mBubbleRectF.top, (int) mBubbleRectF.right,
-        // (int) mBubbleRectF.bottom);
-        mBubbleDrawable.draw(canvas);
+//        // mBubbleDrawable.setBounds((int) mBubbleRectF.left, (int) mBubbleRectF.top, (int) mBubbleRectF.right,
+//        // (int) mBubbleRectF.bottom);
+//        mBubbleDrawable.draw(canvas);
+        bubbleDrawable.setBounds(mCurrentProgress, 0, 170 + mCurrentProgress,100);
+        bubbleDrawable.draw(canvas);
 
         int radius = mFrameHeight / 2;
 
         // frame
         mFrameRectF.left = mFrameLineWidth / 2;
-        mFrameRectF.top = mBubbleRectF.height() + mFrameLineWidth / 2;
+        mFrameRectF.top = bubbleHeight + mFrameLineWidth / 2;
         mFrameRectF.right = getWidth() - mFrameLineWidth / 2;
-        mFrameRectF.bottom = mBubbleRectF.height() + mFrameHeight;
+        mFrameRectF.bottom = bubbleHeight + mFrameHeight - mFrameLineWidth / 2;
         canvas.drawRoundRect(mFrameRectF, radius, radius, mFramePaint);
 
         // unreached
-        // canvas.drawLine(radius, mBubbleRectF.height() + mFrameHeight / 2, getWidth() - radius,
-        // mBubbleRectF.height() + mFrameHeight / 2, mUnreachedPaint);
-        mTile.onBoundsChange(new Rect(radius, (int) (mBubbleRectF.height() + mFrameHeight / 2 - mUnreachedHeight / 2),
-            getWidth() - radius, (int) (mBubbleRectF.height() + mFrameHeight / 2 + mUnreachedHeight / 2)));
-        mTile.draw(canvas);
+        mUnReachedRect.left = radius - mUnreachedHeight / 2;
+        mUnReachedRect.top = bubbleHeight + (mFrameHeight - mUnreachedHeight) / 2;
+        mUnReachedRect.right = getWidth() - radius + mUnreachedHeight / 2;
+        mUnReachedRect.bottom = bubbleHeight + (mFrameHeight + mUnreachedHeight) / 2;
+        canvas.drawRoundRect(new RectF(mUnReachedRect), mUnreachedHeight / 2, mUnreachedHeight / 2, mUnreachedPaint);
 
         // reached
-        canvas.drawLine(radius, mBubbleRectF.height() + mFrameHeight / 2, getWidth() / 2,
-            mBubbleRectF.height() + mFrameHeight / 2, mReachedPaint);
+        mReachedRectF.left = mUnReachedRect.left;
+        mReachedRectF.top = mUnReachedRect.top;
+        mReachedRectF.right = getWidth() / 2;
+        mReachedRectF.bottom = mUnReachedRect.bottom;
+        canvas.drawRoundRect(mReachedRectF, mReachedHeight / 2, mReachedHeight / 2, mReachedPaint);
     }
 }
