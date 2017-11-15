@@ -69,6 +69,16 @@
             android:text="Seek" />
     </LinearLayout>
 
+    <com.cc.custom.progress.BubbleProgress
+        android:id="@+id/progress"
+        android:layout_width="300dp"
+        android:layout_marginLeft="20dp"
+        android:layout_height="200dp" />
+
+    <com.cc.custom.progress.NumberProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
     <com.cc.custom.edittext.TXEditText
         android:layout_width="match_parent"
         android:layout_height="48dp"

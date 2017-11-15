@@ -16,6 +16,7 @@ import com.cc.custom.gallery.model.TXVideoModel;
 import com.cc.custom.gallery.task.TXVideoAlbumTask;
 import com.cc.custom.gallery.task.TXVideoTask;
 import com.cc.custom.ndk.TXNDKDemoActivity;
+import com.cc.custom.progress.BubbleProgress;
 import com.cc.custom.rating.TXRatingView;
 import com.cc.custom.seek.TXSeekDemoActivity;
 import com.cc.custom.stepview.TXStepViewDemoActivity;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private LineChartView2 lineChartView;
     private TXRatingView ratingView;
+    private BubbleProgress mProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +144,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 TXSeekDemoActivity.launch(v.getContext());
+                mProgress.setProgress(150);
             }
         });
+
+        mProgress = (BubbleProgress) findViewById(R.id.progress);
     }
 }

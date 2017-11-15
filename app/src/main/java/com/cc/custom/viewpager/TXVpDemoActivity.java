@@ -89,6 +89,14 @@ public class TXVpDemoActivity extends FragmentActivity implements View.OnClickLi
         mList = new ArrayList<>();
         mList.add("1: hh1");
         mList.add("2: hh2");
+
+        mViewPager.setVisibility(View.VISIBLE);
+        mViewPager.post(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.setData(mList);
+            }
+        });
     }
 
     @Override
