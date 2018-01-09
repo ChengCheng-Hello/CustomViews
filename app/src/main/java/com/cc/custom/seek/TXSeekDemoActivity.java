@@ -37,7 +37,7 @@ public class TXSeekDemoActivity extends FragmentActivity implements TXFrameSeekB
 
         setContentView(R.layout.activity_seek_demo);
 
-        String path = "/mnt/sdcard/DCIM/Camera/VID_20171114_171352.mp4";//"/mnt/sdcard/3.mp4";// "/mnt/sdcard/DCIM/Camera/VID_20171031_100232.mp4";//
+        String path = "/mnt/sdcard/3.mp4";// "/mnt/sdcard/DCIM/Camera/VID_20171031_100232.mp4";//
         mVideoView = (VideoView) findViewById(R.id.videoView);
         mVideoView.setVideoPath(path);
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {

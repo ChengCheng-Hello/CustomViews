@@ -16,9 +16,9 @@ import com.cc.custom.gallery.model.TXVideoModel;
 import com.cc.custom.gallery.task.TXVideoAlbumTask;
 import com.cc.custom.gallery.task.TXVideoTask;
 import com.cc.custom.ndk.TXNDKDemoActivity;
-import com.cc.custom.progress.BubbleProgress;
 import com.cc.custom.rating.TXRatingView;
 import com.cc.custom.stepview.TXStepViewDemoActivity;
+import com.cc.custom.textview.TXThreeTextView;
 import com.cc.custom.video.TXVideoEditDemoActivity;
 import com.cc.custom.viewpager.TXVpDemoActivity;
 
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private LineChartView2 lineChartView;
     private TXRatingView ratingView;
-    private BubbleProgress mProgress;
+    private TXThreeTextView threeTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         TXContextManager.getInstance().init(getApplicationContext());
 
         lineChartView = (LineChartView2) findViewById(R.id.lineChart);
+
+        threeTextView = (TXThreeTextView) findViewById(R.id.threeTv);
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,11 +144,9 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_seek).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                threeTextView.setFirstText("我是First先生哦哦哦哦哦哦哦");
 //                TXSeekDemoActivity.launch(v.getContext());
-                mProgress.setProgress(150);
             }
         });
-
-        mProgress = (BubbleProgress) findViewById(R.id.progress);
     }
 }

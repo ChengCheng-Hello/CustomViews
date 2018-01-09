@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/TX_CO_WHITE"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginRight="130dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/tx_cell_space_30">
+
+        <com.cc.custom.textview.TXThreeTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            app:autoType="one"
+            app:ellipsisType="second"
+            app:firstSpace="4dp"
+            app:firstText="已选"
+            app:firstTextColor="@color/TX_CO_BNINE"
+            app:firstTextSize="@dimen/TX_FT_MAIN"
+            app:secondSpace="4dp"
+            app:secondText="999"
+            app:secondTextColor="@color/TX_CO_BLUEMAJ"
+            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:thirdText="组"
+            app:thirdTextColor="@color/TX_CO_BNINE"
+            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+
+        <com.cc.custom.textview.TXThreeTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="6"
+            app:autoType="one"
+            app:ellipsisType="second"
+            app:firstText="已选"
+            app:firstTextColor="@color/TX_CO_BNINE"
+            app:firstTextSize="@dimen/TX_FT_MAIN"
+            app:secondText="9999999"
+            app:secondTextColor="@color/TX_CO_BLUEMAJ"
+            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:thirdText="人"
+            app:thirdTextColor="@color/TX_CO_BNINE"
+            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginRight="130dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/tx_cell_space_30">
+
+        <com.cc.custom.textview.TXThreeTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            app:autoType="one"
+            app:ellipsisType="first"
+            app:firstText="999999"
+            app:firstTextColor="@color/TX_CO_BLUEMAJ"
+            app:firstTextSize="@dimen/TX_FT_MAIN"
+            app:secondText="已选"
+            app:secondTextColor="@color/TX_CO_BNINE"
+            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:thirdText="组"
+            app:thirdTextColor="@color/TX_CO_BNINE"
+            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+
+        <com.cc.custom.textview.TXThreeTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="6"
+            app:autoType="one"
+            app:ellipsisType="first"
+            app:firstText="999999999999"
+            app:firstTextColor="@color/TX_CO_BLUEMAJ"
+            app:firstTextSize="@dimen/TX_FT_MAIN"
+            app:secondText="已选"
+            app:secondTextColor="@color/TX_CO_BNINE"
+            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:thirdText="人"
+            app:thirdTextColor="@color/TX_CO_BNINE"
+            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/tx_cell_space_30">
+
+        <com.cc.custom.textview.TXThreeTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            app:autoType="two"
+            app:ellipsisType="firstAndThird"
+            app:firstText="汪汪汪老师"
+            app:firstTextColor="@color/TX_CO_BLUEMAJ"
+            app:firstTextSize="@dimen/TX_FT_MAIN"
+            app:secondText="评价"
+            app:secondTextColor="@color/TX_CO_BNINE"
+            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:thirdText="哈哈哈哈哈哈哈哈"
+            app:thirdTextColor="@color/TX_CO_BLUEMAJ"
+            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+
+        <com.cc.custom.textview.TXThreeTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="6"
+            app:autoType="two"
+            app:ellipsisType="firstAndThird"
+            app:firstText="汪汪老师"
+            app:firstTextColor="@color/TX_CO_BLUEMAJ"
+            app:firstTextSize="@dimen/TX_FT_MAIN"
+            app:secondText="评价"
+            app:secondTextColor="@color/TX_CO_BNINE"
+            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:thirdText="哈哈哈哈汪汪汪汪哈"
+            app:thirdTextColor="@color/TX_CO_BLUEMAJ"
+            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/tx_cell_space_30">
+
+        <com.cc.custom.textview.TXThreeTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            app:autoType="two"
+            app:ellipsisType="firstAndSecond"
+            app:firstText="汪汪汪老师"
+            app:firstTextColor="@color/TX_CO_BLUEMAJ"
+            app:firstTextSize="@dimen/TX_FT_MAIN"
+            app:secondText="222222222"
+            app:secondTextColor="@color/TX_CO_BLUEMAJ"
+            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:thirdText="哈哈"
+            app:thirdTextColor="@color/TX_CO_BNINE"
+            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+
+        <com.cc.custom.textview.TXThreeTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="6"
+            app:autoType="two"
+            app:ellipsisType="firstAndSecond"
+            app:firstText="汪汪汪汪汪汪汪汪汪汪老师"
+            app:firstTextColor="@color/TX_CO_BLUEMAJ"
+            app:firstTextSize="@dimen/TX_FT_MAIN"
+            app:secondText="2222"
+            app:secondTextColor="@color/TX_CO_BLUEMAJ"
+            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:thirdText="哈哈"
+            app:thirdTextColor="@color/TX_CO_BNINE"
+            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/tx_cell_space_30">
+
+        <com.cc.custom.textview.TXThreeTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            app:autoType="two"
+            app:ellipsisType="secondAndThird"
+            app:firstSpace="10dp"
+            app:firstText="老师:"
+            app:firstTextColor="@color/TX_CO_BNINE"
+            app:firstTextSize="@dimen/TX_FT_MAIN"
+            app:secondSpace="10dp"
+            app:secondText="汪汪老师"
+            app:secondTextColor="@color/TX_CO_BLUEMAJ"
+            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:thirdText="哈哈"
+            app:thirdTextColor="@color/TX_CO_BLUEMAJ"
+            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+
+        <com.cc.custom.textview.TXThreeTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="6"
+            app:autoType="two"
+            app:ellipsisType="secondAndThird"
+            app:firstText="老师:"
+            app:firstTextColor="@color/TX_CO_BNINE"
+            app:firstTextSize="@dimen/TX_FT_MAIN"
+            app:secondText="汪汪汪汪汪汪汪汪汪汪老师老师"
+            app:secondTextColor="@color/TX_CO_BLUEMAJ"
+            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:thirdText=""
+            app:thirdTextColor="@color/TX_CO_BLUEMAJ"
+            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="aaaaa" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="bbbbbbbbbbbbb" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:layout_height="wrap_content"
+            android:text="aaaaaaaaa" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="bbbbbb" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginRight="130dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/tx_cell_space_30">
+
+        <com.cc.custom.textview.TXThreeTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            app:autoType="one"
+            app:ellipsisType="first"
+            app:firstText="99999999"
+            app:firstTextColor="@color/TX_CO_BLUEMAJ"
+            app:firstTextSize="@dimen/TX_FT_MAIN"
+            app:secondText="已选"
+            app:secondTextColor="@color/TX_CO_BNINE"
+            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:thirdTextColor="@color/TX_CO_BNINE"
+            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+
+        <com.cc.custom.textview.TXThreeTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="6"
+            app:autoType="one"
+            app:ellipsisType="first"
+            app:firstText="99999999009999"
+            app:firstTextColor="@color/TX_CO_BLUEMAJ"
+            app:firstTextSize="@dimen/TX_FT_MAIN"
+            app:secondText="已选"
+            app:secondTextColor="@color/TX_CO_BNINE"
+            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:thirdTextColor="@color/TX_CO_BNINE"
+            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+    </LinearLayout>
+</LinearLayout>

@@ -146,7 +146,6 @@ public class TXFrameSeekBar extends FrameLayout implements TXRangeSeekBar.TXOnRa
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mRetriever.release();
         }
     }
 

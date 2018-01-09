@@ -6,8 +6,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.cc.custom.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/tx_cell_space_30">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            />
+
+        <com.cc.custom.textview.TXThreeTextView
+            android:id="@+id/threeTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="6"
+            app:autoType="two"
+            app:ellipsisType="firstAndThird"
+            app:firstText="汪汪老师"
+            app:firstTextColor="@color/TX_CO_BLUEMAJ"
+            app:firstTextSize="@dimen/TX_FT_MAIN"
+            app:secondText="评价"
+            app:secondTextColor="@color/TX_CO_BNINE"
+            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:thirdText="哈哈哈哈汪汪汪汪哈"
+            app:thirdTextColor="@color/TX_CO_BLUEMAJ"
+            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -69,11 +99,11 @@
             android:text="Seek" />
     </LinearLayout>
 
-    <com.cc.custom.progress.BubbleProgress
+    <com.cc.custom.progress.TXVideoProgressBar
         android:id="@+id/progress"
         android:layout_width="300dp"
-        android:layout_marginLeft="20dp"
-        android:layout_height="200dp" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp" />
 
     <com.cc.custom.progress.NumberProgressBar
         android:layout_width="match_parent"
