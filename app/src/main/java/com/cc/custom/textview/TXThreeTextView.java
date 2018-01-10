@@ -35,6 +35,7 @@ public class TXThreeTextView extends View {
     private static final int AUTO_TYPE_ONE = 1;
     // 情况二：两个label长度可变，xx评价xx，中间label宽度固定，前后label可变
     private static final int AUTO_TYPE_TWO = 2;
+    private int mWidth;
 
     @IntDef({ AUTO_TYPE_ONE, AUTO_TYPE_TWO })
     @Retention(RetentionPolicy.SOURCE)
@@ -200,81 +201,12 @@ public class TXThreeTextView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        int width = getMeasuredWidth();
-        if (width <= 0) {
+        mWidth = getMeasuredWidth();
+        if (mWidth <= 0) {
             return;
         }
-        setMeasuredDimension(width, (int) mHeight);
-
-        float defaultWidth = mFirstWidth + mSecondWidth + mThirdWidth + mFirstSpace + mSecondSpace;
-
-        if (width < defaultWidth) {
-            if (mAutoType == AUTO_TYPE_ONE) {
-                // 情况一
-                if (mEllipsisType == ELLIPSIS_TYPE_FIRST) {
-                    // 省略第一个
-                    mEllipsisIndexType = ELLIPSIS_FIRST;
-                    mFirstWidth = width - mSecondWidth - mThirdWidth - mFirstSpace - mSecondSpace;
-                } else if (mEllipsisType == ELLIPSIS_TYPE_SECOND) {
-                    // 省略第二个
-                    mEllipsisIndexType = ELLIPSIS_SECOND;
-                    mSecondWidth = width - mFirstWidth - mThirdWidth - mFirstSpace - mSecondSpace;
-                }
-            } else if (mAutoType == AUTO_TYPE_TWO) {
-                // 情况二
-                // 如果两个可变都超长的最大宽度
-                float halfMaxWidth;
-                if (mEllipsisType == ELLIPSIS_TYPE_FIRST_AND_THIRD) {
-                    // 一、三label长度可变
-                    halfMaxWidth = (width - mSecondWidth - mFirstSpace - mSecondSpace) / 2;
-                    if (mFirstWidth > halfMaxWidth && mThirdWidth > halfMaxWidth) {
-                        // 一、三都省略
-                        mEllipsisIndexType = ELLIPSIS_FIRST_AND_THIRD;
-                        mFirstWidth = mThirdWidth = (width - mSecondWidth - mFirstSpace - mSecondSpace) / 2;
-                    } else if (mFirstWidth > halfMaxWidth) {
-                        // 一省略
-                        mEllipsisIndexType = ELLIPSIS_FIRST;
-                        mFirstWidth = width - mSecondWidth - mThirdWidth - mFirstSpace - mSecondSpace;
-                    } else if (mThirdWidth > halfMaxWidth) {
-                        // 三省略
-                        mEllipsisIndexType = ELLIPSIS_THIRD;
-                        mThirdWidth = width - mFirstWidth - mSecondWidth - mFirstSpace - mSecondSpace;
-                    }
-                } else if (mEllipsisType == ELLIPSIS_TYPE_FIRST_AND_SECOND) {
-                    // 一、二label长度可变
-                    halfMaxWidth = (width - mThirdWidth - mFirstSpace - mSecondSpace) / 2;
-                    if (mFirstWidth > halfMaxWidth && mSecondWidth > halfMaxWidth) {
-                        // 一、二都省略
-                        mEllipsisIndexType = ELLIPSIS_FIRST_AND_SECOND;
-                        mFirstWidth = mSecondWidth = (width - mThirdWidth - mFirstSpace - mSecondSpace) / 2;
-                    } else if (mFirstWidth > halfMaxWidth) {
-                        // 一省略
-                        mEllipsisIndexType = ELLIPSIS_FIRST;
-                        mFirstWidth = width - mSecondWidth - mThirdWidth - mFirstSpace - mSecondSpace;
-                    } else if (mSecondWidth > halfMaxWidth) {
-                        // 二省略
-                        mEllipsisIndexType = ELLIPSIS_SECOND;
-                        mSecondWidth = width - mFirstWidth - mThirdWidth - mFirstSpace - mSecondSpace;
-                    }
-                } else if (mEllipsisType == ELLIPSIS_TYPE_SECOND_AND_THIRD) {
-                    // 二、三label长度可变
-                    halfMaxWidth = (width - mFirstWidth - mFirstSpace - mSecondSpace) / 2;
-                    if (mSecondWidth > halfMaxWidth && mThirdWidth > halfMaxWidth) {
-                        // 二、三都省略
-                        mEllipsisIndexType = ELLIPSIS_SECOND_AND_THIRD;
-                        mSecondWidth = mThirdWidth = (width - mFirstWidth) / 2 - mFirstSpace;
-                    } else if (mSecondWidth > halfMaxWidth) {
-                        // 二省略
-                        mEllipsisIndexType = ELLIPSIS_SECOND;
-                        mSecondWidth = width - mFirstWidth - mThirdWidth - mFirstSpace - mSecondSpace;
-                    } else if (mSecondWidth > halfMaxWidth) {
-                        // 三省略
-                        mEllipsisIndexType = ELLIPSIS_THIRD;
-                        mThirdWidth = width - mFirstWidth - mSecondWidth - mFirstSpace - mSecondSpace;
-                    }
-                }
-            }
-        }
+        setMeasuredDimension(mWidth, (int) mHeight);
+        calcEllipsisType();
     }
 
     @Override
@@ -386,7 +318,8 @@ public class TXThreeTextView extends View {
         } else {
             mFirstWidth = mFirstPaint.measureText(mFirstText);
         }
-        requestLayout();
+        calcEllipsisType();
+        invalidate();
     }
 
     /**
@@ -402,7 +335,8 @@ public class TXThreeTextView extends View {
         } else {
             mSecondWidth = mSecondPaint.measureText(mSecondText);
         }
-        requestLayout();
+        calcEllipsisType();
+        invalidate();
     }
 
     /**
@@ -418,7 +352,8 @@ public class TXThreeTextView extends View {
         } else {
             mThirdWidth = mThirdPaint.measureText(mThirdText);
         }
-        requestLayout();
+        calcEllipsisType();
+        invalidate();
     }
 
     /**
@@ -438,5 +373,80 @@ public class TXThreeTextView extends View {
             }
         }
         return ellipsizeText.toString();
+    }
+
+    /**
+     * 计算类型
+     */
+    private void calcEllipsisType() {
+        float defaultWidth = mFirstWidth + mSecondWidth + mThirdWidth + mFirstSpace + mSecondSpace;
+
+        if (mWidth < defaultWidth) {
+            if (mAutoType == AUTO_TYPE_ONE) {
+                // 情况一
+                if (mEllipsisType == ELLIPSIS_TYPE_FIRST) {
+                    // 省略第一个
+                    mEllipsisIndexType = ELLIPSIS_FIRST;
+                    mFirstWidth = mWidth - mSecondWidth - mThirdWidth - mFirstSpace - mSecondSpace;
+                } else if (mEllipsisType == ELLIPSIS_TYPE_SECOND) {
+                    // 省略第二个
+                    mEllipsisIndexType = ELLIPSIS_SECOND;
+                    mSecondWidth = mWidth - mFirstWidth - mThirdWidth - mFirstSpace - mSecondSpace;
+                }
+            } else if (mAutoType == AUTO_TYPE_TWO) {
+                // 情况二
+                // 如果两个可变都超长的最大宽度
+                float halfMaxWidth;
+                if (mEllipsisType == ELLIPSIS_TYPE_FIRST_AND_THIRD) {
+                    // 一、三label长度可变
+                    halfMaxWidth = (mWidth - mSecondWidth - mFirstSpace - mSecondSpace) / 2;
+                    if (mFirstWidth > halfMaxWidth && mThirdWidth > halfMaxWidth) {
+                        // 一、三都省略
+                        mEllipsisIndexType = ELLIPSIS_FIRST_AND_THIRD;
+                        mFirstWidth = mThirdWidth = (mWidth - mSecondWidth - mFirstSpace - mSecondSpace) / 2;
+                    } else if (mFirstWidth > halfMaxWidth) {
+                        // 一省略
+                        mEllipsisIndexType = ELLIPSIS_FIRST;
+                        mFirstWidth = mWidth - mSecondWidth - mThirdWidth - mFirstSpace - mSecondSpace;
+                    } else if (mThirdWidth > halfMaxWidth) {
+                        // 三省略
+                        mEllipsisIndexType = ELLIPSIS_THIRD;
+                        mThirdWidth = mWidth - mFirstWidth - mSecondWidth - mFirstSpace - mSecondSpace;
+                    }
+                } else if (mEllipsisType == ELLIPSIS_TYPE_FIRST_AND_SECOND) {
+                    // 一、二label长度可变
+                    halfMaxWidth = (mWidth - mThirdWidth - mFirstSpace - mSecondSpace) / 2;
+                    if (mFirstWidth > halfMaxWidth && mSecondWidth > halfMaxWidth) {
+                        // 一、二都省略
+                        mEllipsisIndexType = ELLIPSIS_FIRST_AND_SECOND;
+                        mFirstWidth = mSecondWidth = (mWidth - mThirdWidth - mFirstSpace - mSecondSpace) / 2;
+                    } else if (mFirstWidth > halfMaxWidth) {
+                        // 一省略
+                        mEllipsisIndexType = ELLIPSIS_FIRST;
+                        mFirstWidth = mWidth - mSecondWidth - mThirdWidth - mFirstSpace - mSecondSpace;
+                    } else if (mSecondWidth > halfMaxWidth) {
+                        // 二省略
+                        mEllipsisIndexType = ELLIPSIS_SECOND;
+                        mSecondWidth = mWidth - mFirstWidth - mThirdWidth - mFirstSpace - mSecondSpace;
+                    }
+                } else if (mEllipsisType == ELLIPSIS_TYPE_SECOND_AND_THIRD) {
+                    // 二、三label长度可变
+                    halfMaxWidth = (mWidth - mFirstWidth - mFirstSpace - mSecondSpace) / 2;
+                    if (mSecondWidth > halfMaxWidth && mThirdWidth > halfMaxWidth) {
+                        // 二、三都省略
+                        mEllipsisIndexType = ELLIPSIS_SECOND_AND_THIRD;
+                        mSecondWidth = mThirdWidth = (mWidth - mFirstWidth) / 2 - mFirstSpace;
+                    } else if (mSecondWidth > halfMaxWidth) {
+                        // 二省略
+                        mEllipsisIndexType = ELLIPSIS_SECOND;
+                        mSecondWidth = mWidth - mFirstWidth - mThirdWidth - mFirstSpace - mSecondSpace;
+                    } else if (mSecondWidth > halfMaxWidth) {
+                        // 三省略
+                        mEllipsisIndexType = ELLIPSIS_THIRD;
+                        mThirdWidth = mWidth - mFirstWidth - mSecondWidth - mFirstSpace - mSecondSpace;
+                    }
+                }
+            }
+        }
     }
 }
