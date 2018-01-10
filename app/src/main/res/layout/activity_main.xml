@@ -34,7 +34,6 @@
             app:secondText="评价"
             app:secondTextColor="@color/TX_CO_BNINE"
             app:secondTextSize="@dimen/TX_FT_MAIN"
-            app:thirdText="哈哈哈哈汪汪汪汪哈"
             app:thirdTextColor="@color/TX_CO_BLUEMAJ"
             app:thirdTextSize="@dimen/TX_FT_MAIN" />
     </LinearLayout>

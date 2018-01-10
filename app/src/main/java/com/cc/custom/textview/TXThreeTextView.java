@@ -168,20 +168,23 @@ public class TXThreeTextView extends View {
             mHeight = thirdHeight;
         }
 
-        if (mFirstText != null) {
-            mFirstWidth = mFirstPaint.measureText(mFirstText);
-        } else {
+        if (mFirstText == null) {
+            mFirstText = "";
             mFirstWidth = 0;
-        }
-        if (mSecondText != null) {
-            mSecondWidth = mSecondPaint.measureText(mSecondText);
         } else {
+            mFirstWidth = mFirstPaint.measureText(mFirstText);
+        }
+        if (mSecondText == null) {
+            mSecondText = "";
             mSecondWidth = 0;
-        }
-        if (mThirdText != null) {
-            mThirdWidth = mThirdPaint.measureText(mThirdText);
         } else {
+            mSecondWidth = mSecondPaint.measureText(mSecondText);
+        }
+        if (mThirdText == null) {
+            mThirdText = "";
             mThirdWidth = 0;
+        } else {
+            mThirdWidth = mThirdPaint.measureText(mThirdText);
         }
     }
 
@@ -380,10 +383,11 @@ public class TXThreeTextView extends View {
      */
     public void setFirstText(String firstText) {
         mFirstText = firstText;
-        if (mFirstText != null) {
-            mFirstWidth = mFirstPaint.measureText(mFirstText);
-        } else {
+        if (mFirstText == null) {
+            mFirstText = "";
             mFirstWidth = 0;
+        } else {
+            mFirstWidth = mFirstPaint.measureText(mFirstText);
         }
         requestLayout();
     }
@@ -395,10 +399,11 @@ public class TXThreeTextView extends View {
      */
     public void setSecondText(String secondText) {
         mSecondText = secondText;
-        if (mSecondText != null) {
-            mSecondWidth = mSecondPaint.measureText(mSecondText);
-        } else {
+        if (mSecondText == null) {
+            mSecondText = "";
             mSecondWidth = 0;
+        } else {
+            mSecondWidth = mSecondPaint.measureText(mSecondText);
         }
         requestLayout();
     }
@@ -410,10 +415,11 @@ public class TXThreeTextView extends View {
      */
     public void setThirdText(String thirdText) {
         mThirdText = thirdText;
-        if (mThirdText != null) {
-            mThirdWidth = mThirdPaint.measureText(mThirdText);
-        } else {
+        if (mThirdText == null) {
+            mThirdText = "";
             mThirdWidth = 0;
+        } else {
+            mThirdWidth = mThirdPaint.measureText(mThirdText);
         }
         requestLayout();
     }
