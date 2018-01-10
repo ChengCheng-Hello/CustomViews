@@ -11,31 +11,32 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginRight="130dp"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/tx_cell_space_30">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            />
 
         <com.cc.custom.textview.TXThreeTextView
             android:id="@+id/threeTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_weight="6"
-            app:autoType="two"
-            app:ellipsisType="firstAndThird"
-            app:firstText="汪汪老师"
-            app:firstTextColor="@color/TX_CO_BLUEMAJ"
-            app:firstTextSize="@dimen/TX_FT_MAIN"
-            app:secondText="评价"
-            app:secondTextColor="@color/TX_CO_BNINE"
-            app:secondTextSize="@dimen/TX_FT_MAIN"
-            app:thirdTextColor="@color/TX_CO_BLUEMAJ"
-            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+            android:layout_weight="3"
+            app:autoType="one"
+            app:ellipsisType="second"
+            app:firstText="已选"
+            app:firstTextColor="@color/TX_CO_BNINE"
+            app:firstTextSize="@dimen/TX_FT_MED"
+            app:secondText="999"
+            app:secondTextColor="@color/TX_CO_BLUEMAJ"
+            app:secondTextSize="@dimen/TX_FT_MED"
+            app:thirdText="组"
+            app:thirdTextColor="@color/TX_CO_BNINE"
+            app:thirdTextSize="@dimen/TX_FT_MED" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="7" />
     </LinearLayout>
 
     <LinearLayout

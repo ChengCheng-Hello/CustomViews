@@ -16,37 +16,35 @@
         <com.cc.custom.textview.TXThreeTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
+            android:layout_weight="3.8"
             app:autoType="one"
             app:ellipsisType="second"
-            app:firstSpace="4dp"
             app:firstText="已选"
             app:firstTextColor="@color/TX_CO_BNINE"
-            app:firstTextSize="@dimen/TX_FT_MAIN"
-            app:secondSpace="4dp"
+            app:firstTextSize="@dimen/TX_FT_MED"
             app:secondText="999"
             app:secondTextColor="@color/TX_CO_BLUEMAJ"
-            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:secondTextSize="@dimen/TX_FT_MED"
             app:thirdText="组"
             app:thirdTextColor="@color/TX_CO_BNINE"
-            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+            app:thirdTextSize="@dimen/TX_FT_MED" />
 
         <com.cc.custom.textview.TXThreeTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_weight="6"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="6.2"
             app:autoType="one"
             app:ellipsisType="second"
             app:firstText="已选"
             app:firstTextColor="@color/TX_CO_BNINE"
-            app:firstTextSize="@dimen/TX_FT_MAIN"
+            app:firstTextSize="@dimen/TX_FT_MED"
             app:secondText="9999999"
             app:secondTextColor="@color/TX_CO_BLUEMAJ"
-            app:secondTextSize="@dimen/TX_FT_MAIN"
+            app:secondTextSize="@dimen/TX_FT_MED"
             app:thirdText="人"
             app:thirdTextColor="@color/TX_CO_BNINE"
-            app:thirdTextSize="@dimen/TX_FT_MAIN" />
+            app:thirdTextSize="@dimen/TX_FT_MED" />
     </LinearLayout>
 
     <LinearLayout
@@ -237,9 +235,9 @@
 
         <TextView
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:layout_height="wrap_content"
             android:text="aaaaaaaaa" />
 
         <TextView

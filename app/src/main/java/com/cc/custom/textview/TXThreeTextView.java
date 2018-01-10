@@ -23,9 +23,9 @@ import static android.text.TextUtils.TruncateAt.END;
 /**
  * 单行展示的3个并排文本字段，xx根据总宽度动态是否打点省略，(也适用两个label，第三个文本不设置即可)
  * 
- * 情况一：已选xx人，前后label宽度固定，中间长度可变
+ * 情况一：一个label长度可变，已选xx人，前后label宽度固定，中间长度可变
  * 
- * 情况二：xx评价xx，中间label宽度固定，前后label可变
+ * 情况二：两个label长度可变，xx评价xx，中间label宽度固定，前后label可变
  * <p>
  * Created by Cheng on 2018/1/5.
  */
@@ -72,6 +72,9 @@ public class TXThreeTextView extends View {
     private static final int ELLIPSIS_FIRST_AND_SECOND = 5;
     // 二、三都省略
     private static final int ELLIPSIS_SECOND_AND_THIRD = 6;
+
+    // 省略符 ...
+    private static final String ELLIPSIS_NORMAL = "\u2026";
 
     private TextPaint mFirstPaint;
     private TextPaint mSecondPaint;
@@ -286,16 +289,14 @@ public class TXThreeTextView extends View {
                 canvas.drawText(mSecondText, mFirstWidth + mFirstSpace, secondBaseLine, mSecondPaint);
             } else if (mEllipsisIndexType == ELLIPSIS_FIRST) {
                 // 省略第一个
-                CharSequence ellipsizeText = TextUtils.ellipsize(mFirstText, mFirstPaint, mFirstWidth, END);
-                mFirstText = ellipsizeText.toString();
+                mFirstText = getEllipsisText(mFirstText, mFirstPaint, mFirstWidth);
                 canvas.drawText(mFirstText, 0, firstBaseLine, mFirstPaint);
                 mFirstWidth = mFirstPaint.measureText(mFirstText);
                 canvas.drawText(mSecondText, mFirstWidth + mFirstSpace, secondBaseLine, mSecondPaint);
             } else if (mEllipsisIndexType == ELLIPSIS_SECOND) {
                 // 省略第二个
                 canvas.drawText(mFirstText, 0, firstBaseLine, mFirstPaint);
-                CharSequence ellipsizeText = TextUtils.ellipsize(mSecondText, mSecondPaint, mSecondWidth, END);
-                mSecondText = ellipsizeText.toString();
+                mSecondText = getEllipsisText(mSecondText, mSecondPaint, mSecondWidth);
                 canvas.drawText(mSecondText, mFirstWidth + mFirstSpace, secondBaseLine, mSecondPaint);
                 mSecondWidth = mSecondPaint.measureText(mSecondText);
             }
@@ -311,24 +312,20 @@ public class TXThreeTextView extends View {
                     mThirdPaint);
             } else if (mEllipsisIndexType == ELLIPSIS_FIRST_AND_THIRD) {
                 // 一、三都省略
-                CharSequence firstEllipsizeText = TextUtils.ellipsize(mFirstText, mFirstPaint, mFirstWidth, END);
-                mFirstText = firstEllipsizeText.toString();
+                mFirstText = getEllipsisText(mFirstText, mFirstPaint, mFirstWidth);
                 canvas.drawText(mFirstText, 0, firstBaseLine, mFirstPaint);
                 mFirstWidth = mFirstPaint.measureText(mFirstText);
                 canvas.drawText(mSecondText, mFirstWidth + mFirstSpace, secondBaseLine, mSecondPaint);
-                CharSequence thirdEllipsizeText = TextUtils.ellipsize(mThirdText, mThirdPaint, mThirdWidth, END);
-                mThirdText = thirdEllipsizeText.toString();
+                mThirdText = getEllipsisText(mThirdText, mThirdPaint, mThirdWidth);
                 canvas.drawText(mThirdText, mFirstWidth + mSecondWidth + mFirstSpace + mSecondSpace, thirdBaseLine,
                     mThirdPaint);
                 mThirdWidth = mThirdPaint.measureText(mThirdText);
             } else if (mEllipsisIndexType == ELLIPSIS_FIRST_AND_SECOND) {
                 // 一、二都省略
-                CharSequence firstEllipsizeText = TextUtils.ellipsize(mFirstText, mFirstPaint, mFirstWidth, END);
-                mFirstText = firstEllipsizeText.toString();
+                mFirstText = getEllipsisText(mFirstText, mFirstPaint, mFirstWidth);
                 canvas.drawText(mFirstText, 0, firstBaseLine, mFirstPaint);
                 mFirstWidth = mFirstPaint.measureText(mFirstText);
-                CharSequence secondEllipsizeText = TextUtils.ellipsize(mSecondText, mSecondPaint, mSecondWidth, END);
-                mSecondText = secondEllipsizeText.toString();
+                mSecondText = getEllipsisText(mSecondText, mSecondPaint, mSecondWidth);
                 canvas.drawText(mSecondText, mFirstWidth + mFirstSpace, secondBaseLine, mSecondPaint);
                 mSecondWidth = mSecondPaint.measureText(mSecondText);
                 canvas.drawText(mThirdText, mFirstWidth + mSecondWidth + mFirstSpace + mSecondSpace, thirdBaseLine,
@@ -336,19 +333,16 @@ public class TXThreeTextView extends View {
             } else if (mEllipsisIndexType == ELLIPSIS_SECOND_AND_THIRD) {
                 // 二、三都省略
                 canvas.drawText(mFirstText, 0, firstBaseLine, mFirstPaint);
-                CharSequence secondEllipsizeText = TextUtils.ellipsize(mSecondText, mSecondPaint, mSecondWidth, END);
-                mSecondText = secondEllipsizeText.toString();
+                mSecondText = getEllipsisText(mSecondText, mSecondPaint, mSecondWidth);
                 canvas.drawText(mSecondText, mFirstWidth + mFirstSpace, secondBaseLine, mSecondPaint);
                 mSecondWidth = mSecondPaint.measureText(mSecondText);
-                CharSequence thirdEllipsizeText = TextUtils.ellipsize(mThirdText, mThirdPaint, mThirdWidth, END);
-                mThirdText = thirdEllipsizeText.toString();
+                mThirdText = getEllipsisText(mThirdText, mThirdPaint, mThirdWidth);
                 canvas.drawText(mThirdText, mFirstWidth + mSecondWidth + mFirstSpace + mSecondSpace, thirdBaseLine,
                     mThirdPaint);
                 mThirdWidth = mThirdPaint.measureText(mThirdText);
             } else if (mEllipsisIndexType == ELLIPSIS_FIRST) {
                 // 一省略
-                CharSequence ellipsizeText = TextUtils.ellipsize(mFirstText, mFirstPaint, mFirstWidth, END);
-                mFirstText = ellipsizeText.toString();
+                mFirstText = getEllipsisText(mFirstText, mFirstPaint, mFirstWidth);
                 canvas.drawText(mFirstText, 0, firstBaseLine, mFirstPaint);
                 mFirstWidth = mFirstPaint.measureText(mFirstText);
                 canvas.drawText(mSecondText, mFirstWidth + mFirstSpace, secondBaseLine, mSecondPaint);
@@ -357,8 +351,7 @@ public class TXThreeTextView extends View {
             } else if (mEllipsisIndexType == ELLIPSIS_SECOND) {
                 // 二省略
                 canvas.drawText(mFirstText, 0, firstBaseLine, mFirstPaint);
-                CharSequence ellipsizeText = TextUtils.ellipsize(mSecondText, mSecondPaint, mSecondWidth, END);
-                mSecondText = ellipsizeText.toString();
+                mSecondText = getEllipsisText(mSecondText, mSecondPaint, mSecondWidth);
                 canvas.drawText(mSecondText, mFirstWidth + mFirstSpace, secondBaseLine, mSecondPaint);
                 mSecondWidth = mSecondPaint.measureText(mSecondText);
                 canvas.drawText(mThirdText, mFirstWidth + mSecondWidth + mFirstSpace + mSecondSpace, thirdBaseLine,
@@ -367,8 +360,7 @@ public class TXThreeTextView extends View {
                 // 三省略
                 canvas.drawText(mFirstText, 0, firstBaseLine, mFirstPaint);
                 canvas.drawText(mSecondText, mFirstWidth + mFirstSpace, secondBaseLine, mSecondPaint);
-                CharSequence ellipsizeText = TextUtils.ellipsize(mThirdText, mThirdPaint, mThirdWidth, END);
-                mThirdText = ellipsizeText.toString();
+                mThirdText = getEllipsisText(mThirdText, mThirdPaint, mThirdWidth);
                 canvas.drawText(mThirdText, mFirstWidth + mSecondWidth + mFirstSpace + mSecondSpace, thirdBaseLine,
                     mThirdPaint);
                 mThirdWidth = mThirdPaint.measureText(mThirdText);
@@ -422,5 +414,24 @@ public class TXThreeTextView extends View {
             mThirdWidth = mThirdPaint.measureText(mThirdText);
         }
         requestLayout();
+    }
+
+    /**
+     * 获取省略后的文本内容
+     *
+     * @param text  文本
+     * @param paint paint
+     * @param width 可用宽度
+     */
+    private String getEllipsisText(String text, TextPaint paint, float width) {
+        CharSequence ellipsizeText = TextUtils.ellipsize(text, paint, width, END);
+        if (TextUtils.isEmpty(ellipsizeText)) {
+            // 如果返回内容为空，判断是否能显示省略号
+            float ellipsisWidth = paint.measureText(ELLIPSIS_NORMAL);
+            if (ellipsisWidth <= width) {
+                ellipsizeText = ELLIPSIS_NORMAL;
+            }
+        }
+        return ellipsizeText.toString();
     }
 }
