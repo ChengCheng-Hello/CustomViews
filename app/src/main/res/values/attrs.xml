@@ -106,10 +106,6 @@
         <attr name="firstText" format="string" />
         <attr name="secondText" format="string" />
         <attr name="thirdText" format="string" />
-        <attr name="autoType">
-            <flag name="one" value="0x01" />
-            <flag name="two" value="0x02" />
-        </attr>
         <attr name="ellipsisType">
             <flag name="first" value="0x01" />
             <flag name="second" value="0x02" />

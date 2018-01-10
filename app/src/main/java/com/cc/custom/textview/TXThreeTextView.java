@@ -128,7 +128,6 @@ public class TXThreeTextView extends View {
             mFirstTextSize = a.getDimension(R.styleable.TXThreeTextView_firstTextSize, defaultTextSize);
             mSecondTextSize = a.getDimension(R.styleable.TXThreeTextView_secondTextSize, defaultTextSize);
             mThirdTextSize = a.getDimension(R.styleable.TXThreeTextView_thirdTextSize, defaultTextSize);
-            mAutoType = a.getInt(R.styleable.TXThreeTextView_autoType, AUTO_TYPE_ONE);
             mEllipsisType = a.getInt(R.styleable.TXThreeTextView_ellipsisType, ELLIPSIS_FIRST);
             mFirstSpace = a.getDimension(R.styleable.TXThreeTextView_firstSpace, 0);
             mSecondSpace = a.getDimension(R.styleable.TXThreeTextView_secondSpace, 0);
@@ -188,6 +187,12 @@ public class TXThreeTextView extends View {
             mThirdWidth = 0;
         } else {
             mThirdWidth = mThirdPaint.measureText(mThirdText);
+        }
+
+        if (mEllipsisType == ELLIPSIS_TYPE_FIRST || mEllipsisType == ELLIPSIS_TYPE_SECOND) {
+            mAutoType = AUTO_TYPE_ONE;
+        } else {
+            mAutoType = AUTO_TYPE_TWO;
         }
     }
 

@@ -20,7 +20,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            app:autoType="one"
             app:ellipsisType="second"
             app:firstText="已选"
             app:firstTextColor="@color/TX_CO_BNINE"
