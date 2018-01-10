@@ -21,7 +21,7 @@
             app:firstText="已选"
             app:firstTextColor="@color/TX_CO_BNINE"
             app:firstTextSize="@dimen/TX_FT_MED"
-            app:secondText="99"
+            app:secondText="999"
             app:secondTextColor="@color/TX_CO_BLUEMAJ"
             app:secondTextSize="@dimen/TX_FT_MED"
             app:thirdText="组"
