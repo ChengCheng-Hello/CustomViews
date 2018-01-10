@@ -144,7 +144,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_seek).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                threeTextView.setFirstText("我是First先生哦哦哦哦哦哦哦");
+                threeTextView.setVisibility(View.VISIBLE);
+                threeTextView.setSecondText("我是First先生哦哦哦哦哦哦哦");
 //                TXSeekDemoActivity.launch(v.getContext());
             }
         });

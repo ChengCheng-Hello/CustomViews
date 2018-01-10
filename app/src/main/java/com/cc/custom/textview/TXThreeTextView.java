@@ -387,6 +387,7 @@ public class TXThreeTextView extends View {
             mFirstWidth = mFirstPaint.measureText(mFirstText);
         }
         requestLayout();
+        invalidate();
     }
 
     /**
@@ -403,6 +404,7 @@ public class TXThreeTextView extends View {
             mSecondWidth = mSecondPaint.measureText(mSecondText);
         }
         requestLayout();
+        invalidate();
     }
 
     /**
@@ -419,6 +421,7 @@ public class TXThreeTextView extends View {
             mThirdWidth = mThirdPaint.measureText(mThirdText);
         }
         requestLayout();
+        invalidate();
     }
 
     /**
